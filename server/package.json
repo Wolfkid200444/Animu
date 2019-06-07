@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "commando-provider-mongo": "^1.1.1",
+    "connect-redis": "^3.4.1",
+    "discord.js": "^11.5.1",
+    "discord.js-commando": "^0.10.0",
+    "discordjs-prompter": "^1.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.16.1",
+    "mongodb": "^3.2.7",
+    "mongoose": "^5.5.13",
+    "redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "nodemon": "^1.19.1"
+  }
+}
