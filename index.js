@@ -44,6 +44,7 @@ mongoose
     console.log('Database Status: Online');
     //->Creating models
     require('./models/Reaction');
+    require('./models/Profile');
 
     //==========================
     //DISCORD
@@ -73,17 +74,17 @@ mongoose
       .registerCommandsIn(path.join(__dirname, 'commands'));
 
     //->When Ready
-    client.on('ready', () =>
-      client.user.setActivity('over Alvonia | -help', { type: 'WATCHING' })
-    );
+    client.on('ready', () => {
+      client.user.setActivity('over Alvonia | -help', { type: 'WATCHING' });
+
+      //==========================
+      //EVENTS
+      //==========================
+      require('./events/guildMemberAdd')(client);
+      //==========================
+    });
     //==========================
   });
-//==========================
-
-//==========================
-//EVENTS
-//==========================
-require('./events/guildMemberAdd')(client);
 //==========================
 
 //==========================

@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const { RichEmbed } = require('discord.js');
 const _ = require('lodash');
 
+//Init
+const Profile = mongoose.model('Profile');
+
 //Welcome Messages
 const welcomeMessages = [
   {
@@ -58,11 +61,24 @@ const welcomeMessages = [
 
 module.exports = client => {
   client.on('guildMemberAdd', async member => {
-    const newMembersChannel = client.guilds
-      .get('556442896719544320')
-      .channels.get('586102106373619723');
+    const aldovia = client.guilds.get('556442896719544320');
+    const newMembersChannel = aldovia.channels.get('586102106373619723');
 
     const welcomeMsg = _.sample(welcomeMessages);
+
+    //Register Profile
+    const profile = await Profile.register(member.id);
+
+    if (profile.roles.length)
+      profile.roles.forEach(roleName => {
+        const role = aldovia.roles.find(r => r.name === roleName);
+        member.addRole(role, 'Assigning roles this member had before leaving');
+      });
+    else
+      member.addRole(
+        aldovia.roles.find(r => r.name === 'Member'),
+        'Assigning Member role'
+      );
 
     newMembersChannel.send(
       new RichEmbed()
