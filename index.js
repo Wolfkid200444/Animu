@@ -82,6 +82,7 @@ mongoose
       //EVENTS
       //==========================
       require('./events/guildMemberAdd')(client);
+      require('./events/message')(client);
       //==========================
     });
     //==========================
