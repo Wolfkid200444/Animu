@@ -69,8 +69,8 @@ module.exports = client => {
     //Register Profile
     const profile = await Profile.register(member.id);
 
-    if (profile.roles.length)
-      profile.roles.forEach(roleName => {
+    if (profile.res === 'already_exists')
+      profile.profile.roles.forEach(roleName => {
         const role = aldovia.roles.find(r => r.name === roleName);
         member.addRole(role, 'Assigning roles this member had before leaving');
       });

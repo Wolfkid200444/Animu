@@ -45,6 +45,7 @@ mongoose
     //->Creating models
     require('./models/Reaction');
     require('./models/Profile');
+    require('./models/Inventory');
 
     //==========================
     //DISCORD
