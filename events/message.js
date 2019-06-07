@@ -1,6 +1,3 @@
-//Dependencies
-const { RichEmbed } = require('discord.js');
-
 module.exports = client => {
   client.on('message', async msg => {
     const aldovia = client.guilds.get('556442896719544320');
