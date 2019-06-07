@@ -12,3 +12,5 @@ after_success:
   # Push
   - docker push abdulsammad200/aldovia
   - heroku container:push abdulsammad200/aldovia -a aldovia
+  # Release
+  - heroku container:release abdulsammad200/aldovia -a aldovia
