@@ -23,7 +23,7 @@ const client = new CommandoClient({
     disableEveryone: true
   }),
   app = express(),
-  PORT = process.env.PORT || 5000;
+  PORT = process.env.PORT || 8080;
 //==========================
 
 //==========================
@@ -81,6 +81,12 @@ mongoose
 //==========================
 
 //==========================
+//EVENTS
+//==========================
+require('./events/guildMemberAdd')(client);
+//==========================
+
+//==========================
 //ROUTES
 //==========================
 require('./routes/webhooks')(app, client);
@@ -89,6 +95,9 @@ require('./routes/webhooks')(app, client);
 //==========================
 //Listening
 //==========================
-client.login(keys.discordBotToken).catch(err => console.log(err));
-app.listen(PORT, () => console.log('Website Status: Online'));
+client
+  .login(keys.discordBotToken)
+  .then(() => console.log('Bot Status: Online'))
+  .catch(err => console.log(err));
+app.listen(PORT, () => console.log('Web Server Status: Online'));
 //==========================
