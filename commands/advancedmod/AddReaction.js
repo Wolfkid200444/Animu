@@ -14,6 +14,7 @@ module.exports = class AddReactionCommand extends Command {
       name: 'addreaction',
       aliases: [],
       group: 'advancedmod',
+      userPermissions: ['MANAGE_GUILD'],
       memberName: 'addreaction',
       throttling: {
         usages: 1,
