@@ -8,7 +8,7 @@ const prompt = require('discordjs-prompter');
 const Reaction = mongoose.model('Reaction');
 
 //Main
-module.exports = class RedisCommand extends Command {
+module.exports = class AddReactionCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'addreaction',

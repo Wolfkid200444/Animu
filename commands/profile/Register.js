@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const Profile = mongoose.model('Profile');
 
 //Main
-module.exports = class RedisCommand extends Command {
+module.exports = class RegisterCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'register',

@@ -8,7 +8,7 @@ const _ = require('lodash');
 const Reaction = mongoose.model('Reaction');
 
 //Main
-module.exports = class RedisCommand extends Command {
+module.exports = class ReactCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'react',

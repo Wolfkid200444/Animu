@@ -7,8 +7,9 @@ const profileSchema = new Schema({
     type: String,
     unique: true
   },
-  desription: String,
+  description: String,
   favoriteAnime: String,
+  profileColor: String,
   activeBadge: String,
   badges: [String],
   marriedTo: String,
@@ -44,6 +45,7 @@ profileSchema.statics.register = async function(memberID) {
       memberID,
       description: '[No description provided]',
       favoriteAnime: '[No favorite anime provided]',
+      profileColor: '#2196f3',
       activeBadge: '',
       badges: [],
       marriedTo: '',
@@ -52,6 +54,14 @@ profileSchema.statics.register = async function(memberID) {
       previousRoles: []
     }).save()
   ***REMOVED***
+***REMOVED***
+
+profileSchema.methods.edit = async function(memberID, field, value) {
+  this[field] = value;
+
+  await this.save();
+
+  return this;
 ***REMOVED***
 
 //Model
