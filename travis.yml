@@ -1,0 +1,11 @@
+sudo: 'required'
+
+services:
+  - docker
+
+after_success:
+  - docker build -t abdulsammad200/aldovia ./server
+  # Login
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Push
+  - docker push abdulsammad200/aldovia
