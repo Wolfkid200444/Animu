@@ -28,7 +28,7 @@ const answers = [
 ];
 
 //Main
-module.exports = class ReactCommand extends Command {
+module.exports = class EightBallCommand extends Command {
   constructor(client) {
     super(client, {
       name: '8ball',

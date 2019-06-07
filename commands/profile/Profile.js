@@ -43,7 +43,7 @@ module.exports = class ProfileCommand extends Command {
         new RichEmbed()
           .setTitle('Profile not found')
           .setDescription(
-            "Your profile doesn't exist, use `register` command to register your profile"
+            "Profile doesn't exist, use `register` command to register profile"
           )
           .setColor('#f44336')
       );
