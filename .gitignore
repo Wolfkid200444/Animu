@@ -1,4 +1,2 @@
 node_modules
-mongo/data
-dev.sh
-.env
+dev.js

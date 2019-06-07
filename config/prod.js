@@ -1,0 +1,4 @@
+***REMOVED***
+***REMOVED*** process.env.MONGO_CONNECTION_STRING,
+***REMOVED*** process.env.DISCORD_BOT_TOKEN
+***REMOVED***
