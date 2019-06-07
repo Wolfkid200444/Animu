@@ -8,5 +8,7 @@ after_success:
   - docker build -t abdulsammad200/aldovia ./server
   # Login
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
   # Push
   - docker push abdulsammad200/aldovia
+  - heroku container:push abdulsammad200/aldovia -a aldovia
