@@ -3,13 +3,10 @@
 //==========================
 const express = require('express');
 const bodyParser = require('body-parser');
-// const session = require('express-session');
-// const redis = require('redis').createClient();
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
 const MongoDBProvider = require('commando-provider-mongo');
 const { CommandoClient } = require('discord.js-commando');
-// const redisStore = require('connect-redis')(session);
 const path = require('path');
 const keys = require('./config/keys');
 //==========================
@@ -32,19 +29,6 @@ const client = new CommandoClient({
 //==========================
 //EXPRESS
 //==========================
-// app.use(
-//   session({
-//     secret: keys.sessionSecret,
-//     store: new redisStore({
-//       host: keys.redisHost,
-//       port: keys.redisPort,
-//       client: redis,
-//       ttl: 260
-//     }),
-//     saveUninitialized: true,
-//     resave: false
-//   })
-// );
 app.use(bodyParser.json());
 //==========================
 
