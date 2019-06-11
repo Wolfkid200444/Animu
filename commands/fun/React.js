@@ -32,6 +32,7 @@ module.exports = class ReactCommand extends Command {
             'confused',
             'thinking',
             'lewding',
+            'sad',
             'crying',
             'smiling',
             'laughing',

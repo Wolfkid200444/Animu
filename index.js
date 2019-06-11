@@ -44,6 +44,7 @@ mongoose
     console.log('Database Status: Online');
     //->Creating models
     require('./models/Reaction');
+    require('./models/Action');
     require('./models/Profile');
     require('./models/Inventory');
 
