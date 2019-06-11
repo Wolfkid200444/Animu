@@ -12,6 +12,7 @@
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "commando-provider-mongo": "^1.1.1",
+    "compromise": "^11.13.2",
     "connect-redis": "^3.4.1",
     "discord.js": "^11.5.1",
     "discord.js-commando": "^0.10.0",

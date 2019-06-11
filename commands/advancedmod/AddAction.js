@@ -11,11 +11,11 @@ const Action = mongoose.model('Action');
 module.exports = class AddActionCommand extends Command {
   constructor(client) {
     super(client, {
-      name: 'addreaction',
+      name: 'addaction',
       aliases: [],
       group: 'advancedmod',
       userPermissions: ['MANAGE_GUILD'],
-      memberName: 'addreaction',
+      memberName: 'addaction',
       throttling: {
         usages: 1,
         duration: 5

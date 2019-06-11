@@ -3,6 +3,7 @@ const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 const prompt = require('discordjs-prompter');
 const mongoose = require('mongoose');
+const nlp = require('compromise');
 const _ = require('lodash');
 
 //Init
@@ -67,9 +68,9 @@ module.exports = class ActionCommand extends Command {
           new RichEmbed()
             .setTitle('Ooops')
             .setDescription(
-              `${member.displayName} denied ${msg.member.displayName} from ${
-                action.continuosAction
-              } them :(`
+              `${msg.member}, ${member.displayName} denied your request to ${
+                action.name
+              } them...`
             )
             .setColor('#2196f3')
         );
@@ -81,9 +82,10 @@ module.exports = class ActionCommand extends Command {
       return msg.embed(
         new RichEmbed()
           .setTitle(
-            `${msg.member.displayName} ${action.doneAction} ${
-              member.displayName
-            }`
+            `${msg.member.displayName} ${nlp(action.name)
+              .verbs()
+              .toPastTense()
+              .out('normal')} ${member.displayName}`
           )
           .setImage(_.sample(action.urls))
           .setColor('#2196f3')
