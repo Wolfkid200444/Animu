@@ -78,14 +78,13 @@ module.exports = class ActionCommand extends Command {
       sendReactionImage();
     } else sendReactionImage();
 
-    function sendReactionImage() {
+    async function sendReactionImage() {
       return msg.embed(
         new RichEmbed()
           .setTitle(
-            `${msg.member.displayName} ${nlp(action.name)
-              .verbs()
-              .toPastTense()
-              .out('normal')} ${member.displayName}`
+            `${msg.member.displayName} ${action.pastTense} ${
+              member.displayName
+            }`
           )
           .setImage(_.sample(action.urls))
           .setColor('#2196f3')

@@ -5,6 +5,7 @@ const actionSchema = new Schema({
     type: String,
     unique: true
   },
+  pastTense: String,
   requireConsent: Boolean,
   urls: [String]
 });

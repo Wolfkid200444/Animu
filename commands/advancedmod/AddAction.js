@@ -32,12 +32,25 @@ module.exports = class AddActionCommand extends Command {
           key: 'gifUrl',
           prompt: "What's the URL of the gif? (must be ending with .gif)",
           type: 'string'
+        },
+        {
+          key: 'pastTense',
+          prompt:
+            "What's the past tense of this action? (eg: past tense of punch is punched)",
+          type: 'string',
+          default: ''
+        },
+        {
+          key: 'requireConsent',
+          prompt: 'Should this action require consent?',
+          type: 'boolean',
+          default: false
         }
       ]
     });
   }
 
-  async run(msg, { actionName, gifUrl }) {
+  async run(msg, { actionName, gifUrl, pastTense, requireConsent }) {
     const action = await Action.findOne({
       name: actionName.toLowerCase()
     }).exec();
@@ -58,6 +71,8 @@ module.exports = class AddActionCommand extends Command {
 
       await new Action({
         name: actionName.toLowerCase(),
+        pastTense,
+        requireConsent,
         urls: [gifUrl.trim()]
       }).save();
 
