@@ -5,8 +5,6 @@ const actionSchema = new Schema({
     type: String,
     unique: true
   },
-  doneAction: String,
-  continuosAction: String,
   requireConsent: Boolean,
   urls: [String]
 });
