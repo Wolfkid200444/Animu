@@ -3,7 +3,6 @@ const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 const prompt = require('discordjs-prompter');
 const mongoose = require('mongoose');
-const nlp = require('compromise');
 const _ = require('lodash');
 
 //Init
