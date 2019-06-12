@@ -27,14 +27,15 @@ module.exports = (app, client) => {
       const reputation = payload.reputation;
       const change = payload.change;
 
-      var profile = await Profile.findOne({ memberID }).exec();
+      const profile = await Profile.findOne({ memberID }).exec();
 
-      if (!profile) profile = await Profile.register(memberID);
+      if (!profile) await Profile.register(memberID);
 
-      if (change === '+') profile.reputation += reputation;
-      else profile.reputation -= reputation;
-
-      profile.save();
+      if (change === '+')
+        Profile.update({ memberID }, { $inc: { reputation: reputation } });
+      else {
+        Profile.update({ memberID }, { $inc: { reputation: -reputation } });
+      }
     }
   });
 ***REMOVED***
