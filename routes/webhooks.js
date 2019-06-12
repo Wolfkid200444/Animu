@@ -29,7 +29,7 @@ module.exports = (app, client) => {
 
       let profile = await Profile.findOne({ memberID }).exec();
 
-      if (!profile) profile = await profile.register(memberID);
+      if (!profile) profile = await Profile.register(memberID);
 
       if (change === '+') profile.reputation += reputation;
       else profile.reputation -= reputation;
