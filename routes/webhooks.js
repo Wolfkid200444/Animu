@@ -10,7 +10,7 @@ module.exports = (app, client) => {
     res.json({ status: 'Online' });
   });
 
-  app.get('/webhooks', async (req, res) => {
+  app.post('/webhooks', async (req, res) => {
     const apiKey = req.body.apiKey;
     const type = req.body.type;
     const payload = req.body.payload;
