@@ -15,7 +15,7 @@ module.exports = (app, client) => {
     const type = req.body.type;
     const payload = req.body.payload;
 
-    if (!apiKey || apiKey !== keys.aldoviaAPIKey))
+    if (!apiKey || apiKey !== keys.aldoviaAPIKey)
       return res.json({ error: 'Invalid API key' });
 
     if (!type) return res.json({ error: 'No type provided' });
