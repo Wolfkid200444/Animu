@@ -32,9 +32,9 @@ module.exports = (app, client) => {
       if (!profile) await Profile.register(memberID);
 
       if (change === '+')
-        Profile.update({ memberID }, { $inc: { reputation: reputation } });
+        Profile.updateOne({ memberID }, { $inc: { reputation: reputation } });
       else {
-        Profile.update({ memberID }, { $inc: { reputation: -reputation } });
+        Profile.updateOne({ memberID }, { $inc: { reputation: -reputation } });
       }
     }
   });
