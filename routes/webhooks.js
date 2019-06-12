@@ -32,10 +32,17 @@ module.exports = (app, client) => {
       if (!profile) await Profile.register(memberID);
 
       if (change === '+')
-        Profile.updateOne({ memberID }, { $inc: { reputation: reputation } });
-      else {
-        Profile.updateOne({ memberID }, { $inc: { reputation: -reputation } });
-      }
+        await Profile.updateOne(
+          { memberID },
+          { $inc: { reputation: reputation } }
+        );
+      else
+        await Profile.updateOne(
+          { memberID },
+          { $inc: { reputation: -reputation } }
+        );
+
+      return res.json({ success: 'Reputation successfully modified' });
     }
   });
 ***REMOVED***
