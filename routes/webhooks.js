@@ -27,7 +27,7 @@ module.exports = (app, client) => {
       const reputation = payload.reputation;
       const change = payload.change;
 
-      let profile = await Profile.findOne({ memberID }).exec();
+      var profile = await Profile.findOne({ memberID }).exec();
 
       if (!profile) profile = await Profile.register(memberID);
 

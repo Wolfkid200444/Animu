@@ -40,8 +40,18 @@ module.exports = class AwardCommand extends Command {
   }
 
   async run(msg, { member, award }) {
-    const inventory = await Inventory.findOne({ memberID: msg.member }).exec();
-    const profile = await Inventory.findOne({ memberID: member.id }).exec();
+    const inventory = await Inventory.findOne({
+      memberID: msg.member.id
+    }).exec();
+    const profile = await Profile.findOne({ memberID: member.id }).exec();
+
+    if (msg.member.id === member.id)
+      return msg.embed(
+        new RichEmbed()
+          .setTitle('Lol FR?')
+          .setDescription("You can't award yourself")
+          .setColor('#f44336')
+      );
 
     if (!inventory)
       return msg.embed(
@@ -58,7 +68,7 @@ module.exports = class AwardCommand extends Command {
         new RichEmbed()
           .setTitle('Profile not found')
           .setDescription(
-            "The person you're trying to award doesn't have a profile, use `register` command to register profile"
+            "The person you're trying to award doesn't have a profile, they must use `register` command to register profile"
           )
           .setColor('#f44336')
       );

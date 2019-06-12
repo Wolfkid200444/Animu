@@ -23,7 +23,7 @@ const client = new CommandoClient({
     disableEveryone: true
   }),
   app = express(),
-  PORT = process.env.PORT || 8080;
+  PORT = process.env.PORT || 3000;
 //==========================
 
 //==========================
