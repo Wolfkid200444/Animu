@@ -1,7 +1,6 @@
 //Dependencies
-const _ = require('lodash');
 const mongoose = require('mongoose');
-const { apiKeys } = require('../config/config');
+const keys = require('../config/keys');
 
 //Init
 const Profile = mongoose.model('Profile');
@@ -16,7 +15,7 @@ module.exports = (app, client) => {
     const type = req.body.type;
     const payload = req.body.payload;
 
-    if (!apiKey || !_.includes(apiKeys, apiKey))
+    if (!apiKey || apiKey !== keys.aldoviaAPIKey))
       return res.json({ error: 'Invalid API key' });
 
     if (!type) return res.json({ error: 'No type provided' });
