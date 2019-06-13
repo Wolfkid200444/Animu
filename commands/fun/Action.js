@@ -58,7 +58,7 @@ module.exports = class ActionCommand extends Command {
       const res = await prompt.reaction(msg.channel, {
         question: `${member}, do you want to allow ${
           msg.member.displayName
-        } to ${action} you?`,
+        } to ${action.name} you?`,
         userId: member.id
       });
 
