@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const { RichEmbed } = require('discord.js');
 const keys = require('../config/keys');
+const { changeReputation } = require('../helpers/profile');
 
 //Init
 const Profile = mongoose.model('Profile');
@@ -28,20 +29,21 @@ module.exports = (app, client) => {
       const reputation = payload.reputation;
       const change = payload.change;
 
-      const profile = await Profile.findOne({ memberID }).exec();
+      if (
+        client.guilds
+          .get('556442896719544320')
+          .members.get(memberID)
+          .roles.find(r => {
+            return (
+              r.name === 'Moderator' ||
+              r.name === 'Senior Moderator' ||
+              r.name === '👑 Server Admin 👑'
+            );
+          })
+      )
+        return res.json({ error: 'Mod/server admin detected' });
 
-      if (!profile) await Profile.register(memberID);
-
-      if (change === '+')
-        await Profile.updateOne(
-          { memberID },
-          { $inc: { reputation: reputation } }
-        );
-      else
-        await Profile.updateOne(
-          { memberID },
-          { $inc: { reputation: -reputation } }
-        );
+      await changeReputation(memberID, change, reputation);
 
       const profileCheck = await Profile.findOne({ memberID }).exec();
 

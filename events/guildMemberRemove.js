@@ -1,6 +1,5 @@
 //Dependencies
 const mongoose = require('mongoose');
-const _ = require('lodash');
 
 //Init
 const Profile = mongoose.model('Profile');
