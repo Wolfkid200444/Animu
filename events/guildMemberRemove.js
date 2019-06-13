@@ -6,10 +6,7 @@ const _ = require('lodash');
 const Profile = mongoose.model('Profile');
 
 module.exports = client => {
-  client.on('guildMemberAdd', async member => {
-    const aldovia = client.guilds.get('556442896719544320');
-    const memberLeavesChannel = aldovia.channels.get('586644004536582145');
-
+  client.on('guildMemberRemove', async member => {
     //Store roles in profile
     const profile = await Profile.findOne({ memberID: member.id }).exec();
 
@@ -19,7 +16,5 @@ module.exports = client => {
       });
       await profile.save();
     }
-
-    memberLeavesChannel.send(`${member.displayName} has left alvonia`);
   });
 ***REMOVED***

@@ -1,5 +1,6 @@
 //Dependencies
 const mongoose = require('mongoose');
+const { RichEmbed } = require('discord.js');
 const keys = require('../config/keys');
 
 //Init
@@ -41,6 +42,37 @@ module.exports = (app, client) => {
           { memberID },
           { $inc: { reputation: -reputation } }
         );
+
+      const profileCheck = await Profile.findOne({ memberID }).exec();
+
+      if (profileCheck.reputation <= 20)
+        client.guilds
+          .get('556442896719544320')
+          .members.get(memberID)
+          .send(
+            new RichEmbed()
+              .setTitle('Low Reputation')
+              .setDescription(
+                `Your reputation has dropped to ${
+                  profileCheck.reputation
+                }, you're in gray zone and can be banned at any time unless you improve your reputation`
+              )
+              .setColor('#f44336')
+          );
+
+      if (profileCheck.reputation <= 0) {
+        profileCheck.reputation = 20;
+        await client.guilds
+          .get('556442896719544320')
+          .members.get(memberID)
+          .send(
+            'Your reputation has dropped to 0, thus you are hereby banned from Aldovia'
+          );
+        await client.guilds
+          .get('556442896719544320')
+          .members.get(memberID)
+          .ban({ days: 1, reason: 'Reputation dropped to 0' });
+      }
 
       return res.json({ success: 'Reputation successfully modified' });
     }
