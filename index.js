@@ -67,6 +67,7 @@ mongoose
         ['shop', 'Shop Commands'],
         ['inventory', 'Inventory Commands'],
         ['fun', 'Fun Commands'],
+        ['games', 'Games'],
         ['moderation', 'Moderation Commands (For Moderators)'],
         ['advancedmod', 'Advanced Moderation Commands (For Senior Moderators)'],
         ['stats', 'Status Commands']
