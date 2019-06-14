@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 //Init
 const Profile = mongoose.model('Profile');
+const Inventory = mongoose.model('Inventory');
 
 function getProfileEmbed(msg, profile) {
   const profileEmbed = new RichEmbed()
@@ -66,6 +67,17 @@ async function changeReputation(memberID, change, reputation) {
     );
 }
 
+async function changeCoins(memberID, change, coins) {
+  const profile = await Profile.findOne({ memberID }).exec();
+
+  if (!profile) await Profile.register(memberID);
+
+  if (change === '+')
+    await Inventory.updateOne({ memberID }, { $inc: { coins: coins } });
+  else await Inventory.updateOne({ memberID }, { $inc: { coins: -coins } });
+}
+
 //Exports
 module.exports.getProfileEmbed = getProfileEmbed;
 module.exports.changeReputation = changeReputation;
+module.exports.changeCoins = changeCoins;
