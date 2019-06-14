@@ -27,7 +27,7 @@ module.exports = class LeaderboardCommand extends Command {
           key: 'type',
           prompt: 'Which leaderboard do you want to view?',
           type: 'string',
-          oneOf: ['coins']
+          oneOf: ['coins', 'reputation']
         }
       ]
     });
@@ -72,6 +72,47 @@ module.exports = class LeaderboardCommand extends Command {
       msg.embed(
         new RichEmbed()
           .setTitle('Top 10 Richest members of Aldovia')
+          .setDescription(str)
+          .setColor('#2196f3')
+      );
+    } else if (type === 'reputation') {
+      const profiles = await Profile.find({})
+        .sort({ reputation: -1 })
+        .exec();
+      const top = profiles
+        .filter(profile => msg.guild.members.get(profile.memberID))
+        .filter(profile => {
+          const mod = msg.guild.roles.find(r => r.name === 'Moderator');
+          const seniorMod = msg.guild.roles.find(
+            r => r.name === 'Senior Moderator'
+          );
+          const serverAdmin = msg.guild.roles.find(
+            r => r.name === '👑 Server Admin 👑'
+          );
+
+          if (msg.guild.members.get(profile.memberID).roles.has(mod.id))
+            return false;
+          if (msg.guild.members.get(profile.memberID).roles.has(seniorMod.id))
+            return false;
+          if (msg.guild.members.get(profile.memberID).roles.has(serverAdmin.id))
+            return false;
+          else return true;
+        })
+        .slice(0, 10);
+
+      let str = '';
+
+      top.forEach((profile, i) => {
+        str += `${i === 0 ? '**' : ''}${i + 1}) ${
+          msg.guild.members.get(profile.memberID).displayName
+        } - ${profile.reputation}% Reputation ${i === 0 ? '👑' : ''}${
+          i === 0 ? '**' : ''
+        }\n`;
+      });
+
+      msg.embed(
+        new RichEmbed()
+          .setTitle('Top 10 Reputable members of Aldovia')
           .setDescription(str)
           .setColor('#2196f3')
       );
