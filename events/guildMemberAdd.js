@@ -114,6 +114,7 @@ module.exports = client => {
       new RichEmbed()
         .setTitle(welcomeMsg.string.replace('$', member.displayName))
         .setImage(welcomeMsg.gif)
+        .setColor('#2196f3')
     );
   });
 ***REMOVED***
