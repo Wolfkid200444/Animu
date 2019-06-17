@@ -13,7 +13,9 @@ const itemSchema = new Schema({
     max: 100
   },
   roles: [String],
-  misc: [String]
+  misc: [String],
+  usable: Boolean,
+  instantUse: Boolean
 });
 
 //Model Methods
@@ -23,7 +25,9 @@ itemSchema.statics.createItem = async function(
   price,
   discount,
   roles,
-  misc
+  misc,
+  usable,
+  instantUse
 ) {
   const item = await this.findOne({ name: itemName }).exec();
 
@@ -35,7 +39,9 @@ itemSchema.statics.createItem = async function(
     price,
     discount,
     roles: roles.split(',').map(role => role.trim()),
-    misc: misc.split(',').map(misce => misce.trim())
+    misc: misc.split(',').map(misce => misce.trim()),
+    usable,
+    instantUse
   }).save();
 ***REMOVED***
 model('Item', itemSchema);

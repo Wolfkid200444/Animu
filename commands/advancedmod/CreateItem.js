@@ -58,12 +58,25 @@ module.exports = class CreateItemCommand extends Command {
           prompt:
             'Misc stuff related to this item (comma seperated list, none for no misc)',
           type: 'string'
+        },
+        {
+          key: 'usable',
+          prompt: 'Can this item be used using `use` command?',
+          type: 'boolean'
+        },
+        {
+          key: 'instantUse',
+          prompt: 'Will this item be automatically used upon purchase?',
+          type: 'boolean'
         }
       ]
     });
   }
 
-  async run(msg, { itemName, description, price, discount, roles, misc }) {
+  async run(
+    msg,
+    { itemName, description, price, discount, roles, misc, usable, instantUse }
+  ) {
     const item = await Item.findOne({ name: itemName }).exec();
 
     if (item)
@@ -80,7 +93,9 @@ module.exports = class CreateItemCommand extends Command {
       price,
       discount,
       roles,
-      misc
+      misc,
+      usable,
+      instantUse
     );
 
     return msg.embed(getItemEmbed(newItem));
