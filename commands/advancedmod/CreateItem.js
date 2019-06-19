@@ -68,6 +68,16 @@ module.exports = class CreateItemCommand extends Command {
           key: 'instantUse',
           prompt: 'Will this item be automatically used upon purchase?',
           type: 'boolean'
+        },
+        {
+          key: 'purchaseMsg',
+          prompt: 'What should be the message upon purchasing this item?',
+          type: 'string'
+        },
+        {
+          key: 'useMsg',
+          prompt: 'What should be the message after using this item?',
+          type: 'string'
         }
       ]
     });
@@ -75,7 +85,18 @@ module.exports = class CreateItemCommand extends Command {
 
   async run(
     msg,
-    { itemName, description, price, discount, roles, misc, usable, instantUse }
+    {
+      itemName,
+      description,
+      price,
+      discount,
+      roles,
+      misc,
+      usable,
+      instantUse,
+      purchaseMsg,
+      useMsg
+    }
   ) {
     const item = await Item.findOne({ name: itemName }).exec();
 
@@ -95,7 +116,9 @@ module.exports = class CreateItemCommand extends Command {
       roles,
       misc,
       usable,
-      instantUse
+      instantUse,
+      purchaseMsg,
+      useMsg
     );
 
     return msg.embed(getItemEmbed(newItem));

@@ -15,7 +15,9 @@ const itemSchema = new Schema({
   roles: [String],
   misc: [String],
   usable: Boolean,
-  instantUse: Boolean
+  instantUse: Boolean,
+  purchaseMsg: String,
+  useMsg: String
 });
 
 //Model Methods
@@ -27,7 +29,9 @@ itemSchema.statics.createItem = async function(
   roles,
   misc,
   usable,
-  instantUse
+  instantUse,
+  purchaseMsg,
+  useMsg
 ) {
   const item = await this.findOne({ name: itemName }).exec();
 
@@ -41,7 +45,50 @@ itemSchema.statics.createItem = async function(
     roles: roles.split(',').map(role => role.trim()),
     misc: misc.split(',').map(misce => misce.trim()),
     usable,
-    instantUse
+    instantUse,
+    purchaseMsg,
+    useMsg
   }).save();
 ***REMOVED***
+
+//Schema Methods
+itemSchema.methods.purchase = async function(msg, memberID) {
+  const inventory = await this.model('Inventory')
+    .findOne({ memberID })
+    .exec();
+
+  const price = this.price - this.price * (this.discount / 100);
+
+  if (inventory.coins < price)
+    return {
+      res: 'err',
+      title: 'Insufficient Coins',
+      desc: "You don't have enough coins to purchase this item"
+    ***REMOVED***
+
+  //Purchasing item
+  inventory.coins -= price;
+
+  //Use item instantly
+  if (this.instantUse) {
+    this.roles.forEach(role => {
+      if (role !== 'none') {
+        //Assigning role
+        const role = msg.guild.roles.find(r => r.name === role);
+
+        msg.guild.members.get(memberID).addRole(role.id);
+      }
+    });
+
+    return { res: 'success', title: 'Item Purchased', desc: this.useMsg ***REMOVED***
+  } else {
+    //Add item to inventory
+    inventory.inventory.push(this.name);
+
+    await inventory.save();
+
+    return { res: 'success', title: 'Item Purchased', desc: this.purchaseMsg ***REMOVED***
+  }
+***REMOVED***
+
 model('Item', itemSchema);
