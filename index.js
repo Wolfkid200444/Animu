@@ -79,7 +79,7 @@ mongoose
 
     //->When Ready
     client.on('ready', () => {
-      client.user.setActivity('over Alvonia | -help', { type: 'WATCHING' });
+      client.user.setActivity('over Aldovia | -help', { type: 'WATCHING' });
 
       //==========================
       //EVENTS
