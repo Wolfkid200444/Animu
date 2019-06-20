@@ -48,6 +48,7 @@ mongoose
     require('./models/Profile');
     require('./models/Inventory');
     require('./models/Item');
+    require('./models/Config');
 
     //==========================
     //DISCORD
