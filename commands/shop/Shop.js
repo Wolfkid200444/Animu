@@ -39,7 +39,7 @@ module.exports = class ShopCommand extends Command {
           item.discount
         }% off)`;
 
-      itemStr += `${i + 1}) ${item.name} | ${priceStr}`;
+      itemStr += `${i + 1}) ${item.name} | ${priceStr}\n`;
     });
 
     msg.embed(
