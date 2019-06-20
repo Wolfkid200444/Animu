@@ -108,6 +108,7 @@ module.exports = class MarryCommand extends Command {
         .setDescription(
           `${msg.member.displayName} married ${member.displayName} 🎉🎉🎉`
         )
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***
