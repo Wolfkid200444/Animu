@@ -12,7 +12,11 @@ function getProfileEmbed(msg, profile) {
     .addField('Favorite Anime', profile.favoriteAnime)
     .setColor(profile.profileColor);
 
-  if (profile.marriedTo) profileEmbed.addField('Married To', profile.marriedTo);
+  if (profile.marriedTo)
+    profileEmbed.addField(
+      'Married To',
+      msg.guild.members.get(profile.marriedTo).displayName
+    );
 
   const moderatorRole = msg.guild.roles.find(r => r.name === 'Moderator');
   const seniorModeratorRole = msg.guild.roles.find(

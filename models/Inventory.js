@@ -6,7 +6,8 @@ const inventorySchema = new Schema({
     unique: true
   },
   coins: Number,
-  inventory: [String]
+  inventory: [String],
+  lottos: [Number]
 });
 
 model('Inventory', inventorySchema);
