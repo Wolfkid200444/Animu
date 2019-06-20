@@ -56,8 +56,8 @@ module.exports = class InventoryCommand extends Command {
         .setTitle('Lotto')
         .setDescription(
           `Your chances of winning lotto are **${
-            inventory.lottos.length < 0
-              ? (inventory.lottos.length / totalLottos) * 100
+            inventory.lottos.length > 0
+              ? Math.round((inventory.lottos.length / totalLottos.value) * 100)
               : 0
           }%**`
         )
