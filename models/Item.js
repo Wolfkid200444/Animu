@@ -79,15 +79,15 @@ itemSchema.methods.purchase = async function(msg, memberID) {
 
     //If it's a lotto ticket
     if (this.name === 'Lotto Ticket') {
-      const inventory = this.model('Inventory')
+      const inventory = await this.model('Inventory')
         .findOne({ memberID })
         .exec();
-      const totalLottos = this.model('Config')
+      const totalLottos = await this.model('Config')
         .findOne({ key: 'totalLottos' })
         .exec();
 
       totalLottos.value++;
-      inventory.lottos.push(totalLottos);
+      inventory.lottos.push(totalLottos.value);
       totalLottos.markModified('value');
 
       await totalLottos.save();

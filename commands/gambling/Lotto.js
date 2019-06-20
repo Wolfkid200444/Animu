@@ -46,7 +46,7 @@ module.exports = class InventoryCommand extends Command {
     let lotStr = '';
 
     inventory.lottos.forEach(lottoNum => {
-      lotStr += `- ${lottoNum}\n`;
+      lotStr += `${lottoNum}\n`;
     });
 
     if (lotStr === '') lotStr = '[No Lotto tickets Purchased]';
