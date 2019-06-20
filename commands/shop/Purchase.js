@@ -2,9 +2,9 @@
 const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 const mongoose = require('mongoose');
-const { getItemEmbed } = require('../../helpers/items');
 
 //Init
+const Profile = mongoose.model('Profile');
 const Item = mongoose.model('Item');
 
 //Main
@@ -33,6 +33,16 @@ module.exports = class PurchaseCommand extends Command {
   }
 
   async run(msg, { itemName }) {
+    const profile = await Profile.findOne({ memberID: msg.author.id }).exec();
+
+    if (!profile)
+      return msg.embed(
+        new RichEmbed()
+          .setTitle('Profile not found')
+          .setDescription('Use `-register` to register your profile')
+          .setColor('#f44336')
+      );
+
     const item = await Item.findOne({ name: itemName }).exec();
 
     if (!item)
