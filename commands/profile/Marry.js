@@ -44,6 +44,14 @@ module.exports = class MarryCommand extends Command {
       memberID: member.id
     }).exec();
 
+    if (msg.member.id === member.id)
+      return msg.embed(
+        new RichEmbed()
+          .setTitle("Can't marry yourself")
+          .setDescription('You did an oopsie!')
+          .setColor('#f44336')
+      );
+
     if (!profile)
       return msg.embed(
         new RichEmbed()
