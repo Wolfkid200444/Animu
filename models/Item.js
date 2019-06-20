@@ -13,7 +13,6 @@ const itemSchema = new Schema({
     max: 100
   },
   roles: [String],
-  misc: [String],
   usable: Boolean,
   instantUse: Boolean,
   purchaseMsg: String,
@@ -27,7 +26,6 @@ itemSchema.statics.createItem = async function(
   price,
   discount,
   roles,
-  misc,
   usable,
   instantUse,
   purchaseMsg,
@@ -43,7 +41,6 @@ itemSchema.statics.createItem = async function(
     price,
     discount,
     roles: roles.split(',').map(role => role.trim()),
-    misc: misc.split(',').map(misce => misce.trim()),
     usable,
     instantUse,
     purchaseMsg,
@@ -80,7 +77,7 @@ itemSchema.methods.purchase = async function(msg, memberID) {
       }
     });
 
-    return { res: 'success', title: 'Item Purchased', desc: this.useMsg ***REMOVED***
+    return { res: 'success', title: 'Item Purchased', desc: this.purchaseMsg ***REMOVED***
   } else {
     //Add item to inventory
     inventory.inventory.push(this.name);

@@ -54,12 +54,6 @@ module.exports = class CreateItemCommand extends Command {
           type: 'string'
         },
         {
-          key: 'misc',
-          prompt:
-            'Misc stuff related to this item (comma seperated list, none for no misc)',
-          type: 'string'
-        },
-        {
           key: 'usable',
           prompt: 'Can this item be used using `use` command?',
           type: 'boolean'
@@ -91,7 +85,6 @@ module.exports = class CreateItemCommand extends Command {
       price,
       discount,
       roles,
-      misc,
       usable,
       instantUse,
       purchaseMsg,
@@ -114,7 +107,6 @@ module.exports = class CreateItemCommand extends Command {
       price,
       discount,
       roles,
-      misc,
       usable,
       instantUse,
       purchaseMsg,
