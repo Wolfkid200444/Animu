@@ -67,6 +67,7 @@ mongoose
         ['profile', 'Profile Commands'],
         ['shop', 'Shop Commands'],
         ['inventory', 'Inventory Commands'],
+        ['gambling', 'Gambling & Lotto Commands'],
         ['fun', 'Fun Commands'],
         ['games', 'Games'],
         ['moderation', 'Moderation Commands (For Moderators)'],
