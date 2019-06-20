@@ -77,6 +77,23 @@ itemSchema.methods.purchase = async function(msg, memberID) {
       }
     });
 
+    //If it's a lotto ticket
+    if (this.name === 'Lotto Ticket') {
+      const inventory = this.model('Inventory')
+        .findOne({ memberID })
+        .exec();
+      const totalLottos = this.model('Config')
+        .findOne({ key: 'totalLottos' })
+        .exec();
+
+      totalLottos.value++;
+      inventory.lottos.push(totalLottos);
+      totalLottos.markModified('value');
+
+      await totalLottos.save();
+      await inventory.save();
+    }
+
     return { res: 'success', title: 'Item Purchased', desc: this.purchaseMsg ***REMOVED***
   } else {
     //Add item to inventory
