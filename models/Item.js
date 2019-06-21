@@ -79,9 +79,6 @@ itemSchema.methods.purchase = async function(msg, memberID) {
 
     //If it's a lotto ticket
     if (this.name === 'Lotto Ticket') {
-      const inventory = await this.model('Inventory')
-        .findOne({ memberID })
-        .exec();
       const totalLottos = await this.model('Config')
         .findOne({ key: 'totalLottos' })
         .exec();
