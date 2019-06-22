@@ -9,6 +9,7 @@ const Config = mongoose.model('Config');
 //Main
 module.exports = client => {
   schedule.scheduleJob('0 0 0 * *', async () => {
+    console.log('GIVING LOTTO');
     const totalLottos = await Config.findOne({ key: 'totalLottos' }).exec();
 
     if (totalLottos < 1) return;

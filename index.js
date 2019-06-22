@@ -84,6 +84,12 @@ mongoose
       client.user.setActivity('over Aldovia | -help', { type: 'WATCHING' });
 
       //==========================
+      //TIMERS
+      //==========================
+      require('./timers/lotto')(client);
+      //==========================
+
+      //==========================
       //EVENTS
       //==========================
       require('./events/guildMemberAdd')(client);
@@ -94,12 +100,6 @@ mongoose
       //ROUTES
       //==========================
       require('./routes/webhooks')(app, client);
-      //==========================
-
-      //==========================
-      //TIMERS
-      //==========================
-      require('./timers/lotto')(client);
       //==========================
     });
     //==========================
