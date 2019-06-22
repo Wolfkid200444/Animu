@@ -52,10 +52,10 @@ module.exports = class ShipCommand extends Command {
 
     if (
       (profile.marriedTo || profile2.marriedTo) &&
-      profile.marriedTo !== profile2.id
+      profile.marriedTo !== profile2.memberID
     )
       randNum = Math.floor(Math.random() * 44);
-    else if (profile.marriedTo === profile2.id)
+    else if (profile.marriedTo === profile2.memberID)
       randNum = Math.floor(Math.random() * 41) + 60;
     else randNum = Math.floor(Math.random() * 101);
 
