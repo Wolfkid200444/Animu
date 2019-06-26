@@ -17,7 +17,8 @@ const keys = require('./config/keys');
 const client = new CommandoClient({
     commandPrefix: '-',
     owner: [
-      '338334949331697664' //Light Yagami
+      '338334949331697664', //Light Yagami
+      '510715931572305920' //Misaki
     ],
     invite: 'https://discord.gg/JGsgBsN',
     disableEveryone: true
