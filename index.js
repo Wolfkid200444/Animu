@@ -1,41 +1,32 @@
-//==========================
+//=====================
 //DEPENDENCIES
-//==========================
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const { MongoClient } = require('mongodb');
-const MongoDBProvider = require('commando-provider-mongo');
-const { CommandoClient } = require('discord.js-commando');
-const path = require('path');
+//=====================
+const { Client } = require('klasa');
 const keys = require('./config/keys');
-//==========================
+const mongoose = require('mongoose');
+//=====================
 
-//==========================
-//CONSTANTS
-//==========================
-const client = new CommandoClient({
-    commandPrefix: '-',
-    owner: [
-      '338334949331697664', //Light Yagami
-      '510715931572305920' //Misaki
-    ],
-    invite: 'https://discord.gg/JGsgBsN',
-    disableEveryone: true
-  }),
-  app = express(),
-  PORT = process.env.PORT || 3000;
-//==========================
+//=====================
+//SCHEMAS
+//=====================
+//-> Client Schema
+Client.defaultClientSchema.add('aldoviaSeniorMods', 'User', { array: true });
+//=====================
 
-//==========================
-//EXPRESS
-//==========================
-app.use(bodyParser.json());
-//==========================
-
-//==========================
-//MONGOOSE
-//==========================
+//=====================
+//INIT
+//=====================
+//-> Klasa Client
+Client.defaultPermissionLevels
+  .add(
+    5,
+    ({ guild, member }) => guild && member.permissions.has('MANAGE_ROLES'),
+    { fetch: true }
+  )
+  .add(8, ({ client, author }) =>
+    client.settings.aldoviaSeniorMods.includes(author.id)
+  );
+//-> Mongoose
 mongoose
   .connect(keys.mongoConnectionString, {
     useNewUrlParser: true,
@@ -51,68 +42,31 @@ mongoose
     require('./models/Item');
     require('./models/Config');
 
-    //==========================
-    //DISCORD
-    //==========================
-    //->Settings provider
-    client
-      .setProvider(
-        MongoClient.connect(keys.mongoConnectionString, {
-          useNewUrlParser: true
-        }).then(client => new MongoDBProvider(client, 'abot'))
-      )
-      .catch(console.error);
-    //->Registering commands
-    client.registry
-      .registerDefaultTypes()
-      .registerGroups([
-        ['profile', 'Profile Commands'],
-        ['shop', 'Shop Commands'],
-        ['inventory', 'Inventory Commands'],
-        ['gambling', 'Gambling & Lotto Commands'],
-        ['fun', 'Fun Commands'],
-        ['games', 'Games'],
-        ['moderation', 'Moderation Commands (For Moderators)'],
-        ['advancedmod', 'Advanced Moderation Commands (For Senior Moderators)'],
-        ['stats', 'Status Commands']
-      ])
-      .registerDefaultGroups()
-      .registerDefaultCommands()
-      .registerCommandsIn(path.join(__dirname, 'commands'));
-
-    //->When Ready
-    client.on('ready', () => {
-      client.user.setActivity('over Aldovia | -help', { type: 'WATCHING' });
-
-      //==========================
-      //TIMERS
-      //==========================
-      require('./timers/lotto')(client);
-      //==========================
-
-      //==========================
-      //EVENTS
-      //==========================
-      require('./events/guildMemberAdd')(client);
-      require('./events/message')(client);
-      //==========================
-
-      //==========================
-      //ROUTES
-      //==========================
-      require('./routes/webhooks')(app, client);
-      //==========================
-    });
-    //==========================
+    //-> Klasa Client
+    new Client({
+      fetchAllMembers: false,
+      prefix: '-',
+      commandEditing: true,
+      typing: true,
+      noPrefixDM: true,
+      providers: {
+        default: 'mongodb',
+        mongodb: {
+          connectionString: keys.mongoConnectionString
+        }
+      },
+      owners: [
+        '556455046217203752', //Lily
+        '338334949331697664', //Light Yagami
+        '510715931572305920' //Misaki
+      ],
+      readyMessage: client => {
+        client.user.setActivity('over Aldovia Network', { type: 'WATCHING' });
+        client.settings.aldoviaSeniorMods = [
+          '477853785436192769' //Kitty
+        ];
+        return 'Bot ready';
+      }
+    }).login(keys.discordBotToken);
   });
-//==========================
-
-//==========================
-//Listening
-//==========================
-client
-  .login(keys.discordBotToken)
-  .then(() => console.log('Bot Status: Online'))
-  .catch(err => console.log(err));
-app.listen(PORT, () => console.log('Web Server Status: Online'));
-//==========================
+//=====================

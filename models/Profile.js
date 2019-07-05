@@ -56,7 +56,27 @@ profileSchema.statics.register = async function(memberID) {
   ***REMOVED***
 ***REMOVED***
 
-profileSchema.methods.edit = async function(memberID, field, value) {
+profileSchema.methods.addReputation = async function(amount) {
+  this.reputation += amount;
+
+  if (this.reputation > 100) this.reputation = 100;
+  this.save();
+  return true;
+***REMOVED***
+
+profileSchema.methods.deductReputation = async function(amount) {
+  this.reputation -= amount;
+
+  if (this.reputation < 0) {
+    this.reputation = 20;
+    return false;
+  }
+
+  this.save();
+  return true;
+***REMOVED***
+
+profileSchema.methods.edit = async function(field, value) {
   this[field] = value;
 
   await this.save();

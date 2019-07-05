@@ -1,33 +1,30 @@
 {
-  "name": "server",
+  "name": "aldovia",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Aldovia bot for Aldovia Network of Servers",
+  "main": ".eslintrc.js",
   "scripts": {
     "start": "node index.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbdulSammad200/Aldovia-Bot.git"
+  },
+  "keywords": [
+    "aldovia"
+  ],
+  "author": "LightYagami200",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbdulSammad200/Aldovia-Bot/issues"
+  },
+  "homepage": "https://github.com/AbdulSammad200/Aldovia-Bot#readme",
   "dependencies": {
     "axios": "^0.19.0",
-    "body-parser": "^1.19.0",
-    "commando-provider-mongo": "^1.1.1",
-    "connect-redis": "^3.4.1",
-    "discord.js": "^11.5.1",
-    "discord.js-commando": "^0.10.0",
-    "discord.js-minesweeper": "^1.0.4-b",
-    "discordjs-prompter": "^1.0.0",
-    "express": "^4.17.1",
-    "express-session": "^1.16.1",
+    "discord.js": "github:discordjs/discord.js",
+    "klasa": "github:dirigeants/klasa#v1.0.0-alpha",
     "lodash": "^4.17.11",
-    "moment": "^2.24.0",
     "mongodb": "^3.2.7",
-    "mongoose": "^5.5.13",
-    "node-schedule": "^1.3.2",
-    "redis": "^2.8.0"
-  },
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "nodemon": "^1.19.1"
+    "mongoose": "^5.6.3"
   }
 }

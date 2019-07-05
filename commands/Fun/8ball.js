@@ -1,7 +1,33 @@
-//Dependencies
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { Command } = require('klasa');
+const { MessageEmbed } = require('discord.js');
 const _ = require('lodash');
+
+module.exports = class extends Command {
+  constructor(...args) {
+    super(...args, {
+      runIn: ['text', 'dm', 'group'],
+      aliases: ['8', 'eightball', 'ball', 'magicball'],
+      cooldown: 10,
+      description: 'Ask 8ball',
+      extendedHelp:
+        'Ask any question you want and the magic 8ball will answer all your questions',
+      usage: '<question:string>',
+      usageDelim: ' ',
+      quotedStringSupport: true
+    });
+  }
+
+  async run(msg, [question]) {
+    const answer = _.sample(answers);
+
+    return msg.sendEmbed(
+      new MessageEmbed()
+        .setTitle(`${msg.member.displayName} asks "${question}"`)
+        .setDescription(answer.string)
+        .setColor(answer.color)
+    );
+  }
+***REMOVED***
 
 //8Ball answers
 const answers = [
@@ -26,40 +52,3 @@ const answers = [
   { string: 'Outlook not so good.', color: '#f44336' },
   { string: 'Very doubtful.', color: '#f44336' }
 ];
-
-//Main
-module.exports = class EightBallCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: '8ball',
-      aliases: [],
-      group: 'fun',
-      memberName: '8ball',
-      throttling: {
-        usages: 1,
-        duration: 5
-      },
-      guildOnly: true,
-      description: 'Ask the well known 8 ball anything you want',
-      examples: ['8ball', '8ball Am I gay?'],
-      args: [
-        {
-          key: 'question',
-          prompt: 'What do you want to ask?',
-          type: 'string'
-        }
-      ]
-    });
-  }
-
-  async run(msg, { question }) {
-    const answer = _.sample(answers);
-
-    return msg.embed(
-      new RichEmbed()
-        .setTitle(`${msg.member.displayName} asks "${question}"`)
-        .setDescription(answer.string)
-        .setColor(answer.color)
-    );
-  }
-***REMOVED***
