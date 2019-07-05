@@ -41,13 +41,7 @@ module.exports = class extends Extendable {
     //Generating basic embed
     const profileEmbed = new MessageEmbed()
       .setThumbnail(this.displayAvatarURL({ size: 256 }))
-      .addField(
-        '❯ Name',
-        this.client.guilds
-          .find(guild => guild.members.get(this.id) !== undefined)
-          .members.get(this.id).displayName || this.username,
-        true
-      )
+      .addField('❯ Name', this.username, true)
       .addField('❯ ID', this.id, true)
       .addField('❯ Description', profile.description)
       .setColor(profile.profileColor);
@@ -66,14 +60,7 @@ module.exports = class extends Extendable {
         .get(profile.memberID)
         .roles.find(r => r.name === 'Senior Moderator')
     )
-      profileEmbed.setFooter('Senior Moderator');
-    //If is Moderator
-    else if (
-      aldovia.members
-        .get(profile.memberID)
-        .roles.find(r => r.name === 'Moderator')
-    )
-      profileEmbed.setFooter('Moderator');
+      profileEmbed.setFooter('🛡 Senior Moderator');
     //Else
     else {
       if (profile.activeBadge) profileEmbed.setFooter(profile.activeBadge);
@@ -159,23 +146,18 @@ module.exports = class extends Extendable {
       isOwner ||
       aldovia.members
         .get(inventory.memberID)
-        .roles.find(r => r.name === 'Senior Moderator') ||
-      aldovia.members
-        .get(inventory.memberID)
-        .roles.find(r => r.name === 'Moderator')
+        .roles.find(r => r.name === 'Senior Moderator')
     )
       return new MessageEmbed()
         .setTitle('No Inventory')
         .setDescription(
-          "Moderators, Senior Moderators and Server Admins can't view/use their inventory"
+          "Senior Moderators and Server Admins can't view/use their inventory"
         )
         .setColor('#f44336');
 
     return new MessageEmbed()
       .setTitle(
-        `${this.client.guilds
-          .find(guild => guild.members.get(inventory.memberID) !== undefined)
-          .members.get(inventory.memberID).displayName ||
+        `${this.client.users.get(inventory.memberID).username ||
           'Unknown'}'s Inventory`
       )
       .addField('Coins', inventory.coins)
