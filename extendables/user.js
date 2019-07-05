@@ -40,25 +40,17 @@ module.exports = class extends Extendable {
 
     //Generating basic embed
     const profileEmbed = new MessageEmbed()
-      .setTitle(
+      .setThumbnail(this.displayAvatarURL({ size: 256 }))
+      .addField(
+        '❯ Name',
         this.client.guilds
           .find(guild => guild.members.get(this.id) !== undefined)
-          .members.get(this.id).displayName || this.username
+          .members.get(this.id).displayName || this.username,
+        true
       )
-      .setDescription(profile.description)
-      .addField('Favorite Anime', profile.favoriteAnime)
+      .addField('❯ ID', this.id, true)
+      .addField('❯ Description', profile.description)
       .setColor(profile.profileColor);
-
-    //If member is married
-    if (profile.marriedTo)
-      profileEmbed.addField(
-        'Married To',
-        this.client.guilds
-          .find(guild => guild.members.get(profile.marriedTo) !== undefined)
-          .members.get(profile.marriedTo).displayName ||
-          this.client.users.get(profile.marriedTo).username ||
-          '[Left Aldovia Network...]'
-      );
 
     //Checking Aldovia Title
     let isOwner = false;
@@ -88,16 +80,32 @@ module.exports = class extends Extendable {
 
       profileEmbed
         .addField(
-          'Rewards',
-          `Silver: ${profile.rewards.silver}\nGold: ${
-            profile.rewards.gold
-          }\nPlatinum: ${profile.rewards.platinum}`
+          '❯ Reputation',
+          `${profile.reputation <= 20 ? '⚠️' : ''} ${profile.reputation}%`,
+          true
         )
         .addField(
-          'Reputation',
-          `${profile.reputation <= 20 ? '⚠️' : ''} ${profile.reputation}%`
+          '❯ Rewards',
+          `Silver: ${profile.rewards.silver}\tGold: ${
+            profile.rewards.gold
+          }\tPlatinum: ${profile.rewards.platinum}`,
+          true
         );
     }
+
+    //If member is married
+    if (profile.marriedTo)
+      profileEmbed.addField(
+        '❯ Married To',
+        this.client.guilds
+          .find(guild => guild.members.get(profile.marriedTo) !== undefined)
+          .members.get(profile.marriedTo).displayName ||
+          this.client.users.get(profile.marriedTo).username ||
+          '[Left Aldovia Network...]',
+        true
+      );
+
+    profileEmbed.addField('❯ Favorite Anime', profile.favoriteAnime);
 
     return profileEmbed;
   }
