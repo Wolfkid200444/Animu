@@ -5,7 +5,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
-      aliases: ['coins'],
+      aliases: ['coin'],
       cooldown: 10,
       permissionLevel: 8,
       description: 'Modify coins',
