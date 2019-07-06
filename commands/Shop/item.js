@@ -1,6 +1,7 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
+const Fuse = require('fuse.js');
 
 //Init
 const Item = mongoose.model('Item');
@@ -14,14 +15,21 @@ module.exports = class extends Command {
       description: 'View an Item',
       extendedHelp:
         'View details about an item such as description, pricing, etc',
-      usage: '<itemName:string>',
+      usage: '<itemName:...string>',
       usageDelim: ' ',
       quotedStringSupport: true
     });
   }
 
   async run(msg, [itemName]) {
-    const item = await Item.findOne({ name: itemName }).exec();
+    const itemArr = await Item.find({}).exec();
+
+    const fuse = new Fuse(itemArr, {
+      keys: ['name'],
+      threshold: 0.2
+    });
+
+    const item = fuse.search(itemName)[0];
 
     if (!item)
       return msg.sendEmbed(

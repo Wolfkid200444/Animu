@@ -25,6 +25,7 @@
     "discord.js": "github:discordjs/discord.js",
     "discordjs-prompter": "^1.0.0",
     "express": "^4.17.1",
+    "fuse.js": "^3.4.5",
     "klasa": "github:dirigeants/klasa#v1.0.0-alpha",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
