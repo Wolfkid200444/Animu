@@ -73,9 +73,9 @@ module.exports = class extends Extendable {
         )
         .addField(
           '❯ Rewards',
-          `Silver: ${profile.rewards.silver}\tGold: ${
+          `Silver: ${profile.rewards.silver} \tGold: ${
             profile.rewards.gold
-          }\tPlatinum: ${profile.rewards.platinum}`,
+          } \tPlatinum: ${profile.rewards.platinum}`,
           true
         );
     }

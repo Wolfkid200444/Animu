@@ -60,6 +60,7 @@ profileSchema.methods.addReputation = async function(amount) {
   this.reputation += amount;
 
   if (this.reputation > 100) this.reputation = 100;
+
   this.save();
   return true;
 ***REMOVED***
@@ -67,8 +68,11 @@ profileSchema.methods.addReputation = async function(amount) {
 profileSchema.methods.deductReputation = async function(amount) {
   this.reputation -= amount;
 
-  if (this.reputation < 0) {
+  if (this.reputation <= 0) {
     this.reputation = 20;
+
+    this.save();
+
     return false;
   }
 
