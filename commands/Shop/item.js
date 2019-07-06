@@ -1,0 +1,51 @@
+const { Command } = require('klasa');
+const { MessageEmbed } = require('discord.js');
+const mongoose = require('mongoose');
+
+//Init
+const Item = mongoose.model('Item');
+
+module.exports = class extends Command {
+  constructor(...args) {
+    super(...args, {
+      runIn: ['text', 'dm', 'group'],
+      bucket: 2,
+      cooldown: 10,
+      description: 'View an Item',
+      extendedHelp:
+        'View details about an item such as description, pricing, etc',
+      usage: '<itemName:string>',
+      usageDelim: ' ',
+      quotedStringSupport: true
+    });
+  }
+
+  async run(msg, [itemName]) {
+    const item = await Item.findOne({ name: itemName }).exec();
+
+    if (!item)
+      return msg.sendEmbed(
+        new MessageEmbed()
+          .setTitle('Invalid Item Name')
+          .setDescription('The item with given name was not found')
+          .setColor('#f44336')
+      );
+
+    let priceStr = '';
+
+    if (item.discount === 0) priceStr = `${item.price} Coins`;
+    else
+      priceStr = `${item.price - item.price * (item.discount / 100)} ~~${
+        item.price
+      }~~ (${item.discount}% off)`;
+
+    return msg.sendEmbed(
+      new MessageEmbed()
+        .setThumbnail(item.imageURL)
+        .addField('❯ Name', item.name)
+        .addField('❯ Description', item.description)
+        .addField('❯ Price', priceStr)
+        .setColor('#2196f3')
+    );
+  }
+***REMOVED***
