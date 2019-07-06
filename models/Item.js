@@ -6,6 +6,7 @@ const itemSchema = new Schema({
     unique: true
   },
   description: String,
+  imageURL: String,
   price: Number,
   discount: {
     type: Number,
