@@ -26,6 +26,8 @@ module.exports = class extends Command {
 
     let itemStr = '';
 
+    if (items.length < 1) itemStr = '[No items on this page]';
+
     items.forEach(item => {
       let priceStr = '';
 
