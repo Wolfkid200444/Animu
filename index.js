@@ -4,6 +4,8 @@
 const { Client } = require('klasa');
 const keys = require('./config/keys');
 const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
 //=====================
 
 //=====================
@@ -16,6 +18,11 @@ Client.defaultClientSchema.add('aldoviaSeniorMods', 'User', { array: true });
 //=====================
 //INIT
 //=====================
+//-> Express App
+const app = express();
+app.use(bodyParser.json());
+require('./routes/root')(app);
+
 //-> Klasa Client
 Client.defaultPermissionLevels
   .add(
@@ -69,4 +76,10 @@ mongoose
       }
     }).login(keys.discordBotToken);
   });
+//=====================
+
+//=====================
+//Listening
+//=====================
+app.listen(process.env.PORT || 3000);
 //=====================
