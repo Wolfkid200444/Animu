@@ -81,5 +81,5 @@ mongoose
 //=====================
 //Listening
 //=====================
-app.listen(process.env.PORT || 3000);
+if (process.env.NODE_ENV === 'production') app.listen(process.env.PORT || 3000);
 //=====================
