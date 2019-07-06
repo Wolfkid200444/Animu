@@ -5,7 +5,6 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
-      aliases: ['r'],
       cooldown: 60,
       description: 'Register profile',
       extendedHelp: 'Register your profile'
