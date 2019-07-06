@@ -23,7 +23,12 @@ const profileSchema = new Schema({
     max: 100,
     type: Number
   },
-  previousRoles: []
+  previousRoles: [
+    {
+      guildID: String,
+      roles: [String]
+    }
+  ]
 });
 
 //Schema Methods

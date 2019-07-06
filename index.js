@@ -13,6 +13,9 @@ const bodyParser = require('body-parser');
 //=====================
 //-> Client Schema
 Client.defaultClientSchema.add('aldoviaSeniorMods', 'User', { array: true });
+
+//-> Guild Schema
+Client.defaultGuildSchema.add('joinRole', 'role');
 //=====================
 
 //=====================
