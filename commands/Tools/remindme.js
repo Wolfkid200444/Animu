@@ -1,4 +1,5 @@
 const { Command } = require('klasa');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -21,8 +22,17 @@ module.exports = class extends Command {
         text
       }
     });
-    return msg.sendMessage(
-      `Ok, I created you a reminder with the id: \`${reminder.id}\``
+    return msg.sendEmbed(
+      new MessageEmbed()
+        .setAuthor(
+          msg.author.username,
+          msg.author.displayAvatarURL({ size: 32 })
+        )
+        .setTitle('Reminder Created')
+        .setDescription(
+          `A reminder was created with the id: \`${reminder.id}\``
+        )
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***
