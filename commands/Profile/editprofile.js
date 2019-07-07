@@ -9,7 +9,7 @@ module.exports = class extends Command {
       description: 'Edit profile',
       extendedHelp:
         "Edit your profile, valid keys are 'description', 'favorite anime' and 'profile color'",
-      usage: '<description|favoriteAnime|profileColor> <value:string>',
+      usage: '<description|favoriteAnime|profileColor> <value:...string>',
       usageDelim: ' ',
       quotedStringSupport: true
     });

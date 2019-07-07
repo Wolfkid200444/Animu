@@ -9,7 +9,7 @@ module.exports = class extends Command {
       cooldown: 10,
       extendedHelp:
         'Get information about a role including role permissions, color, name, creation date, and other details',
-      usage: '<role:string>',
+      usage: '<role:...string>',
       quotedStringSupport: true
     });
     this.perms = {
