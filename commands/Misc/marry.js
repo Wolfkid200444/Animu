@@ -16,7 +16,7 @@ module.exports = class extends Command {
       description: 'Marry someone',
       extendedHelp:
         'Marry someone! Tho you need the Marriage Ring to marry anyone, and if you get rejected you will lose your ring',
-      usage: '<member:user>',
+      usage: '<member:member>',
       usageDelim: ' ',
       quotedStringSupport: true
     });
