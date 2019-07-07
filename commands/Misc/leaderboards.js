@@ -1,6 +1,5 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const _ = require('lodash');
 const mongoose = require('mongoose');
 
 //Init
