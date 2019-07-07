@@ -6,14 +6,8 @@ const mongoose = require('mongoose');
 const Profile = mongoose.model('Profile');
 
 module.exports = class extends Event {
-  constructor(...args) {
-    super(...args, {
-      enabled: true,
-      once: false
-    });
-  }
-
   async run(member) {
+    console.log(member);
     //Register Profile
     const profile = await Profile.register(member.id);
 
@@ -25,7 +19,12 @@ module.exports = class extends Event {
         const role = member.guild.roles.find(r => r.name === roleName);
         member.addRole(role, 'Assigning roles this member had before leaving');
       });
-    } else if (member.guild.settings.joinRole)
-      member.addRole(member.guild.settings.joinRole, 'Assigning Member role');
+    } else if (member.guild.settings.joinRole) {
+      console.log('Assigning Role');
+      member.roles.add(
+        member.guild.settings.joinRole.id,
+        'Assigning Member role'
+      );
+    }
   }
 ***REMOVED***
