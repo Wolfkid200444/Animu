@@ -16,6 +16,9 @@ Client.defaultClientSchema.add('aldoviaSeniorMods', 'User', { array: true });
 
 //-> Guild Schema
 Client.defaultGuildSchema.add('joinRole', 'role');
+
+//-> User Schema
+Client.defaultUserSchema.add('TODOs', 'any', { array: true });
 //=====================
 
 //=====================
