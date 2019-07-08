@@ -17,7 +17,10 @@ module.exports = class extends Event {
       );
       previousRoles.forEach(roleName => {
         const role = member.guild.roles.find(r => r.name === roleName);
-        member.addRole(role, 'Assigning roles this member had before leaving');
+        member.roles.add(
+          role,
+          'Assigning roles this member had before leaving'
+        );
       });
     } else if (member.guild.settings.joinRole)
       member.roles.add(member.guild.settings.joinRole, 'Assigning Member role');
