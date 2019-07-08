@@ -19,12 +19,7 @@ module.exports = class extends Event {
         const role = member.guild.roles.find(r => r.name === roleName);
         member.addRole(role, 'Assigning roles this member had before leaving');
       });
-    } else if (member.guild.settings.joinRole) {
-      console.log('Assigning Role');
-      member.roles.add(
-        member.guild.settings.joinRole.id,
-        'Assigning Member role'
-      );
-    }
+    } else if (member.guild.settings.joinRole)
+      member.roles.add(member.guild.settings.joinRole, 'Assigning Member role');
   }
 ***REMOVED***
