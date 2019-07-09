@@ -9,7 +9,8 @@ module.exports = class extends Command {
       extendedHelp: 'add|remove|list your TODOs through DM or text channels',
       usage: '<add|remove|list:default> (TODO:string) [content:...string]',
       usageDelim: ' ',
-      subcommands: true
+      subcommands: true,
+      quotedStringSupport: true
     });
     this.createCustomResolver('string', (arg, possible, message, [action]) => {
       if (action === 'list') return arg;
