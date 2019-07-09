@@ -78,6 +78,10 @@ mongoose
         client.settings.aldoviaSeniorMods = [
           '477853785436192769' //Kitty
         ];
+
+        //-> Adding client-dependent routes
+        require('./routes/webhooks')(app, client);
+
         return 'Bot ready';
       }
     }).login(keys.discordBotToken);
