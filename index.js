@@ -53,6 +53,7 @@ mongoose
     require('./models/Profile');
     require('./models/Inventory');
     require('./models/Item');
+    require('./models/Partner');
     require('./models/Config');
 
     //-> Klasa Client
