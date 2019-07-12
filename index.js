@@ -13,6 +13,8 @@ const bodyParser = require('body-parser');
 //=====================
 //-> Client Schema
 Client.defaultClientSchema.add('aldoviaSeniorMods', 'User', { array: true });
+Client.defaultClientSchema.add('aldoviaInviteLink', 'String');
+Client.defaultClientSchema.add('aldoviaDescription', 'String');
 
 //-> Guild Schema
 Client.defaultGuildSchema.add('joinRole', 'role');
@@ -76,6 +78,9 @@ mongoose
       ],
       readyMessage: client => {
         client.user.setActivity('over Aldovia Network', { type: 'WATCHING' });
+        client.settings.aldoviaInviteLink = 'https://discord.gg/JGsgBsN';
+        client.settings.aldoviaDescription =
+          'An anime server made for weebs by weebs';
         client.settings.aldoviaSeniorMods = [
           '477853785436192769' //Kitty
         ];

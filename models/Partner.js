@@ -5,9 +5,9 @@ const partnerSchema = new Schema({
     type: String,
     unique: true
   },
-  channels: {
-    networkServers: String
-  }
+  description: String,
+  networkServersChannelID: String,
+  inviteLink: String
 });
 
 model('Partner', partnerSchema);
