@@ -10,7 +10,7 @@ module.exports = class extends Command {
       permissionLevel: 8,
       description: 'Modify reputation',
       extendedHelp:
-        'Modify reputation of a member. This commmand affects reputation of server whose moderator uses it',
+        'Modify reputation of a member. This commmand can only be run by one of the senior moderators/Server Admins of Aldovia',
       usage: '<member:user> <+|-> <amount:integer{1,100}>',
       usageDelim: ' '
     });
