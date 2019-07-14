@@ -88,6 +88,9 @@ mongoose
         //-> Adding client-dependent routes
         require('./routes/webhooks')(app, client);
 
+        //-> Scheduling Tasks
+        client.schedule.create('lotto', '0 0 * * *');
+
         return 'Bot ready';
       }
     }).login(keys.discordBotToken);
