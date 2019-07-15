@@ -197,7 +197,8 @@ module.exports = class extends Extendable {
     let isOwner = false;
 
     for (const owner of this.client.owners)
-      if (owner.id === inventory.memberID) isOwner = true;
+      if (owner.id === profile.memberID) 
+isOwner = true;
 
     if (
       isOwner ||
