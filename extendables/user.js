@@ -1,3 +1,4 @@
+//Dependencies
 const { Extendable } = require('klasa');
 const { User, MessageEmbed } = require('discord.js');
 const { model } = require('mongoose');
