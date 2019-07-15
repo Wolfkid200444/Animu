@@ -33,7 +33,6 @@ module.exports = class extends Extendable {
    * @returns {MessageEmbed} - MessageEmbed containing profile or error
    */
   async getProfileEmbed() {
-    const aldovia = this.client.guilds.get('556442896719544320');
     const profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) return this._noProfile();
@@ -46,20 +45,11 @@ module.exports = class extends Extendable {
       .addField('❯ Description', profile.description)
       .setColor(profile.profileColor);
 
-    //Checking Aldovia Title
-    let isOwner = false;
-
-    for (const owner of this.client.owners)
-      if (owner.id === this.id) isOwner = true;
-
     //If is owner
-    if (isOwner) profileEmbed.setFooter('👑 Aldovia Admin 👑');
+    if (await msg.hasAtLeastPermissionLevel(9))
+      profileEmbed.setFooter('👑 Aldovia Admin 👑');
     //If is Senior Moderator
-    else if (
-      aldovia.members
-        .get(profile.memberID)
-        .roles.find(r => r.name === 'Senior Moderator')
-    )
+    else if (await msg.hasAtLeastPermissionLevel(8))
       profileEmbed.setFooter('🛡 Senior Moderator');
     //Else
     else {
@@ -137,17 +127,8 @@ module.exports = class extends Extendable {
           : `${item}\n`;
 
     //Checking Aldovia Title
-    let isOwner = false;
 
-    for (const owner of this.client.owners)
-      if (owner.id === inventory.memberID) isOwner = true;
-
-    if (
-      isOwner ||
-      aldovia.members
-        .get(inventory.memberID)
-        .roles.find(r => r.name === 'Senior Moderator')
-    )
+    if (await msg.hasAtLeastPermissionLevel(8))
       return new MessageEmbed()
         .setTitle('No Inventory')
         .setDescription(
@@ -189,6 +170,8 @@ module.exports = class extends Extendable {
    * @returns {boolean} - True if reputation was added/deducted, False if user was banned due to low rep
    */
   async editReputation(change, amount) {
+    if (await msg.hasAtLeastPermissionLevel(8)) return true;
+
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) profile = await Profile.register(this.id);
