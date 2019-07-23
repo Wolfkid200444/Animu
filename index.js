@@ -82,7 +82,8 @@ mongoose
         client.settings.aldoviaDescription =
           'An anime server made for weebs by weebs';
         client.settings.aldoviaSeniorMods = [
-          '477853785436192769' //Kitty
+          '477853785436192769', //Kitty
+          '555394471320092684' //Saeba
         ];
 
         //-> Adding client-dependent routes

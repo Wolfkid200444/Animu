@@ -33,6 +33,8 @@ module.exports = class extends Event {
           roles: _.map(member.roles, role => role.name)
         });
 
+      console.log(profile.previousRoles);
+
       await profile.save();
     }
   }

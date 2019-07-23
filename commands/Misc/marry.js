@@ -23,6 +23,8 @@ module.exports = class extends Command {
   }
 
   async run(msg, [member]) {
+    const aldovia = this.client.guilds.get('556442896719544320');
+
     const profile = await Profile.findOne({
       memberID: msg.member.id
     }).exec();
@@ -67,7 +69,12 @@ module.exports = class extends Command {
           .setColor('#f44336')
       );
 
-    if (!(await msg.hasAtLeastPermissionLevel(8))) {
+    if (
+      !(await msg.hasAtLeastPermissionLevel(8)) ||
+      aldovia.members
+        .get(inventory.memberID)
+        .roles.find(r => r.name === 'Moderator')
+    ) {
       const inventory = await Inventory.findOne({
         memberID: msg.member.id
       }).exec();

@@ -62,6 +62,13 @@ module.exports = class extends Extendable {
         .roles.find(r => r.name === 'Senior Moderator')
     )
       profileEmbed.setFooter('🛡 Senior Moderator');
+    //If is Moderator
+    else if (
+      aldovia.members
+        .get(profile.memberID)
+        .roles.find(r => r.name === 'Moderator')
+    )
+      profileEmbed.setFooter('Moderator');
     //Else
     else {
       if (profile.activeBadge) profileEmbed.setFooter(profile.activeBadge);
@@ -147,7 +154,10 @@ module.exports = class extends Extendable {
       isOwner ||
       aldovia.members
         .get(inventory.memberID)
-        .roles.find(r => r.name === 'Senior Moderator')
+        .roles.find(r => r.name === 'Senior Moderator') ||
+      aldovia.members
+        .get(inventory.memberID)
+        .roles.find(r => r.name === 'Moderator')
     )
       return new MessageEmbed()
         .setTitle('No Inventory')
@@ -197,14 +207,16 @@ module.exports = class extends Extendable {
     let isOwner = false;
 
     for (const owner of this.client.owners)
-      if (owner.id === profile.memberID) 
-isOwner = true;
+      if (owner.id === profile.memberID) isOwner = true;
 
     if (
       isOwner ||
       aldovia.members
         .get(profile.memberID)
-        .roles.find(r => r.name === 'Senior Moderator')
+        .roles.find(r => r.name === 'Senior Moderator') ||
+      aldovia.members
+        .get(inventory.memberID)
+        .roles.find(r => r.name === 'Moderator')
     )
       return true;
 
