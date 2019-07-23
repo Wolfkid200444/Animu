@@ -215,7 +215,7 @@ module.exports = class extends Extendable {
         .get(profile.memberID)
         .roles.find(r => r.name === 'Senior Moderator') ||
       aldovia.members
-        .get(inventory.memberID)
+        .get(profile.memberID)
         .roles.find(r => r.name === 'Moderator')
     )
       return true;

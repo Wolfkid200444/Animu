@@ -26,9 +26,7 @@ module.exports = class extends Command {
 
     if (
       (await msg.hasAtLeastPermissionLevel(8)) ||
-      aldovia.members
-        .get(inventory.memberID)
-        .roles.find(r => r.name === 'Moderator')
+      aldovia.members.get(msg.author.id).roles.find(r => r.name === 'Moderator')
     )
       return msg.sendEmbed(
         new MessageEmbed()
