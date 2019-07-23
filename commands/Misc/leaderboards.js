@@ -1,6 +1,7 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
+const _ = require('lodash');
 
 //Init
 const Profile = mongoose.model('Profile');
@@ -43,11 +44,14 @@ module.exports = class extends Command {
           inLeaderboard = false;
 
         if (
+          !_.isUndefined(aldovia.members.get(profile.memberID)) &&
           aldovia.members
             .get(profile.memberID)
             .roles.find(r => r.name === 'Moderator')
         )
-          return inLeaderboard;
+          inLeaderboard = false;
+
+        return inLeaderboard;
       })
       .slice(0, 10);
 
