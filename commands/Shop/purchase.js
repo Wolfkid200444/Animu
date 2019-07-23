@@ -22,11 +22,18 @@ module.exports = class extends Command {
   }
 
   async run(msg, [itemName]) {
-    if (await msg.hasAtLeastPermissionLevel(8))
+    const aldovia = this.client.guilds.get('556442896719544320');
+
+    if (
+      (await msg.hasAtLeastPermissionLevel(8)) ||
+      aldovia.members
+        .get(inventory.memberID)
+        .roles.find(r => r.name === 'Moderator')
+    )
       return msg.sendEmbed(
         new MessageEmbed()
           .setTitle("Can't purchase item")
-          .setDescription("Senior moderators/Owners can't purchase items")
+          .setDescription("Moderators/Admins can't purchase items")
           .setColor('#f44336')
       );
 
