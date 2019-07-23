@@ -21,6 +21,7 @@ module.exports = class extends Command {
 
   async run(msg, [leaderboard]) {
     let profiles;
+    const aldovia = this.client.guilds.get('556442896719544320');
 
     if (leaderboard === 'coins')
       profiles = await Inventory.find({})
@@ -41,7 +42,12 @@ module.exports = class extends Command {
         if (this.client.settings.aldoviaSeniorMods.includes(profile.memberID))
           inLeaderboard = false;
 
-        return inLeaderboard;
+        if (
+          aldovia.members
+            .get(profile.memberID)
+            .roles.find(r => r.name === 'Moderator')
+        )
+          return inLeaderboard;
       })
       .slice(0, 10);
 
