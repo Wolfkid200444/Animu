@@ -37,7 +37,7 @@ module.exports = class extends Extendable {
   async getProfileEmbed() {
     const aldovia = this.client.guilds.get('556442896719544320');
     const profile = await Profile.findOne({ memberID: this.id }).exec();
-    const pet = await Pet.findOne({ memberID: this.id });
+    const pet = await Pet.findOne({ memberID: this.id }).exec();
 
     if (!profile) return this._noProfile();
 
@@ -102,12 +102,14 @@ module.exports = class extends Extendable {
         true
       );
 
+    console.log(pet);
+
     profileEmbed.addField('❯ Favorite Anime', profile.favoriteAnime, true);
 
     if (pet)
       profileEmbed.addField(
         '❯ Pet',
-        `${pet.type === 'cat' ? '🐱' : '❓'} ${pet.name}`,
+        `${pet.petType === 'cat' ? '🐱' : '❓'} ${pet.petName}`,
         true
       );
 
