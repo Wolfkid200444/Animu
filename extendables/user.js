@@ -6,6 +6,7 @@ const { model } = require('mongoose');
 //Init
 const Profile = model('Profile');
 const Inventory = model('Inventory');
+const Pet = model('Pet');
 
 module.exports = class extends Extendable {
   constructor(...args) {
@@ -36,6 +37,7 @@ module.exports = class extends Extendable {
   async getProfileEmbed() {
     const aldovia = this.client.guilds.get('556442896719544320');
     const profile = await Profile.findOne({ memberID: this.id }).exec();
+    const pet = await Pet.findOne({ memberID: this.id });
 
     if (!profile) return this._noProfile();
 
@@ -100,7 +102,14 @@ module.exports = class extends Extendable {
         true
       );
 
-    profileEmbed.addField('❯ Favorite Anime', profile.favoriteAnime);
+    profileEmbed.addField('❯ Favorite Anime', profile.favoriteAnime, true);
+
+    if (pet)
+      profileEmbed.addField(
+        '❯ Pet',
+        `${pet.type === 'cat' ? '🐱' : '❓'} ${pet.name}`,
+        true
+      );
 
     return profileEmbed;
   }

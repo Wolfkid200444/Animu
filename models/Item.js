@@ -93,6 +93,17 @@ itemSchema.methods.purchase = async function(msg, memberID) {
     }
 
     return { res: 'success', title: 'Item Purchased', desc: this.purchaseMsg ***REMOVED***
+  } else if (this.name === 'Pet Cat') {
+    const Pet = this.model('Pet');
+
+    await new Pet({
+      memberID: memberID,
+      petType: this.name.substr(4).toLowerCase(),
+      petName: this.name.substr(4)
+    }).save();
+
+    await inventory.save();
+    return { res: 'success', title: 'Item Purchased', desc: this.purchaseMsg ***REMOVED***
   } else {
     //Add item to inventory
     inventory.inventory.push(this.name);
