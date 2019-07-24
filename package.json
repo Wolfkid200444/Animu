@@ -32,5 +32,8 @@
     "moment": "^2.24.0",
     "mongodb": "^3.2.7",
     "mongoose": "^5.6.3"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0"
   }
 }

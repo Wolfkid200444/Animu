@@ -47,7 +47,7 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true
   })
-  .then(() => {
+  .then(async () => {
     console.log('Database Status: Online');
     //->Creating models
     require('./models/Reaction');
@@ -59,7 +59,7 @@ mongoose
     require('./models/Config');
 
     //-> Klasa Client
-    new Client({
+    const client = await new Client({
       fetchAllMembers: false,
       prefix: '-',
       commandEditing: true,
@@ -76,25 +76,11 @@ mongoose
         '338334949331697664', //Light Yagami
         '510715931572305920' //Misaki
       ],
-      readyMessage: client => {
-        client.user.setActivity('over Aldovia Network', { type: 'WATCHING' });
-        client.settings.aldoviaInviteLink = 'https://discord.gg/JGsgBsN';
-        client.settings.aldoviaDescription =
-          'An anime server made for weebs by weebs';
-        client.settings.aldoviaSeniorMods = [
-          '477853785436192769', //Kitty
-          '555394471320092684' //Saeba
-        ];
-
-        //-> Adding client-dependent routes
-        require('./routes/webhooks')(app, client);
-
-        //-> Scheduling Tasks
-        client.schedule.create('lotto', '0 0 * * *');
-
-        return 'Bot ready';
-      }
+      readyMessage: () => 'Bot ready'
     }).login(keys.discordBotToken);
+
+    //-> Adding client-dependent routes
+    require('./routes/webhooks')(app, client);
   });
 //=====================
 

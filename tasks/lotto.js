@@ -8,7 +8,10 @@ const Config = mongoose.model('Config');
 
 module.exports = class extends Task {
   async run() {
-    console.log('GIVING LOTTO');
+    this.client.guilds
+      .get('556442896719544320')
+      .channels.get('586293473788035092')
+      .send('GIVING LOTTO');
     const totalLottos = await Config.findOne({ key: 'totalLottos' }).exec();
 
     if (totalLottos < 1) return;
