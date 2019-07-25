@@ -92,8 +92,18 @@ itemSchema.methods.purchase = async function(msg, memberID) {
       await inventory.save();
     }
 
-    if (this.name === 'Pet Cat') {
+    if (this.name === 'Pet Cat' || this.name === 'Pet Dog') {
       const Pet = this.model('Pet');
+
+      const existingPet = await Pet.findOne({ memberID }).exec();
+
+      if (existingPet)
+        return {
+          res: 'err',
+          title: 'Already Own a pet',
+          desc:
+            'You already own a pet, use `kickPet` command to kick out your current pet before you can purchase a new pet'
+        ***REMOVED***
 
       await new Pet({
         memberID: memberID,
