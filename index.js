@@ -64,7 +64,6 @@ mongoose
       fetchAllMembers: false,
       prefix: '-',
       commandEditing: true,
-      typing: true,
       noPrefixDM: true,
       providers: {
         default: 'mongodb',
