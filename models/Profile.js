@@ -13,6 +13,7 @@ const profileSchema = new Schema({
   activeBadge: String,
   badges: [String],
   marriedTo: String,
+  isMuted: Boolean,
   rewards: {
     silver: Number,
     gold: Number,
@@ -22,13 +23,7 @@ const profileSchema = new Schema({
     min: 0,
     max: 100,
     type: Number
-  },
-  previousRoles: [
-    {
-      guildID: String,
-      roles: [String]
-    }
-  ]
+  }
 });
 
 //Schema Methods

@@ -18,23 +18,12 @@ module.exports = class extends Event {
     //Store roles in profile
     const profile = await Profile.findOne({ memberID: member.id }).exec();
 
-    if (profile) {
-      const index = profile.previousRoles.indexOf(
-        roles => roles.guildID === member.guild.id
-      );
-
-      if (index >= 0)
-        member.roles.forEach(role => {
-          profile.previousRoles[index].roles.push(role.name);
-        });
-      else
-        profile.previousRoles.push({
-          guildID: member.guild.id,
-          roles: _.map(member.roles, role => role.name)
-        });
-
-      console.log(profile.previousRoles);
-
+    if (
+      profile &&
+      member.guild.settings.mutedRole &&
+      member.roles.find(r => r.id === member.guild.settings.mutedRole)
+    ) {
+      profile.isMuted = true;
       await profile.save();
     }
   }

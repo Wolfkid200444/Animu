@@ -18,6 +18,7 @@ Client.defaultClientSchema.add('aldoviaDescription', 'String');
 
 //-> Guild Schema
 Client.defaultGuildSchema.add('joinRole', 'role');
+Client.defaultGuildSchema.add('mutedRole', 'role');
 
 //-> User Schema
 Client.defaultUserSchema.add('TODOs', 'any', { array: true });
