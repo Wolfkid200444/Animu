@@ -240,7 +240,7 @@ module.exports = class extends Extendable {
         this.client.guilds
           .get('556442896719544320')
           .members.get(this.id)
-          .ban({ reason: 'Reached 0% Reputation' });
+          .ban({ reason: 'Reached 0 Reputation' });
       }
       return res;
     }

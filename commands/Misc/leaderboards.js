@@ -62,7 +62,7 @@ module.exports = class extends Command {
     top10.forEach((top, i) => {
       str += `${this.client.users.get(top.memberID).username ||
         '[Left Aldovia Network]'} (${
-        leaderboard === 'coins' ? top.coins + ' Coins' : top.reputation + '%'
+        leaderboard === 'coins' ? top.coins + ' Coins' : top.reputation + '🏆'
       }) ${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''}\n\n`;
     });
 
