@@ -78,7 +78,7 @@ module.exports = class extends Extendable {
       profileEmbed
         .addField(
           '❯ Reputation',
-          `${profile.reputation <= 20 ? '⚠️' : ''} ${profile.reputation}%`,
+          `${profile.reputation <= 20 ? '⚠️' : ''} ${profile.reputation} 🏆`,
           true
         )
         .addField(

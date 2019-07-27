@@ -59,7 +59,7 @@ profileSchema.statics.register = async function(memberID) {
 profileSchema.methods.addReputation = async function(amount) {
   this.reputation += amount;
 
-  if (this.reputation > 100) this.reputation = 100;
+  if (this.reputation > 150) this.reputation = 150;
 
   this.save();
   return true;
