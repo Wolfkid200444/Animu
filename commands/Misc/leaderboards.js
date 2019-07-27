@@ -51,6 +51,8 @@ module.exports = class extends Command {
         )
           inLeaderboard = false;
 
+        if (!this.client.users.get(profile.memberID)) inLeaderboard = false;
+
         return inLeaderboard;
       })
       .slice(0, 10);
