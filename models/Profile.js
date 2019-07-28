@@ -21,7 +21,7 @@ const profileSchema = new Schema({
   },
   reputation: {
     min: 0,
-    max: 100,
+    max: 200,
     type: Number
   }
 });
