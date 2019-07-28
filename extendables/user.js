@@ -63,7 +63,7 @@ module.exports = class extends Extendable {
         .get(profile.memberID)
         .roles.find(r => r.name === '🛡 Senior Moderator')
     )
-      profileEmbed.setFooter('🛡 🛡 Senior Moderator');
+      profileEmbed.setFooter('🛡 Senior Moderator');
     //If is Moderator
     else if (
       aldovia.members
