@@ -57,13 +57,13 @@ module.exports = class extends Extendable {
 
     //If is owner
     if (isOwner) profileEmbed.setFooter('👑 Aldovia Admin 👑');
-    //If is Senior Moderator
+    //If is 🛡 Senior Moderator
     else if (
       aldovia.members
         .get(profile.memberID)
-        .roles.find(r => r.name === 'Senior Moderator')
+        .roles.find(r => r.name === '🛡 Senior Moderator')
     )
-      profileEmbed.setFooter('🛡 Senior Moderator');
+      profileEmbed.setFooter('🛡 🛡 Senior Moderator');
     //If is Moderator
     else if (
       aldovia.members
@@ -165,7 +165,7 @@ module.exports = class extends Extendable {
       isOwner ||
       aldovia.members
         .get(inventory.memberID)
-        .roles.find(r => r.name === 'Senior Moderator') ||
+        .roles.find(r => r.name === '🛡 Senior Moderator') ||
       aldovia.members
         .get(inventory.memberID)
         .roles.find(r => r.name === 'Moderator')
@@ -173,7 +173,7 @@ module.exports = class extends Extendable {
       return new MessageEmbed()
         .setTitle('No Inventory')
         .setDescription(
-          "Senior Moderators and Server Admins can't view/use their inventory"
+          "🛡 Senior Moderators and Server Admins can't view/use their inventory"
         )
         .setColor('#f44336');
 
@@ -224,7 +224,7 @@ module.exports = class extends Extendable {
       isOwner ||
       aldovia.members
         .get(profile.memberID)
-        .roles.find(r => r.name === 'Senior Moderator') ||
+        .roles.find(r => r.name === '🛡 Senior Moderator') ||
       aldovia.members
         .get(profile.memberID)
         .roles.find(r => r.name === 'Moderator')
