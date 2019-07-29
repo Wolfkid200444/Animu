@@ -102,14 +102,14 @@ module.exports = class extends Extendable {
         true
       );
 
-    console.log(pet);
-
     profileEmbed.addField('❯ Favorite Anime', profile.favoriteAnime, true);
 
     if (pet)
       profileEmbed.addField(
         '❯ Pet',
-        `${pet.petType === 'cat' ? '🐱' : '❓'} ${pet.petName}`,
+        `${
+          pet.petType === 'cat' ? '🐱' : pet.petType === 'dog' ? '🐶' : '❓'
+        } ${pet.petName}`,
         true
       );
 
