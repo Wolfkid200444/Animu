@@ -226,7 +226,7 @@ module.exports = class extends Extendable {
     let badgesString = '';
 
     if (profile.badges.length < 1) badgesString = false;
-    else profile.badges.forEach(badge => (badgesString += badge));
+    else profile.badges.forEach(badge => (badgesString += `${badge}\n`));
 
     return new MessageEmbed()
       .setTitle(
