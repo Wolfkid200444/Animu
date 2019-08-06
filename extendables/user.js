@@ -162,13 +162,14 @@ module.exports = class extends Extendable {
       if (owner.id === inventory.memberID) isOwner = true;
 
     if (
-      isOwner ||
-      aldovia.members
-        .get(inventory.memberID)
-        .roles.find(r => r.name === '🛡 Senior Moderator') ||
-      aldovia.members
-        .get(inventory.memberID)
-        .roles.find(r => r.name === 'Moderator')
+      aldovia.members.get(inventory.memberID) !== undefined &&
+      (isOwner ||
+        aldovia.members
+          .get(inventory.memberID)
+          .roles.find(r => r.name === '🛡 Senior Moderator') ||
+        aldovia.members
+          .get(inventory.memberID)
+          .roles.find(r => r.name === 'Moderator'))
     )
       return new MessageEmbed()
         .setTitle('No Inventory')
