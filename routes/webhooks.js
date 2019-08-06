@@ -7,6 +7,7 @@ module.exports = (app, client) => {
   });
 
   app.post('/webhooks', async (req, res) => {
+    console.log(req.body);
     const apiKey = req.body.apiKey;
     const type = req.body.type;
     const payload = req.body.payload;

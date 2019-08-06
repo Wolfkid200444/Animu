@@ -22,8 +22,6 @@ module.exports = class extends Task {
       lottos: winningNumber
     }).exec();
 
-    console.log(winnerInventory);
-
     const reward = totalLottos * 10;
 
     winnerInventory.coins += reward;
