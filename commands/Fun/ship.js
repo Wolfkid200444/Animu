@@ -36,7 +36,7 @@ module.exports = class extends Command {
     )
       randNum = Math.floor(Math.random() * 44);
     else if (profile.marriedTo === profile2.memberID)
-      randNum = Math.floor(Math.random() * 41) + 60;
+      randNum = Math.random() < 0.5 ? Math.floor(Math.random() * 41) + 60 : 69;
     else randNum = Math.floor(Math.random() * 101);
 
     const embed = new MessageEmbed()
