@@ -130,13 +130,13 @@ module.exports = class extends Extendable {
 
     if (!profile) return this._noProfile();
 
-    if (!profile.marriedTo && partner) return;
-    new MessageEmbed()
-      .setTitle('Not married')
-      .setDescription(
-        "You can't view your partner's inventory when you have no partner... You did an Ooopsie!"
-      )
-      .setColor('#f44336');
+    if (!profile.marriedTo && partner)
+      return new MessageEmbed()
+        .setTitle('Not married')
+        .setDescription(
+          "You can't view your partner's inventory when you have no partner... You did an Ooopsie!"
+        )
+        .setColor('#f44336');
 
     const inventory = await Inventory.findOne({
       memberID: partner ? profile.marriedTo : this.id
@@ -185,6 +185,56 @@ module.exports = class extends Extendable {
       )
       .addField('Coins', inventory.coins)
       .addField('Inventory', inventoryStr || '[Inventory is empty]')
+      .setColor('#2196f3');
+  }
+
+  /**
+   * Get Badges embed
+   * @returns {MessageEmbed} - Message embed containing badges
+   */
+  async getBadgesEmbed() {
+    const aldovia = this.client.guilds.get('556442896719544320');
+    const profile = await Profile.findOne({
+      memberID: this.id
+    }).exec();
+
+    if (!profile) return this._noProfile();
+
+    //Checking Aldovia Title
+    let isOwner = false;
+
+    for (const owner of this.client.owners)
+      if (owner.id === profile.memberID) isOwner = true;
+
+    if (
+      aldovia.members.get(profile.memberID) !== undefined &&
+      (isOwner ||
+        aldovia.members
+          .get(profile.memberID)
+          .roles.find(r => r.name === '🛡 Senior Moderator') ||
+        aldovia.members
+          .get(profile.memberID)
+          .roles.find(r => r.name === 'Moderator'))
+    )
+      return new MessageEmbed()
+        .setTitle('No Badges')
+        .setDescription(
+          "🛡 Senior Moderators and Server Admins can't view/use their badges"
+        )
+        .setColor('#f44336');
+
+    let badgesString = '';
+
+    if (profile.badges.length < 1) badgesString = false;
+    else profile.badges.forEach(badge => (badgesString += badge));
+
+    return new MessageEmbed()
+      .setTitle(
+        `${this.client.users.get(profile.memberID).username ||
+          'Unknown'}'s Badges`
+      )
+      .addField('Active Badge', profile.activeBadge)
+      .addField('All Badges', badgesString || '[No badges]')
       .setColor('#2196f3');
   }
 
