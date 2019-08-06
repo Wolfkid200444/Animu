@@ -2,6 +2,7 @@
 const { Extendable } = require('klasa');
 const { User, MessageEmbed } = require('discord.js');
 const { model } = require('mongoose');
+const _ = require('lodash');
 
 //Init
 const Profile = model('Profile');
@@ -233,7 +234,7 @@ module.exports = class extends Extendable {
         `${this.client.users.get(profile.memberID).username ||
           'Unknown'}'s Badges`
       )
-      .addField('Active Badge', profile.activeBadge)
+      .addField('Active Badge', profile.activeBadge || '[No active badge]')
       .addField('All Badges', badgesString || '[No badges]')
       .setColor('#2196f3');
   }
@@ -313,6 +314,25 @@ module.exports = class extends Extendable {
 
     if (change === '+') await inventory.addCoins(amount);
     else await inventory.deductCoins(amount);
+    return true;
+  }
+
+  /**
+   * Give a badge to a member
+   *
+   * @param {string} badgeName - Badge to give
+   * @returns {boolean} - True if badge was given & false if badge is already given
+   */
+  async giveBadge(badgeName) {
+    let profile = await Profile.findOne({ memberID: this.id }).exec();
+
+    if (!profile) profile = await Profile.register(this.id);
+
+    if (_.includes(profile.badges, badgeName)) return false;
+    else profile.badges.push(badgeName);
+
+    await profile.save();
+
     return true;
   }
 
