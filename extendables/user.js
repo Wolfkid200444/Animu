@@ -336,6 +336,29 @@ module.exports = class extends Extendable {
     return true;
   }
 
+  /**
+   * Set an active badge
+   *
+   * @param {string} badgeName - Badge to set active
+   * @returns {boolean} - True if badge was given & false if badge is already given
+   */
+  async setActiveBadge(badgeName) {
+    let profile = await Profile.findOne({ memberID: this.id }).exec();
+
+    if (!profile) this._noProfile(true);
+
+    if (!_.includes(profile.badges, badgeName)) return false;
+    else {
+      if (profile.activeBadge) profile.badges.push(profile.activeBadge);
+      profile.activeBadge = badgeName;
+      profile.badges = profile.badges.filter(badge => badge !== badgeName);
+    }
+
+    await profile.save();
+
+    return true;
+  }
+
   _noProfile(isAuthor = false) {
     return isAuthor
       ? new MessageEmbed()
