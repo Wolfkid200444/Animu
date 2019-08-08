@@ -14,5 +14,13 @@ const petSchema = new Schema({
   petUnhappyForDays: Number //If 7, pet runs away
 });
 
+//Schema Methods
+petSchema.methods.notFedInHour = function() {
+  this.lastFedHoursAgo += 1;
+
+  this.save();
+  return this.lastFedHoursAgo;
+***REMOVED***
+
 //Model
 model('Pet', petSchema);
