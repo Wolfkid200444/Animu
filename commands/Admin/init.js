@@ -22,7 +22,6 @@ module.exports = class extends Command {
   }
 
   async run(msg, [inviteLink, description]) {
-    console.log(inviteLink, description);
     //Validation
     if (msg.guild.id === '556442896719544320')
       return msg.sendEmbed(

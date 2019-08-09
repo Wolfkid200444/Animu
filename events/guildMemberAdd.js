@@ -7,7 +7,6 @@ const Profile = mongoose.model('Profile');
 
 module.exports = class extends Event {
   async run(member) {
-    console.log(member);
     //Register Profile
     const profile = await Profile.register(member.id);
 

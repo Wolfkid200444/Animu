@@ -7,7 +7,6 @@ module.exports = (app, client) => {
   });
 
   app.post('/webhooks', async (req, res) => {
-    console.log(req.body);
     const apiKey = req.body.apiKey;
     const type = req.body.type;
     const payload = req.body.payload;
@@ -23,8 +22,6 @@ module.exports = (app, client) => {
       const memberID = payload.memberID;
       const reputation = payload.reputation;
       const change = payload.change;
-
-      console.log(client);
 
       await client.users.get(memberID).editReputation(change, reputation);
 

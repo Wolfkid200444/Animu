@@ -49,7 +49,6 @@ mongoose
     useCreateIndex: true
   })
   .then(async () => {
-    console.log('Database Status: Online');
     //->Creating models
     require('./models/Reaction');
     require('./models/Action');
