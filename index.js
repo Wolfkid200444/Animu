@@ -78,7 +78,9 @@ mongoose
         '510715931572305920' //Misaki
       ],
       readyMessage: () => 'Bot ready'
-    }).login(keys.discordBotToken);
+    });
+
+    await client.login(keys.discordBotToken);
 
     //-> Adding client-dependent routes
     require('./routes/webhooks')(app, client);
