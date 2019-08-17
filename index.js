@@ -81,6 +81,8 @@ mongoose
 
     await client.login(keys.discordBotToken);
 
+    console.log('hmmm');
+
     //-> Adding client-dependent routes
     require('./routes/webhooks')(app, client);
   });
