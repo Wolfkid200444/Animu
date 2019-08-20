@@ -11,18 +11,17 @@ module.exports = class extends Command {
       permissionLevel: 7,
       runIn: ['text'],
       description: 'Add a new self role',
-      usage: '<emojiName:string> <roleName:string>',
+      usage: '<emoji:string> <roleName:string>',
       usageDelim: ' '
     });
   }
 
-  async run(msg, [emojiName, roleName]) {
-    const emoji = this.client.emojis.find(e => e.name === emojiName);
+  async run(msg, [emoji, roleName]) {
     const role = msg.guild.roles.find(r => r.name === roleName);
 
     if (
-      !msg.guild.settings.selfRoleChannel ||
-      !msg.guild.settings.selfRoleMessage
+      !msg.guild.settings.selfRolesChannel ||
+      !msg.guild.settings.selfRolesMessage
     )
       return msg.sendMessage(
         new MessageEmbed({
@@ -33,7 +32,7 @@ module.exports = class extends Command {
         })
       );
 
-    if (!emoji || !role)
+    if (!role)
       return msg.sendMessage(
         new MessageEmbed({
           title: 'No Emoji/role found',
@@ -42,12 +41,37 @@ module.exports = class extends Command {
         })
       );
 
-    await new SelfRole({
-      guildID: msg.guild.id,
-      channelID: msg.guild.settings.selfRoleChannel,
-      messageID: msg.guild.settings.selfRoleMessage,
-      emojiName: emojiName,
-      roleName: roleName
-    }).save();
+    const rCh = msg.guild.channels.get(msg.guild.settings.selfRolesChannel);
+
+    const rMsg = await rCh.messages.fetch(msg.guild.settings.selfRolesMessage);
+
+    if (!rMsg || !rCh)
+      return msg.sendMessage(
+        new MessageEmbed({
+          title: 'Invalid self role channel/msg',
+          description:
+            'The self role channel/msg that you provided is/are invalid',
+          color: '#f44336'
+        })
+      );
+
+    rMsg.react(emoji);
+
+    if (!msg)
+      await new SelfRole({
+        guildID: msg.guild.id,
+        channelID: msg.guild.settings.selfRolesChannel,
+        messageID: msg.guild.settings.selfRolesMessage,
+        emojiName: emoji,
+        roleName: roleName
+      }).save();
+
+    return msg.sendMessage(
+      new MessageEmbed({
+        title: 'Self Role Added',
+        description: 'Self role is successfully added',
+        color: '#2196f3'
+      })
+    );
   }
 ***REMOVED***
