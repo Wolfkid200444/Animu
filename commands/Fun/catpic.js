@@ -17,7 +17,6 @@ module.exports = class extends Command {
       'x-api-key': '0067907b-12a2-47fe-b056-c3aa58cee4d8'
     });
 
-    console.log(res.data);
     const image = res.data[0].url;
 
     msg.sendEmbed(
