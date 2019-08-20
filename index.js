@@ -59,6 +59,7 @@ mongoose
     require('./models/Item');
     require('./models/Partner');
     require('./models/Pet');
+    require('./models/SelfRole');
     require('./models/Config');
 
     //-> Klasa Client
