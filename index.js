@@ -19,6 +19,8 @@ Client.defaultClientSchema.add('aldoviaDescription', 'String');
 //-> Guild Schema
 Client.defaultGuildSchema.add('joinRole', 'role');
 Client.defaultGuildSchema.add('mutedRole', 'role');
+Client.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
+Client.defaultGuildSchema.add('selfRolesMessage', 'string');
 
 //-> User Schema
 Client.defaultUserSchema.add('TODOs', 'any', { array: true });
@@ -80,8 +82,6 @@ mongoose
     });
 
     await client.login(keys.discordBotToken);
-
-    console.log('hmmm');
 
     //-> Adding client-dependent routes
     require('./routes/webhooks')(app, client);
