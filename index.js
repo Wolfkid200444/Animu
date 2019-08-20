@@ -78,6 +78,7 @@ mongoose
         '338334949331697664', //Light Yagami
         '510715931572305920' //Misaki
       ],
+      partials: ['MESSAGE'],
       readyMessage: () => 'Bot ready'
     });
 
