@@ -18,6 +18,8 @@ module.exports = class extends Command {
 
   async run(msg, [emoji, roleName]) {
     const role = msg.guild.roles.find(r => r.name === roleName);
+    if (this.client.emojis.find(e => e.name === emoji.split(':')[1]))
+      emoji = this.client.emojis.find(e => e.name === emoji.split(':')[1]);
 
     if (
       !msg.guild.settings.selfRolesChannel ||
@@ -59,7 +61,6 @@ module.exports = class extends Command {
 
     await new SelfRole({
       guildID: msg.guild.id,
-      channelID: msg.guild.settings.selfRolesChannel,
       messageID: msg.guild.settings.selfRolesMessage,
       emojiName: emoji,
       roleName: roleName
