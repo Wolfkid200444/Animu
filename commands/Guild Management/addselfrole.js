@@ -57,14 +57,13 @@ module.exports = class extends Command {
 
     rMsg.react(emoji);
 
-    if (!msg)
-      await new SelfRole({
-        guildID: msg.guild.id,
-        channelID: msg.guild.settings.selfRolesChannel,
-        messageID: msg.guild.settings.selfRolesMessage,
-        emojiName: emoji,
-        roleName: roleName
-      }).save();
+    await new SelfRole({
+      guildID: msg.guild.id,
+      channelID: msg.guild.settings.selfRolesChannel,
+      messageID: msg.guild.settings.selfRolesMessage,
+      emojiName: emoji,
+      roleName: roleName
+    }).save();
 
     return msg.sendMessage(
       new MessageEmbed({
