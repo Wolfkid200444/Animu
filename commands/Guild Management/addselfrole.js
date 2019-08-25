@@ -11,8 +11,9 @@ module.exports = class extends Command {
       permissionLevel: 7,
       runIn: ['text'],
       description: 'Add a new self role',
-      usage: '<emoji:string> <roleName:string>',
-      usageDelim: ' '
+      usage: '<emoji:string> <roleName:...string>',
+      usageDelim: ' ',
+      quotedStringSupport: true
     });
   }
 
