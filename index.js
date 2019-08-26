@@ -18,9 +18,13 @@ Client.defaultClientSchema.add('aldoviaDescription', 'String');
 
 //-> Guild Schema
 Client.defaultGuildSchema.add('joinRole', 'role');
+Client.defaultGuildSchema.add('verifiedRole', 'role');
 Client.defaultGuildSchema.add('mutedRole', 'role');
 Client.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
 Client.defaultGuildSchema.add('selfRolesMessage', 'string');
+Client.defaultGuildSchema.add('verifiedMemberPerks', folder =>
+  folder.add('changeBanner', 'boolean')
+);
 
 //-> User Schema
 Client.defaultUserSchema.add('TODOs', 'any', { array: true });
