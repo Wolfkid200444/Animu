@@ -23,7 +23,13 @@ const profileSchema = new Schema({
     min: 0,
     max: 200,
     type: Number
-  }
+  },
+  lastBannerChange: [
+    {
+      guildID: String,
+      daysAgo: Number
+    }
+  ]
 });
 
 //Schema Methods
