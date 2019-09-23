@@ -23,8 +23,6 @@ module.exports = class extends Command {
       },
     });
 
-    console.log(res);
-
     const anime = res.data.results[0];
 
     msg.sendEmbed(
