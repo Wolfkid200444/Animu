@@ -10,7 +10,7 @@ module.exports = class extends Event {
       guildID: message.guild.id,
       event: 'messageDelete',
       data: {
-        authorID: message.author.id,
+        authorID: message.member.id,
         channelID: message.channel.id,
         content: message.content,
         createdAt: message.createdAt,
