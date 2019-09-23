@@ -5,7 +5,7 @@ const { Schema, model } = require('mongoose');
 const profileSchema = new Schema({
   memberID: {
     type: String,
-    unique: true
+    unique: true,
   },
   description: String,
   favoriteAnime: String,
@@ -14,22 +14,17 @@ const profileSchema = new Schema({
   badges: [String],
   marriedTo: String,
   isMuted: Boolean,
-  rewards: {
-    silver: Number,
-    gold: Number,
-    platinum: Number
-  },
   reputation: {
     min: 0,
     max: 200,
-    type: Number
+    type: Number,
   },
   lastBannerChange: [
     {
       guildID: String,
-      daysAgo: Number
-    }
-  ]
+      daysAgo: Number,
+    },
+  ],
 });
 
 //Schema Methods
@@ -42,7 +37,7 @@ profileSchema.statics.register = async function(memberID) {
   await new Inventory({
     memberID,
     coins: 100,
-    inventory: []
+    inventory: [],
   }).save();
 
   return {
@@ -55,10 +50,9 @@ profileSchema.statics.register = async function(memberID) {
       activeBadge: '',
       badges: [],
       marriedTo: '',
-      rewards: { silver: 0, gold: 0, platinum: 0 },
       reputation: 50,
-      previousRoles: []
-    }).save()
+      previousRoles: [],
+    }).save(),
   ***REMOVED***
 ***REMOVED***
 

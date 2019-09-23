@@ -13,7 +13,7 @@ module.exports = class extends Extendable {
   constructor(...args) {
     super(...args, {
       enabled: true,
-      appliesTo: [User]
+      appliesTo: [User],
     });
   }
 
@@ -62,33 +62,25 @@ module.exports = class extends Extendable {
     else if (
       aldovia.members
         .get(profile.memberID)
-        .roles.find(r => r.name === '🛡 Senior Moderator')
+        .roles.find((r) => r.name === '🛡 Senior Moderator')
     )
       profileEmbed.setFooter('🛡 Senior Moderator');
     //If is Moderator
     else if (
       aldovia.members
         .get(profile.memberID)
-        .roles.find(r => r.name === 'Moderator')
+        .roles.find((r) => r.name === 'Moderator')
     )
       profileEmbed.setFooter('Moderator');
     //Else
     else {
       if (profile.activeBadge) profileEmbed.setFooter(profile.activeBadge);
 
-      profileEmbed
-        .addField(
-          '❯ Reputation',
-          `${profile.reputation <= 20 ? '⚠️' : ''} ${profile.reputation} 🏆`,
-          true
-        )
-        .addField(
-          '❯ Rewards',
-          `Silver: ${profile.rewards.silver} \tGold: ${
-            profile.rewards.gold
-          } \tPlatinum: ${profile.rewards.platinum}`,
-          true
-        );
+      profileEmbed.addField(
+        '❯ Reputation',
+        `${profile.reputation <= 20 ? '⚠️' : ''} ${profile.reputation} 🏆`,
+        true,
+      );
     }
 
     //If member is married
@@ -96,11 +88,11 @@ module.exports = class extends Extendable {
       profileEmbed.addField(
         '❯ Married To',
         this.client.guilds
-          .find(guild => guild.members.get(profile.marriedTo) !== undefined)
+          .find((guild) => guild.members.get(profile.marriedTo) !== undefined)
           .members.get(profile.marriedTo).displayName ||
           this.client.users.get(profile.marriedTo).username ||
           '[Left Aldovia Network...]',
-        true
+        true,
       );
 
     profileEmbed.addField('❯ Favorite Anime', profile.favoriteAnime, true);
@@ -111,7 +103,7 @@ module.exports = class extends Extendable {
         `${
           pet.petType === 'cat' ? '🐱' : pet.petType === 'dog' ? '🐶' : '❓'
         } ${pet.petName}`,
-        true
+        true,
       );
 
     return profileEmbed;
@@ -126,7 +118,7 @@ module.exports = class extends Extendable {
   async getInventoryEmbed(partner = false) {
     const aldovia = this.client.guilds.get('556442896719544320');
     const profile = await Profile.findOne({
-      memberID: this.id
+      memberID: this.id,
     }).exec();
 
     if (!profile) return this._noProfile();
@@ -135,18 +127,18 @@ module.exports = class extends Extendable {
       return new MessageEmbed()
         .setTitle('Not married')
         .setDescription(
-          "You can't view your partner's inventory when you have no partner... You did an Ooopsie!"
+          "You can't view your partner's inventory when you have no partner... You did an Ooopsie!",
         )
         .setColor('#f44336');
 
     const inventory = await Inventory.findOne({
-      memberID: partner ? profile.marriedTo : this.id
+      memberID: partner ? profile.marriedTo : this.id,
     }).exec();
 
     let inventoryStr = '';
     const inventoryItems = {***REMOVED***
 
-    inventory.inventory.forEach(item => {
+    inventory.inventory.forEach((item) => {
       inventoryItems[item] = inventoryItems[item] + 1 || 1;
     });
 
@@ -167,22 +159,22 @@ module.exports = class extends Extendable {
       (isOwner ||
         aldovia.members
           .get(inventory.memberID)
-          .roles.find(r => r.name === '🛡 Senior Moderator') ||
+          .roles.find((r) => r.name === '🛡 Senior Moderator') ||
         aldovia.members
           .get(inventory.memberID)
-          .roles.find(r => r.name === 'Moderator'))
+          .roles.find((r) => r.name === 'Moderator'))
     )
       return new MessageEmbed()
         .setTitle('No Inventory')
         .setDescription(
-          "🛡 Senior Moderators and Server Admins can't view/use their inventory"
+          "🛡 Senior Moderators and Server Admins can't view/use their inventory",
         )
         .setColor('#f44336');
 
     return new MessageEmbed()
       .setTitle(
         `${this.client.users.get(inventory.memberID).username ||
-          'Unknown'}'s Inventory`
+          'Unknown'}'s Inventory`,
       )
       .addField('Coins', inventory.coins)
       .addField('Inventory', inventoryStr || '[Inventory is empty]')
@@ -196,7 +188,7 @@ module.exports = class extends Extendable {
   async getBadgesEmbed() {
     const aldovia = this.client.guilds.get('556442896719544320');
     const profile = await Profile.findOne({
-      memberID: this.id
+      memberID: this.id,
     }).exec();
 
     if (!profile) return this._noProfile();
@@ -212,27 +204,27 @@ module.exports = class extends Extendable {
       (isOwner ||
         aldovia.members
           .get(profile.memberID)
-          .roles.find(r => r.name === '🛡 Senior Moderator') ||
+          .roles.find((r) => r.name === '🛡 Senior Moderator') ||
         aldovia.members
           .get(profile.memberID)
-          .roles.find(r => r.name === 'Moderator'))
+          .roles.find((r) => r.name === 'Moderator'))
     )
       return new MessageEmbed()
         .setTitle('No Badges')
         .setDescription(
-          "🛡 Senior Moderators and Server Admins can't view/use their badges"
+          "🛡 Senior Moderators and Server Admins can't view/use their badges",
         )
         .setColor('#f44336');
 
     let badgesString = '';
 
     if (profile.badges.length < 1) badgesString = false;
-    else profile.badges.forEach(badge => (badgesString += `${badge}\n`));
+    else profile.badges.forEach((badge) => (badgesString += `${badge}\n`));
 
     return new MessageEmbed()
       .setTitle(
         `${this.client.users.get(profile.memberID).username ||
-          'Unknown'}'s Badges`
+          'Unknown'}'s Badges`,
       )
       .addField('Active Badge', profile.activeBadge || '[No active badge]')
       .addField('All Badges', badgesString || '[No badges]')
@@ -276,10 +268,10 @@ module.exports = class extends Extendable {
       isOwner ||
       aldovia.members
         .get(profile.memberID)
-        .roles.find(r => r.name === '🛡 Senior Moderator') ||
+        .roles.find((r) => r.name === '🛡 Senior Moderator') ||
       aldovia.members
         .get(profile.memberID)
-        .roles.find(r => r.name === 'Moderator')
+        .roles.find((r) => r.name === 'Moderator')
     )
       return true;
 
@@ -351,7 +343,7 @@ module.exports = class extends Extendable {
     else {
       if (profile.activeBadge) profile.badges.push(profile.activeBadge);
       profile.activeBadge = badgeName;
-      profile.badges = profile.badges.filter(badge => badge !== badgeName);
+      profile.badges = profile.badges.filter((badge) => badge !== badgeName);
     }
 
     await profile.save();
@@ -364,13 +356,13 @@ module.exports = class extends Extendable {
       ? new MessageEmbed()
           .setTitle('Profile not found')
           .setDescription(
-            "Your profile doesn't exist, use `register` command to register"
+            "Your profile doesn't exist, use `register` command to register",
           )
           .setColor('#f44336')
       : new MessageEmbed()
           .setTitle('Profile not found')
           .setDescription(
-            "The profile you're looking for doesn't exist, if it's your profile, use `register` command to register"
+            "The profile you're looking for doesn't exist, if it's your profile, use `register` command to register",
           )
           .setColor('#f44336');
   }
