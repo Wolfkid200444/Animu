@@ -22,6 +22,9 @@ Client.defaultGuildSchema.add('verifiedRole', 'role');
 Client.defaultGuildSchema.add('mutedRole', 'role');
 Client.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
 Client.defaultGuildSchema.add('selfRolesMessage', 'string');
+Client.defaultGuildSchema.add('logChannels', (folder) =>
+  folder.add('deletedMessages', 'textchannel'),
+);
 Client.defaultGuildSchema.add('verifiedMemberPerks', (folder) =>
   folder.add('changeBanner', 'boolean'),
 );
