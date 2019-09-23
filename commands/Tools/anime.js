@@ -1,6 +1,6 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const JikanTS = require('jikants').default;
+const axios = require('axios');
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -10,15 +10,22 @@ module.exports = class extends Command {
       extendedHelp:
         'Show details about an anime. The argument provided is anime name',
       usage: '<animeName:...string>',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
   }
 
   async run(msg, [animeName]) {
-    const res = await JikanTS.Search.search(animeName, 'anime', 1, {
-      limit: 1
+    const res = await axios.get('https://api.jikan.moe/v3/search/anime/', {
+      params: {
+        q: animeName,
+        page: 1,
+        limit: 1,
+      },
     });
-    const anime = res.result[0];
+
+    console.log(res);
+
+    const anime = res.data.results[0];
 
     msg.sendEmbed(
       new MessageEmbed()
@@ -26,9 +33,9 @@ module.exports = class extends Command {
         .setColor('#2196f3')
         .addField('❯ Name', anime.title, true)
         .addField('❯ Type', anime.type, true)
-        .addField('❯ Description', anime.description)
+        .addField('❯ Description', anime.synopsis)
         .addField('❯ Episodes', anime.episodes, true)
-        .addField('❯ Score', anime.score, true)
+        .addField('❯ Score', anime.score, true),
     );
   }
 ***REMOVED***
