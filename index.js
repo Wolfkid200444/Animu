@@ -22,8 +22,8 @@ Client.defaultGuildSchema.add('verifiedRole', 'role');
 Client.defaultGuildSchema.add('mutedRole', 'role');
 Client.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
 Client.defaultGuildSchema.add('selfRolesMessage', 'string');
-Client.defaultGuildSchema.add('verifiedMemberPerks', folder =>
-  folder.add('changeBanner', 'boolean')
+Client.defaultGuildSchema.add('verifiedMemberPerks', (folder) =>
+  folder.add('changeBanner', 'boolean'),
 );
 
 //-> User Schema
@@ -43,16 +43,16 @@ Client.defaultPermissionLevels
   .add(
     5,
     ({ guild, member }) => guild && member.permissions.has('MANAGE_ROLES'),
-    { fetch: true }
+    { fetch: true },
   )
   .add(8, ({ client, author }) =>
-    client.settings.aldoviaSeniorMods.includes(author.id)
+    client.settings.aldoviaSeniorMods.includes(author.id),
   );
 //-> Mongoose
 mongoose
   .connect(keys.mongoConnectionString, {
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
   })
   .then(async () => {
     //->Creating models
@@ -64,6 +64,7 @@ mongoose
     require('./models/Partner');
     require('./models/Pet');
     require('./models/SelfRole');
+    require('./models/Log');
     require('./models/Config');
 
     //-> Klasa Client
@@ -75,16 +76,16 @@ mongoose
       providers: {
         default: 'mongodb',
         mongodb: {
-          connectionString: keys.mongoConnectionString
-        }
+          connectionString: keys.mongoConnectionString,
+        },
       },
       owners: [
         '556455046217203752', //Lily
         '338334949331697664', //Light Yagami
-        '510715931572305920' //Misaki
+        '510715931572305920', //Misaki
       ],
       partials: ['MESSAGE'],
-      readyMessage: () => 'Bot ready'
+      readyMessage: () => 'Bot ready',
     });
 
     await client.login(keys.discordBotToken);
