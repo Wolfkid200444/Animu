@@ -3,7 +3,7 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       aliases: ['p', 'member'],
       cooldown: 10,
       description: 'View profile',

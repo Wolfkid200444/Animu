@@ -80,11 +80,18 @@ module.exports = class extends Extendable {
         (reputation) => reputation.guildID === guildID,
       ).rep;
 
-      profileEmbed.addField(
-        '❯ Reputation',
-        `${rep <= 20 ? '⚠️' : ''} ${rep} 🏆`,
-        true,
-      );
+      if (rep)
+        profileEmbed.addField(
+          '❯ Reputation',
+          `${rep <= 20 ? '⚠️' : ''} ${rep} 🏆`,
+          true,
+        );
+      else
+        profileEmbed.addField(
+          '❯ Reputation',
+          'Not configured (use `setup`)',
+          true,
+        );
     }
 
     //If member is married
@@ -342,7 +349,7 @@ module.exports = class extends Extendable {
   async setActiveBadge(badgeName) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
-    if (!profile) this._noProfile(true);
+    if (!profile) return this._noProfile(true);
 
     if (!_.includes(profile.badges, badgeName)) return false;
     else {
@@ -354,6 +361,37 @@ module.exports = class extends Extendable {
     await profile.save();
 
     return true;
+  }
+
+  /**
+   * Setup profile for a guild
+   * @param {String} guildID - ID of guild to setup this profile for
+   * @returns {MessageEmbed} - Embed containing details
+   */
+  async setupProfile(guildID) {
+    const profile = await Profile.findOne({ memberID: this.id }).exec();
+
+    if (!profile) return this._noProfile(true);
+
+    if (profile.reputation.find((rep) => rep.guildID === guildID))
+      return MessageEmbed({
+        title: 'Already Configured',
+        description: 'Your profile is already configured for this server',
+        color: '#f44336',
+      });
+
+    profile.reputation.push({
+      guildID: guildID,
+      rep: 50,
+    });
+
+    await profile.save();
+
+    return MessageEmbed({
+      title: 'Setup complete',
+      description: 'Your profile is configured for this server',
+      color: '#2196f3',
+    });
   }
 
   _noProfile(isAuthor = false) {
