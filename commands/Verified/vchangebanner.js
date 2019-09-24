@@ -1,7 +1,6 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
-const prompt = require('discordjs-prompter');
 
 //Init
 const Profile = mongoose.model('Profile');

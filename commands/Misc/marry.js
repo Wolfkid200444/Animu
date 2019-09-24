@@ -18,7 +18,7 @@ module.exports = class extends Command {
         'Marry someone! Tho you need the Marriage Ring to marry anyone, and if you get rejected you will lose your ring',
       usage: '<member:member>',
       usageDelim: ' ',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
   }
 
@@ -26,11 +26,11 @@ module.exports = class extends Command {
     const aldovia = this.client.guilds.get('556442896719544320');
 
     const profile = await Profile.findOne({
-      memberID: msg.member.id
+      memberID: msg.member.id,
     }).exec();
 
     const profileToMarry = await Profile.findOne({
-      memberID: member.id
+      memberID: member.id,
     }).exec();
 
     if (msg.member.id === member.id)
@@ -38,7 +38,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle("Can't marry yourself")
           .setDescription('You did an oopsie!')
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     if (!profile)
@@ -46,7 +46,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Profile not found')
           .setDescription('Use `-register` to register your profile')
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     if (!profileToMarry)
@@ -54,9 +54,9 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Profile not found')
           .setDescription(
-            "The person you're trying to marry doesn't have a profile, they have to use `-register` command to register their profile"
+            "The person you're trying to marry doesn't have a profile, they have to use `-register` command to register their profile",
           )
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     if (profile.marriedTo !== '' || profileToMarry.marriedTo !== '')
@@ -64,19 +64,19 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Already married')
           .setDescription(
-            "You or the person you're trying to marry is already married"
+            "You or the person you're trying to marry is already married",
           )
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     if (
       !(await msg.hasAtLeastPermissionLevel(8)) ||
       aldovia.members
-        .get(inventory.memberID)
-        .roles.find(r => r.name === 'Moderator')
+        .get(profile.memberID)
+        .roles.find((r) => r.name === 'Moderator')
     ) {
       const inventory = await Inventory.findOne({
-        memberID: msg.member.id
+        memberID: msg.member.id,
       }).exec();
 
       const index = inventory.inventory.indexOf('Marriage Ring');
@@ -86,9 +86,9 @@ module.exports = class extends Command {
           new MessageEmbed()
             .setTitle('Marriage Ring not found')
             .setDescription(
-              'You need a `Marriage Ring` in your inventory to marry someone'
+              'You need a `Marriage Ring` in your inventory to marry someone',
             )
-            .setColor('#f44336')
+            .setColor('#f44336'),
         );
 
       inventory.inventory.splice(index, 1);
@@ -96,10 +96,8 @@ module.exports = class extends Command {
     }
 
     const res = await prompt.reaction(msg.channel, {
-      question: `${member}, Do you accept ${
-        msg.member.displayName
-      }'s proposal to marry you?`,
-      userId: member.id
+      question: `${member}, Do you accept ${msg.member.displayName}'s proposal to marry you?`,
+      userId: member.id,
     });
 
     if (!res || res === 'no')
@@ -107,7 +105,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Rejected')
           .setDescription(`Big Oof for you, ${msg.member.displayName}`)
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     profile.marriedTo = member.id;
@@ -120,9 +118,9 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle("You're married now!🎉")
         .setDescription(
-          `${msg.member.displayName} married ${member.displayName} 🎉🎉🎉`
+          `${msg.member.displayName} married ${member.displayName} 🎉🎉🎉`,
         )
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***
