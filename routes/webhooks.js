@@ -23,7 +23,9 @@ module.exports = (app, client) => {
       const reputation = payload.reputation;
       const change = payload.change;
 
-      await client.users.get(memberID).editReputation(change, reputation);
+      await client.users
+        .get(memberID)
+        .editReputation(change, reputation, '556442896719544320');
 
       return res.json({ success: 'Reputation successfully modified' });
     }
