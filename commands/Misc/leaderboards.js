@@ -16,65 +16,35 @@ module.exports = class extends Command {
       description: 'View leaderboards',
       extendedHelp:
         'View leaderboards, valid leaderboards are coins, reputation',
-      usage: '<coins|reputation>'
+      usage: '<coins|reputation>',
     });
   }
 
   async run(msg, [leaderboard]) {
-    let profiles;
-    const aldovia = this.client.guilds.get('556442896719544320');
+    if (leaderboard === 'coins') {
+      const richest10 = await Inventory.find(
+        {},
+        {},
+        { sort: { coins: -1 }, limit: 10 },
+      );
 
-    if (leaderboard === 'coins')
-      profiles = await Inventory.find({})
-        .sort({ coins: -1 })
-        .exec();
-    else
-      profiles = await Profile.find({})
-        .sort({ reputation: -1 })
-        .exec();
+      let str = '';
 
-    const top10 = profiles
-      .filter(profile => {
-        let inLeaderboard = true;
+      richest10.forEach((inv, i) => {
+        if (this.client.users.get(inv.memberID))
+          str += `${i + 1}) ${this.client.users.get(inv.memberID).username} - ${
+            inv.coins
+          } Coins ${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''}\n\n`;
+        else str += '[Can we get an F?]';
+      });
 
-        for (const owner of this.client.owners)
-          if (owner.id === profile.memberID) inLeaderboard = false;
-
-        if (this.client.settings.aldoviaSeniorMods.includes(profile.memberID))
-          inLeaderboard = false;
-
-        if (
-          !_.isUndefined(aldovia.members.get(profile.memberID)) &&
-          aldovia.members
-            .get(profile.memberID)
-            .roles.find(r => r.name === 'Moderator')
-        )
-          inLeaderboard = false;
-
-        if (!this.client.users.get(profile.memberID)) inLeaderboard = false;
-
-        return inLeaderboard;
-      })
-      .slice(0, 10);
-
-    let str = '';
-
-    top10.forEach((top, i) => {
-      str += `${this.client.users.get(top.memberID).username ||
-        '[Left Aldovia Network]'} (${
-        leaderboard === 'coins' ? top.coins + ' Coins' : top.reputation + '🏆'
-      }) ${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''}\n\n`;
-    });
-
-    msg.sendEmbed(
-      new MessageEmbed()
-        .setTitle(
-          leaderboard === 'coins'
-            ? 'Top 10 Richest members of Aldovia Network'
-            : 'Top 10 most reputable members of Aldovia'
-        )
-        .setDescription(str)
-        .setColor('#2196f3')
-    );
+      msg.sendEmbed(
+        new MessageEmbed({
+          title: 'Top 10 Richest People in Animu',
+          description: str,
+          color: '#2196f3',
+        }),
+      );
+    }
   }
 ***REMOVED***
