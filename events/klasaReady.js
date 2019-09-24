@@ -8,19 +8,20 @@ module.exports = class extends Event {
       'An anime server made for weebs by weebs';
     this.client.settings.aldoviaSeniorMods = [
       '477853785436192769', //Kitty
-      '555394471320092684' //Saeba
+      '555394471320092684', //Saeba
     ];
+    this.client.settings.patreonCurrent = 46;
 
     //-> Scheduling Tasks
-    if (!this.client.schedule.tasks.find(task => task.taskName === 'lotto'))
+    if (!this.client.schedule.tasks.find((task) => task.taskName === 'lotto'))
       this.client.schedule.create('lotto', '0 0 * * *');
 
-    if (!this.client.schedule.tasks.find(task => task.taskName === 'petfed'))
+    if (!this.client.schedule.tasks.find((task) => task.taskName === 'petfed'))
       this.client.schedule.create('petfed', '0 * * * *');
 
     if (
       !this.client.schedule.tasks.find(
-        task => task.taskName === 'changedbanner'
+        (task) => task.taskName === 'changedbanner',
       )
     )
       this.client.schedule.create('changedbanner', '0 0 * * *');
