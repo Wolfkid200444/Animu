@@ -54,7 +54,7 @@ profileSchema.statics.register = async function(memberID) {
       activeBadge: '',
       badges: [],
       marriedTo: '',
-      reputation: 50,
+      reputation: [],
       previousRoles: [],
     }).save(),
   ***REMOVED***

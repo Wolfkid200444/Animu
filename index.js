@@ -22,6 +22,7 @@ Client.defaultGuildSchema.add('verifiedRole', 'role');
 Client.defaultGuildSchema.add('mutedRole', 'role');
 Client.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
 Client.defaultGuildSchema.add('selfRolesMessage', 'string');
+Client.defaultGuildSchema.add('banOnLowRep', 'boolean');
 Client.defaultGuildSchema.add('logChannels', (folder) =>
   folder.add('deletedMessages', 'textchannel'),
 );

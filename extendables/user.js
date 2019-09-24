@@ -285,11 +285,11 @@ module.exports = class extends Extendable {
     if (change === '+') return await profile.addReputation(amount, guildID);
     else {
       const res = await profile.deductReputation(amount, guildID);
-      if (!res) {
-        // this.client.guilds
-        //   .get('556442896719544320')
-        //   .members.get(this.id)
-        //   .ban({ reason: 'Reached 0 Reputation' });
+      if (!res && this.client.guilds.get(guildID).settings.banOnLowRep) {
+        this.client.guilds
+          .get(guildID)
+          .members.get(this.id)
+          .ban({ reason: 'Reached 0 Reputation' });
       }
       return res;
     }
