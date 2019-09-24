@@ -32,10 +32,11 @@ module.exports = class extends Extendable {
 
   /**
    * Get User's profile embed
+   * @param {String} guildID - ID of the guild to fetch profile for
    *
    * @returns {MessageEmbed} - MessageEmbed containing profile or error
    */
-  async getProfileEmbed() {
+  async getProfileEmbed(guildID) {
     const aldovia = this.client.guilds.get('556442896719544320');
     const profile = await Profile.findOne({ memberID: this.id }).exec();
     const pet = await Pet.findOne({ memberID: this.id }).exec();
@@ -75,10 +76,13 @@ module.exports = class extends Extendable {
     //Else
     else {
       if (profile.activeBadge) profileEmbed.setFooter(profile.activeBadge);
+      const rep = profile.reputation.find(
+        (reputation) => reputation.guildID === guildID,
+      ).rep;
 
       profileEmbed.addField(
         '❯ Reputation',
-        `${profile.reputation <= 20 ? '⚠️' : ''} ${profile.reputation} 🏆`,
+        `${rep <= 20 ? '⚠️' : ''} ${rep} 🏆`,
         true,
       );
     }
@@ -252,9 +256,10 @@ module.exports = class extends Extendable {
    *
    * @param {('+'|'-')} change - Add (+) or deduct (-) rep?
    * @param {number} amount - amount of rep to add/deduct
+   * @param {String} guildID - ID of guild to add/deduct rep for
    * @returns {boolean} - True if reputation was added/deducted, False if user was banned due to low rep
    */
-  async editReputation(change, amount) {
+  async editReputation(change, amount, guildID) {
     const aldovia = this.client.guilds.get('556442896719544320');
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
@@ -277,14 +282,14 @@ module.exports = class extends Extendable {
 
     if (!profile) profile = await Profile.register(this.id);
 
-    if (change === '+') return await profile.addReputation(amount);
+    if (change === '+') return await profile.addReputation(amount, guildID);
     else {
-      const res = await profile.deductReputation(amount);
+      const res = await profile.deductReputation(amount, guildID);
       if (!res) {
-        this.client.guilds
-          .get('556442896719544320')
-          .members.get(this.id)
-          .ban({ reason: 'Reached 0 Reputation' });
+        // this.client.guilds
+        //   .get('556442896719544320')
+        //   .members.get(this.id)
+        //   .ban({ reason: 'Reached 0 Reputation' });
       }
       return res;
     }

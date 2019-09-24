@@ -14,11 +14,15 @@ const profileSchema = new Schema({
   badges: [String],
   marriedTo: String,
   isMuted: Boolean,
-  reputation: {
-    min: 0,
-    max: 200,
-    type: Number,
-  },
+  reputation: [
+    {
+      guildID: String,
+      rep: {
+        min: 0,
+        type: Number,
+      },
+    },
+  ],
   lastBannerChange: [
     {
       guildID: String,
@@ -56,17 +60,17 @@ profileSchema.statics.register = async function(memberID) {
   ***REMOVED***
 ***REMOVED***
 
-profileSchema.methods.addReputation = async function(amount) {
-  this.reputation += amount;
-
-  if (this.reputation > 200) this.reputation = 200;
+profileSchema.methods.addReputation = async function(amount, guildID) {
+  const index = this.reputation.findIndex((rep) => rep.guildID === guildID);
+  this.reputation[index].rep += amount;
 
   this.save();
   return true;
 ***REMOVED***
 
-profileSchema.methods.deductReputation = async function(amount) {
-  this.reputation -= amount;
+profileSchema.methods.deductReputation = async function(amount, guildID) {
+  const index = this.reputation.findIndex((rep) => rep.guildID === guildID);
+  this.reputation[index] -= amount;
 
   if (this.reputation <= 0) {
     this.reputation = 20;

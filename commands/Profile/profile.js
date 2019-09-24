@@ -9,11 +9,11 @@ module.exports = class extends Command {
       description: 'View profile',
       extendedHelp:
         'View your own profile or mention someone to view their profile',
-      usage: '[member:user]'
+      usage: '[member:user]',
     });
   }
 
   async run(msg, [member = msg.author]) {
-    msg.sendEmbed(await member.getProfileEmbed());
+    msg.sendEmbed(await member.getProfileEmbed(msg.guild.id));
   }
 ***REMOVED***
