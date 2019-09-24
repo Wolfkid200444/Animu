@@ -7,23 +7,22 @@ module.exports = class extends Command {
       runIn: ['text'],
       aliases: ['rep'],
       cooldown: 10,
-      permissionLevel: 8,
+      permissionLevel: 6,
       description: 'Modify reputation',
-      extendedHelp:
-        'Modify reputation of a member. This commmand can only be run by one of the 🛡 Senior Moderators/Server Admins of Aldovia',
+      extendedHelp: 'Modify reputation of a member',
       usage: '<member:user> <+|-> <amount:integer{1,100}>',
-      usageDelim: ' '
+      usageDelim: ' ',
     });
   }
 
   async run(msg, [member, change, amount]) {
     msg.sendEmbed(
-      (await member.editReputation(change, amount))
+      (await member.editReputation(change, amount, msg.guild.id))
         ? new MessageEmbed().setTitle('Reputation modified').setColor('#2196f3')
         : new MessageEmbed()
             .setTitle('Banned')
             .setDescription('User was banned for reaching 0% reputation')
-            .setColor('#2196f3')
+            .setColor('#2196f3'),
     );
   }
 ***REMOVED***
