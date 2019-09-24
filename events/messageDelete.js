@@ -8,6 +8,8 @@ module.exports = class extends Event {
   async run(message) {
     if (!message.author) return;
 
+    if (message.author.id === this.client.user.id) return;
+
     await new Log({
       guildID: message.guild.id,
       event: 'messageDelete',
