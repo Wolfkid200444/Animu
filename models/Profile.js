@@ -18,7 +18,7 @@ const profileSchema = new Schema({
     },
   ],
   marriedTo: String,
-  isMuted: Boolean,
+  mutedIn: [String],
   reputation: [
     {
       guildID: String,

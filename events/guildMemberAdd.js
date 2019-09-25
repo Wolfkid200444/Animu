@@ -1,6 +1,7 @@
 //Dependencies
 const { Event } = require('klasa');
 const mongoose = require('mongoose');
+const _ = require('lodash');
 
 //Init
 const Profile = mongoose.model('Profile');
@@ -28,7 +29,7 @@ module.exports = class extends Event {
     if (
       profile.res === 'already_exists' &&
       member.guild.settings.mutedRole &&
-      profile.isMuted
+      _.includes(profile.mutedIn, member.guild.id)
     )
       member.roles.add(member.guild.settings.mutedRole, 'Assigning Muted role');
     else if (member.guild.settings.joinRole)

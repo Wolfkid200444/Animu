@@ -1,6 +1,7 @@
 //Dependencies
 const { Event } = require('klasa');
 const mongoose = require('mongoose');
+const _ = require('lodash');
 
 //Init
 const Profile = mongoose.model('Profile');
@@ -22,8 +23,12 @@ module.exports = class extends Event {
       member.guild.settings.mutedRole &&
       member.roles.find((r) => r.id === member.guild.settings.mutedRole)
     ) {
-      profile.isMuted = true;
+      profile.mutedIn.push(member.guild.id);
       await profile.save();
+    } else if (_.includes(profile.mutedIn, member.guild.id)) {
+      const index = profile.mutedIn.indexOf(member.guild.id);
+      profile.mutedIn.splice(index, 1);
+      profile.save();
     }
   }
 ***REMOVED***
