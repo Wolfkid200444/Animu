@@ -17,15 +17,13 @@ module.exports = class extends Command {
   }
 
   async run(msg) {
-    const deletedMsg = await Log.findOne(
-      {
-        guildID: msg.guild.id,
-        event: 'messageDelete',
-        'data.channelID': msg.channel.id,
-      },
-      {},
-      { sort: { created_at: -1 } },
-    );
+    const deletedMsg = await Log.findOne({
+      guildID: msg.guild.id,
+      event: 'messageDelete',
+      'data.channelID': msg.channel.id,
+    })
+      .sort({ _id: -1 })
+      .exec();
 
     if (!deletedMsg)
       return msg.sendEmbed(
