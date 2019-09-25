@@ -11,8 +11,7 @@ module.exports = class extends Command {
       description: 'Ask 8ball',
       extendedHelp:
         'Ask any question you want and the magic 8ball will answer all your questions',
-      usage: '<question:...string>',
-      usageDelim: ' ',
+      usage: '<question:string>',
       quotedStringSupport: true,
     });
   }
