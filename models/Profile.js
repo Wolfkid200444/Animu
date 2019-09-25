@@ -74,7 +74,7 @@ profileSchema.methods.addReputation = async function(amount, guildID) {
 
 profileSchema.methods.deductReputation = async function(amount, guildID) {
   const index = this.reputation.findIndex((rep) => rep.guildID === guildID);
-  this.reputation[index] -= amount;
+  this.reputation[index].rep -= amount;
 
   if (this.reputation <= 0) {
     this.reputation = 20;
