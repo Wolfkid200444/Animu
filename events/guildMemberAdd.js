@@ -10,9 +10,13 @@ module.exports = class extends Event {
     //Register Profile
     const profile = await Profile.register(member.id);
 
-    if (profile.res === 'already_exists') {
-      const profileFind = await Profile.findOne({ memberID: member.id }).exec();
+    const profileFind = await Profile.findOne({ memberID: member.id }).exec();
 
+    if (
+      !profileFind.reputation.find(
+        (guildRep) => guildRep.guildID === member.guild.id,
+      )
+    ) {
       profileFind.reputation.push({
         guildID: member.guild.id,
         rep: 50,
