@@ -37,7 +37,6 @@ module.exports = class extends Extendable {
    * @returns {MessageEmbed} - MessageEmbed containing profile or error
    */
   async getProfileEmbed(guildID) {
-    const aldovia = this.client.guilds.get('556442896719544320');
     const profile = await Profile.findOne({ memberID: this.id }).exec();
     const pet = await Pet.findOne({ memberID: this.id }).exec();
 
@@ -61,37 +60,48 @@ module.exports = class extends Extendable {
     if (isOwner) profileEmbed.setFooter('👑 Aldovia Admin 👑');
     //If is 🛡 Senior Moderator
     else if (
-      aldovia.members
-        .get(profile.memberID)
-        .roles.find((r) => r.name === '🛡 Senior Moderator')
+      _.includes(this.client.settings.aldoviaSeniorMods, profile.memberID)
     )
       profileEmbed.setFooter('🛡 Senior Moderator');
-    //If is Moderator
-    else if (
-      aldovia.members
-        .get(profile.memberID)
-        .roles.find((r) => r.name === 'Moderator')
-    )
-      profileEmbed.setFooter('Moderator');
     //Else
     else {
       if (profile.activeBadge) profileEmbed.setFooter(profile.activeBadge);
-      const repRaw = profile.reputation.find(
-        (reputation) => reputation.guildID === guildID,
-      );
 
-      if (repRaw)
-        profileEmbed.addField(
-          '❯ Reputation',
-          `${repRaw.rep <= 20 ? '⚠️' : ''} ${repRaw.rep} 🏆`,
-          true,
+      let proceed = true;
+
+      const thisGuild = this.client.guilds.get(guildID);
+
+      for (let i = 0; i < thisGuild.settings.ignoreRepRoles.length; i++) {
+        const ignoreRepRole = thisGuild.settings.ignoreRepRoles[i];
+        if (
+          this.client.guilds
+            .get(guildID)
+            .members.get(this.id)
+            .roles.has(ignoreRepRole)
+        ) {
+          proceed = false;
+          break;
+        }
+      }
+
+      if (proceed) {
+        const repRaw = profile.reputation.find(
+          (reputation) => reputation.guildID === guildID,
         );
-      else
-        profileEmbed.addField(
-          '❯ Reputation',
-          'Not configured (use `setup`)',
-          true,
-        );
+
+        if (repRaw)
+          profileEmbed.addField(
+            '❯ Reputation',
+            `${repRaw.rep <= 20 ? '⚠️' : ''} ${repRaw.rep} 🏆`,
+            true,
+          );
+        else
+          profileEmbed.addField(
+            '❯ Reputation',
+            'Not configured (use `setup`)',
+            true,
+          );
+      }
     }
 
     //If member is married
