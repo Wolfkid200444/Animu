@@ -7,23 +7,23 @@ module.exports = class extends Command {
       runIn: ['text'],
       aliases: ['addbadge', 'assignbadge', 'rewardbadge'],
       cooldown: 10,
-      permissionLevel: 8,
+      permissionLevel: 6,
       description: 'Give badge',
       extendedHelp:
-        'Give a badge to a member. This commmand can only be run by one of the 🛡 Senior Moderators/Server Admins of Aldovia',
+        'Give a badge to a member',
       usage: '<member:user> <badge:string>',
-      usageDelim: ' '
+      usageDelim: ' ',
     });
   }
 
   async run(msg, [member, badge]) {
     msg.sendEmbed(
-      (await member.giveBadge(badge))
+      (await member.giveBadge(badge, msg.guild.id))
         ? new MessageEmbed().setTitle('Gave Badge').setColor('#2196f3')
         : new MessageEmbed()
             .setTitle('Badge already given')
             .setDescription('User already has the badge you are trying to give')
-            .setColor('#f44336')
+            .setColor('#f44336'),
     );
   }
 ***REMOVED***

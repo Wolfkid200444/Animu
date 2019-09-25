@@ -10,8 +10,13 @@ const profileSchema = new Schema({
   description: String,
   favoriteAnime: String,
   profileColor: String,
-  activeBadge: String,
-  badges: [String],
+  badges: [
+    {
+      guildID: String,
+      activeBadge: String,
+      badges: [String],
+    },
+  ],
   marriedTo: String,
   isMuted: Boolean,
   reputation: [
@@ -51,7 +56,6 @@ profileSchema.statics.register = async function(memberID) {
       description: '[No description provided]',
       favoriteAnime: '[No favorite anime provided]',
       profileColor: '#2196f3',
-      activeBadge: '',
       badges: [],
       marriedTo: '',
       reputation: [],

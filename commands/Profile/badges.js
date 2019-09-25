@@ -6,11 +6,11 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       aliases: ['b', 'badge'],
       cooldown: 10,
-      description: 'View your badges'
+      description: 'View your badges',
     });
   }
 
   async run(msg) {
-    msg.sendEmbed(await msg.author.getBadgesEmbed());
+    msg.sendEmbed(await msg.author.getBadgesEmbed(msg.guild.id));
   }
 ***REMOVED***

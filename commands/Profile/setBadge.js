@@ -9,20 +9,20 @@ module.exports = class extends Command {
       cooldown: 30,
       description: 'Set a badge as active badge',
       usage: '<badge:...string>',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
   }
 
   async run(msg, [badge]) {
     msg.sendEmbed(
-      (await msg.author.setActiveBadge(badge))
+      (await msg.author.setActiveBadge(badge, msg.guild.id))
         ? new MessageEmbed().setTitle('Badge Active').setColor('#2196f3')
         : new MessageEmbed()
             .setTitle('Badge not found')
             .setDescription(
-              "You don't have the badge you're trying to set as active"
+              "You don't have the badge you're trying to set as active",
             )
-            .setColor('#f44336')
+            .setColor('#f44336'),
     );
   }
 ***REMOVED***

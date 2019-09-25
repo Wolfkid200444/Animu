@@ -65,7 +65,15 @@ module.exports = class extends Extendable {
       profileEmbed.setFooter('🛡 Senior Moderator');
     //Else
     else {
-      if (profile.activeBadge) profileEmbed.setFooter(profile.activeBadge);
+      if (
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID) &&
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+          .activeBadge
+      )
+        profileEmbed.setFooter(
+          profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+            .activeBadge,
+        );
 
       let proceed = true;
 
@@ -197,9 +205,10 @@ module.exports = class extends Extendable {
 
   /**
    * Get Badges embed
+   * @param {string} guildID - ID of Guild to get badges embed for
    * @returns {MessageEmbed} - Message embed containing badges
    */
-  async getBadgesEmbed() {
+  async getBadgesEmbed(guildID) {
     const profile = await Profile.findOne({
       memberID: this.id,
     }).exec();
@@ -225,15 +234,27 @@ module.exports = class extends Extendable {
 
     let badgesString = '';
 
-    if (profile.badges.length < 1) badgesString = false;
-    else profile.badges.forEach((badge) => (badgesString += `${badge}\n`));
+    if (
+      profile.badges.find((guildBadges) => guildBadges.guildID === guildID) &&
+      profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+        .badges.length < 1
+    )
+      badgesString = false;
+    else
+      profile.badges
+        .find((guildBadges) => guildBadges.guildID === guildID)
+        .badges.forEach((badge) => (badgesString += `${badge}\n`));
 
     return new MessageEmbed()
       .setTitle(
         `${this.client.users.get(profile.memberID).username ||
           'Unknown'}'s Badges`,
       )
-      .addField('Active Badge', profile.activeBadge || '[No active badge]')
+      .addField(
+        'Active Badge',
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+          .activeBadge || '[No active badge]',
+      )
       .addField('All Badges', badgesString || '[No badges]')
       .setColor('#2196f3');
   }
@@ -334,17 +355,32 @@ module.exports = class extends Extendable {
    * Give a badge to a member
    *
    * @param {string} badgeName - Badge to give
+   * @param {string} guildID - ID of Guild for which this badge is being given
    * @returns {boolean} - True if badge was given & false if badge is already given
    */
-  async giveBadge(badgeName) {
+  async giveBadge(badgeName, guildID) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) profile = await Profile.register(this.id);
 
-    if (_.includes(profile.badges, badgeName)) return false;
-    else profile.badges.push(badgeName);
+    if (
+      !profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+    ) {
+      if (
+        _.includes(
+          profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+            .badges,
+          badgeName,
+        )
+      )
+        return false;
+      else
+        profile.badges
+          .find((guildBadges) => guildBadges.guildID === guildID)
+          .badges.push(badgeName);
 
-    await profile.save();
+      await profile.save();
+    }
 
     return true;
   }
@@ -353,18 +389,34 @@ module.exports = class extends Extendable {
    * Set an active badge
    *
    * @param {string} badgeName - Badge to set active
+   * @param {string} guildID - ID of Guild for which this badge is being set as active
    * @returns {boolean} - True if badge was given & false if badge is already given
    */
-  async setActiveBadge(badgeName) {
+  async setActiveBadge(badgeName, guildID) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) return this._noProfile(true);
 
-    if (!_.includes(profile.badges, badgeName)) return false;
+    if (!profile.badges.find((guildBadges) => guildBadges.guildID === guildID))
+      return false;
     else {
-      if (profile.activeBadge) profile.badges.push(profile.activeBadge);
-      profile.activeBadge = badgeName;
-      profile.badges = profile.badges.filter((badge) => badge !== badgeName);
+      if (
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+          .activeBadge
+      )
+        profile.badges
+          .find((guildBadges) => guildBadges.guildID === guildID)
+          .badges.push(profile.activeBadge);
+
+      profile.badges.find(
+        (guildBadges) => guildBadges.guildID === guildID,
+      ).activeBadge = badgeName;
+
+      profile.badges.find(
+        (guildBadges) => guildBadges.guildID === guildID,
+      ).badges = profile.badges
+        .find((guildBadges) => guildBadges.guildID === guildID)
+        .badges.filter((badge) => badge !== badgeName);
     }
 
     await profile.save();
