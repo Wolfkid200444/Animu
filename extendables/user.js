@@ -76,14 +76,14 @@ module.exports = class extends Extendable {
     //Else
     else {
       if (profile.activeBadge) profileEmbed.setFooter(profile.activeBadge);
-      const rep = profile.reputation.find(
+      const repRaw = profile.reputation.find(
         (reputation) => reputation.guildID === guildID,
-      ).rep;
+      );
 
-      if (rep)
+      if (repRaw)
         profileEmbed.addField(
           '❯ Reputation',
-          `${rep <= 20 ? '⚠️' : ''} ${rep} 🏆`,
+          `${repRaw.rep <= 20 ? '⚠️' : ''} ${repRaw.rep} 🏆`,
           true,
         );
       else

@@ -4,19 +4,19 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
-      aliases: ['ep', 'profiledit', 'pedit', 'editp', 'edit'],
+      aliases: ['ep', 'profiledit', 'pedit', 'editp', 'edit', 'editprofile'],
       cooldown: 10,
       description: 'Edit profile',
       extendedHelp:
         "Edit your profile, valid keys are 'description', 'favorite anime' and 'profile color'",
       usage: '<description|favoriteAnime|profileColor> <value:...string>',
       usageDelim: ' ',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
   }
 
   async run(msg, [key, value]) {
     await msg.author.editProfile(key, value);
-    msg.sendEmbed(await msg.author.getProfileEmbed());
+    msg.sendEmbed(await msg.author.getProfileEmbed(msg.guild.id));
   }
 ***REMOVED***
