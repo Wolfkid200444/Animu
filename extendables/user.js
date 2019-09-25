@@ -137,7 +137,6 @@ module.exports = class extends Extendable {
    * @returns {MessageEmbed} - MessageEmbed containing inventory or error
    */
   async getInventoryEmbed(partner = false) {
-    const aldovia = this.client.guilds.get('556442896719544320');
     const profile = await Profile.findOne({
       memberID: this.id,
     }).exec();
@@ -176,14 +175,8 @@ module.exports = class extends Extendable {
       if (owner.id === inventory.memberID) isOwner = true;
 
     if (
-      aldovia.members.get(inventory.memberID) !== undefined &&
-      (isOwner ||
-        aldovia.members
-          .get(inventory.memberID)
-          .roles.find((r) => r.name === '🛡 Senior Moderator') ||
-        aldovia.members
-          .get(inventory.memberID)
-          .roles.find((r) => r.name === 'Moderator'))
+      isOwner ||
+      _.includes(this.client.settings.aldoviaSeniorMods, profile.memberID)
     )
       return new MessageEmbed()
         .setTitle('No Inventory')
@@ -207,7 +200,6 @@ module.exports = class extends Extendable {
    * @returns {MessageEmbed} - Message embed containing badges
    */
   async getBadgesEmbed() {
-    const aldovia = this.client.guilds.get('556442896719544320');
     const profile = await Profile.findOne({
       memberID: this.id,
     }).exec();
@@ -221,14 +213,8 @@ module.exports = class extends Extendable {
       if (owner.id === profile.memberID) isOwner = true;
 
     if (
-      aldovia.members.get(profile.memberID) !== undefined &&
-      (isOwner ||
-        aldovia.members
-          .get(profile.memberID)
-          .roles.find((r) => r.name === '🛡 Senior Moderator') ||
-        aldovia.members
-          .get(profile.memberID)
-          .roles.find((r) => r.name === 'Moderator'))
+      isOwner ||
+      _.includes(this.client.settings.aldoviaSeniorMods, profile.memberID)
     )
       return new MessageEmbed()
         .setTitle('No Badges')
