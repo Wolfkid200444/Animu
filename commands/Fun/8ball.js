@@ -11,9 +11,9 @@ module.exports = class extends Command {
       description: 'Ask 8ball',
       extendedHelp:
         'Ask any question you want and the magic 8ball will answer all your questions',
-      usage: '<question:string>',
+      usage: '<question:...string>',
       usageDelim: ' ',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
   }
 
@@ -24,7 +24,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`${msg.member.displayName} asks "${question}"`)
         .setDescription(answer.string)
-        .setColor(answer.color)
+        .setColor(answer.color),
     );
   }
 ***REMOVED***
@@ -41,14 +41,9 @@ const answers = [
   { string: 'Outlook good.', color: '#4caf50' },
   { string: 'Yes.', color: '#4caf50' },
   { string: 'Signs point to yes.', color: '#4caf50' },
-  { string: 'Reply hazy, try again.', color: '#ffeb3b' },
-  { string: 'Ask again later.', color: '#ffeb3b' },
-  { string: 'Better not tell you now.', color: '#ffeb3b' },
-  { string: 'Cannot predict now.', color: '#ffeb3b' },
-  { string: 'Concentrate and ask again.', color: '#ffeb3b' },
   { string: "Don't count on it.", color: '#f44336' },
   { string: 'My reply is no.', color: '#f44336' },
   { string: 'My sources say no.', color: '#f44336' },
   { string: 'Outlook not so good.', color: '#f44336' },
-  { string: 'Very doubtful.', color: '#f44336' }
+  { string: 'Very doubtful.', color: '#f44336' },
 ];
