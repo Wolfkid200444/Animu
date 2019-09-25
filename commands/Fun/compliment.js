@@ -120,5 +120,8 @@ const compliments = [
   'The way you treasure your loved ones is incredible.',
   "You're really something special.",
   "You're a gift to those around you.",
-  'You deserve better.'
+  'You deserve better.',
+  "You're better than Unicorns because you are real.",
+  "You make the Sun seem dull.",
+  "You are more awesome than the Naruto runner at Area 51."
 ];
