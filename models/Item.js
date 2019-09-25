@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const itemSchema = new Schema({
   name: {
     type: String,
-    unique: true
+    unique: true,
   },
   description: String,
   imageURL: String,
@@ -11,13 +11,13 @@ const itemSchema = new Schema({
   discount: {
     type: Number,
     min: 0,
-    max: 100
+    max: 100,
   },
   roles: [String],
   usable: Boolean,
   instantUse: Boolean,
   purchaseMsg: String,
-  useMsg: String
+  useMsg: String,
 });
 
 //Model Methods
@@ -30,7 +30,7 @@ itemSchema.statics.createItem = async function(
   usable,
   instantUse,
   purchaseMsg,
-  useMsg
+  useMsg,
 ) {
   const item = await this.findOne({ name: itemName }).exec();
 
@@ -41,11 +41,11 @@ itemSchema.statics.createItem = async function(
     description: description,
     price,
     discount,
-    roles: roles.split(',').map(role => role.trim()),
+    roles: roles.split(',').map((role) => role.trim()),
     usable,
     instantUse,
     purchaseMsg,
-    useMsg
+    useMsg,
   }).save();
 ***REMOVED***
 
@@ -61,7 +61,7 @@ itemSchema.methods.purchase = async function(msg, memberID) {
     return {
       res: 'err',
       title: 'Insufficient Coins',
-      desc: "You don't have enough coins to purchase this item"
+      desc: "You don't have enough coins to purchase this item",
     ***REMOVED***
 
   //Purchasing item
@@ -69,28 +69,14 @@ itemSchema.methods.purchase = async function(msg, memberID) {
 
   //Use item instantly
   if (this.instantUse) {
-    this.roles.forEach(role => {
+    this.roles.forEach((role) => {
       if (role !== 'none') {
         //Assigning role
-        const role = msg.guild.roles.find(r => r.name === role);
+        const role = msg.guild.roles.find((r) => r.name === role);
 
         msg.guild.members.get(memberID).addRole(role.id);
       }
     });
-
-    //If it's a lotto ticket
-    if (this.name === 'Lotto Ticket') {
-      const totalLottos = await this.model('Config')
-        .findOne({ key: 'totalLottos' })
-        .exec();
-
-      totalLottos.value++;
-      inventory.lottos.push(totalLottos.value);
-      totalLottos.markModified('value');
-
-      await totalLottos.save();
-      await inventory.save();
-    }
 
     if (this.name === 'Pet Cat' || this.name === 'Pet Dog') {
       const Pet = this.model('Pet');
@@ -102,13 +88,13 @@ itemSchema.methods.purchase = async function(msg, memberID) {
           res: 'err',
           title: 'Already Own a pet',
           desc:
-            'You already own a pet, use `kickPet` command to kick out your current pet before you can purchase a new pet'
+            'You already own a pet, use `kickPet` command to kick out your current pet before you can purchase a new pet',
         ***REMOVED***
 
       await new Pet({
         memberID: memberID,
         petType: this.name.substr(4).toLowerCase(),
-        petName: this.name.substr(4)
+        petName: this.name.substr(4),
       }).save();
 
       await inventory.save();
@@ -117,7 +103,7 @@ itemSchema.methods.purchase = async function(msg, memberID) {
     return {
       res: 'success',
       title: 'Item Purchased',
-      desc: this.purchaseMsg
+      desc: this.purchaseMsg,
     ***REMOVED***
   } else {
     //Add item to inventory
