@@ -263,7 +263,6 @@ module.exports = class extends Extendable {
    * @returns {boolean} - True if reputation was added/deducted, False if user was banned due to low rep
    */
   async editReputation(change, amount, guildID) {
-    const aldovia = this.client.guilds.get('556442896719544320');
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     //Checking Aldovia Title
@@ -274,14 +273,28 @@ module.exports = class extends Extendable {
 
     if (
       isOwner ||
-      aldovia.members
-        .get(profile.memberID)
-        .roles.find((r) => r.name === '🛡 Senior Moderator') ||
-      aldovia.members
-        .get(profile.memberID)
-        .roles.find((r) => r.name === 'Moderator')
+      _.includes(this.client.settings.aldoviaSeniorMods, profile.memberID)
     )
       return true;
+
+    let proceed = true;
+
+    const thisGuild = this.client.guilds.get(guildID);
+
+    for (let i = 0; i < thisGuild.settings.ignoreRepRoles.length; i++) {
+      const ignoreRepRole = thisGuild.settings.ignoreRepRoles[i];
+      if (
+        this.client.guilds
+          .get(guildID)
+          .members.get(this.id)
+          .roles.has(ignoreRepRole)
+      ) {
+        proceed = false;
+        break;
+      }
+    }
+
+    if (!proceed) return true;
 
     if (!profile) profile = await Profile.register(this.id);
 

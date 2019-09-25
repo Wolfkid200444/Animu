@@ -17,22 +17,17 @@ module.exports = class extends Command {
       extendedHelp: 'Purchase an Item',
       usage: '<itemName:string>',
       usageDelim: ' ',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
   }
 
   async run(msg, [itemName]) {
-    const aldovia = this.client.guilds.get('556442896719544320');
-
-    if (
-      (await msg.hasAtLeastPermissionLevel(8)) ||
-      aldovia.members.get(msg.author.id).roles.find(r => r.name === 'Moderator')
-    )
+    if (await msg.hasAtLeastPermissionLevel(8))
       return msg.sendEmbed(
         new MessageEmbed()
           .setTitle("Can't purchase item")
-          .setDescription("Moderators/Admins can't purchase items")
-          .setColor('#f44336')
+          .setDescription("Animu Staff can't purchase items")
+          .setColor('#f44336'),
       );
 
     const profile = await Profile.findOne({ memberID: msg.author.id }).exec();
@@ -42,14 +37,14 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Profile not found')
           .setDescription('Use `-register` to register your profile')
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     const itemArr = await Item.find({}).exec();
 
     const fuse = new Fuse(itemArr, {
       keys: ['name'],
-      threshold: 0.2
+      threshold: 0.2,
     });
 
     const item = fuse.search(itemName)[0];
@@ -59,7 +54,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Invalid Item Name')
           .setDescription('The item with given name was not found')
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     const res = await item.purchase(msg, msg.author.id);
@@ -68,7 +63,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(res.title)
         .setDescription(res.desc)
-        .setColor(res.res === 'err' ? '#f44336' : '#2196f3')
+        .setColor(res.res === 'err' ? '#f44336' : '#2196f3'),
     );
   }
 ***REMOVED***
