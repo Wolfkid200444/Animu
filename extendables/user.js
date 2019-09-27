@@ -398,9 +398,7 @@ module.exports = class extends Extendable {
 
     if (!profile) profile = await Profile.register(this.id);
 
-    if (
-      !profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
-    ) {
+    if (profile.badges.find((guildBadges) => guildBadges.guildID === guildID)) {
       if (
         _.includes(
           profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
@@ -414,6 +412,12 @@ module.exports = class extends Extendable {
           .find((guildBadges) => guildBadges.guildID === guildID)
           .badges.push(badgeName);
 
+      await profile.save();
+    } else {
+      profile.badges.push({
+        guildID: guildID,
+        badges: [badgeName],
+      });
       await profile.save();
     }
 
