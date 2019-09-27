@@ -135,7 +135,7 @@ module.exports = class extends Extendable {
           profileEmbed.addField(
             '❯ Level',
             `${levelRaw.level} (${levelRaw.exp}/${10 *
-              levelRaw.level ** 2} Exp)`,
+              (levelRaw.level + 1) ** 2} Exp)`,
             true,
           );
         else
@@ -417,6 +417,22 @@ module.exports = class extends Extendable {
       await profile.save();
     }
 
+    return true;
+  }
+
+  /**
+   * Add Exp to a user's profile
+   *
+   * @param {Number} expToAdd - Amount of Exp to add
+   * @param {String} guildID - ID of guild to add exp for
+   * @returns {Boolean} - True
+   */
+  async addExp(expToAdd, guildID) {
+    let profile = await Profile.findOne({ memberID: this.id }).exec();
+
+    if (!profile) return true;
+
+    await profile.addExp(expToAdd, guildID);
     return true;
   }
 

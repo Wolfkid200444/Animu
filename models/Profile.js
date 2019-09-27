@@ -103,5 +103,39 @@ profileSchema.methods.edit = async function(field, value) {
   return this;
 ***REMOVED***
 
+profileSchema.methods.addExp = async function(expToAdd, guildID) {
+  const index = this.level.findIndex(
+    (guildLev) => guildLev.guildID === guildID,
+  );
+
+  if (this.level[index].level === 100) return true;
+
+  const levelUp = async (exp) => {
+    this.level[index].level++;
+    const expLeft =
+      exp - expToNextLevel(this.level[index].level - 1, this.level[index].exp);
+    if (
+      expLeft >= expToNextLevel(this.level[index].level, this.level[index].exp)
+    )
+      levelUp(expLeft);
+    else this.level[index].exp = expLeft;
+  ***REMOVED***
+
+  if (
+    this.level[index].exp + expToAdd >=
+    expToNextLevel(this.level[index].level, this.level[index].exp)
+  )
+    levelUp(expToAdd + this.level[index].exp);
+  else this.level[index].exp += expToAdd;
+
+  await this.save();
+  return true;
+***REMOVED***
+
+//Helper Functions
+function expToNextLevel(currentLevel, currentExp) {
+  return 10 * (currentLevel + 1) ** 2 - currentExp;
+}
+
 //Model
 model('Profile', profileSchema);

@@ -27,6 +27,7 @@ Client.defaultGuildSchema.add('startingRep', 'number', { default: 50 });
 Client.defaultGuildSchema.add('banOnLowRep', 'boolean');
 Client.defaultGuildSchema.add('ignoreRepRoles', 'role', { array: true });
 Client.defaultGuildSchema.add('ignoreLevelRoles', 'role', { array: true });
+Client.defaultGuildSchema.add('ignoreExpChannels', 'channel', { array: true });
 Client.defaultGuildSchema.add('logChannels', (folder) =>
   folder.add('deletedMessages', 'textchannel'),
 );
