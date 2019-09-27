@@ -27,6 +27,20 @@ module.exports = class extends Event {
     }
 
     if (
+      !profileFind.level.find(
+        (guildLevel) => guildLevel.guildID === member.guild.id,
+      )
+    ) {
+      profileFind.level.push({
+        guildID: member.guild.id,
+        level: 1,
+        exp: 0,
+      });
+
+      await profileFind.save();
+    }
+
+    if (
       profile.res === 'already_exists' &&
       member.guild.settings.mutedRole &&
       _.includes(profile.mutedIn, member.guild.id)

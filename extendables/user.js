@@ -75,7 +75,7 @@ module.exports = class extends Extendable {
             .activeBadge,
         );
 
-      let proceed = true;
+      let proceedRep = true;
 
       const thisGuild = this.client.guilds.get(guildID);
 
@@ -87,12 +87,12 @@ module.exports = class extends Extendable {
             .members.get(this.id)
             .roles.has(ignoreRepRole)
         ) {
-          proceed = false;
+          proceedRep = false;
           break;
         }
       }
 
-      if (proceed) {
+      if (proceedRep) {
         const repRaw = profile.reputation.find(
           (reputation) => reputation.guildID === guildID,
         );
@@ -106,6 +106,41 @@ module.exports = class extends Extendable {
         else
           profileEmbed.addField(
             '❯ Reputation',
+            'Not configured (use `setup`)',
+            true,
+          );
+      }
+
+      let proceedLevel = true;
+
+      for (let i = 0; i < thisGuild.settings.ignoreLevelRoles.length; i++) {
+        const ignoreLevelRole = thisGuild.settings.ignoreLevelRoles[i];
+        if (
+          this.client.guilds
+            .get(guildID)
+            .members.get(this.id)
+            .roles.has(ignoreLevelRole)
+        ) {
+          proceedLevel = false;
+          break;
+        }
+      }
+
+      if (proceedLevel) {
+        const levelRaw = profile.level.find(
+          (level) => level.guildID === guildID,
+        );
+
+        if (levelRaw)
+          profileEmbed.addField(
+            '❯ Level',
+            `${levelRaw.level} (${levelRaw.exp}/${10 *
+              levelRaw.level ** 2} Exp)`,
+            true,
+          );
+        else
+          profileEmbed.addField(
+            '❯ Level',
             'Not configured (use `setup`)',
             true,
           );
@@ -434,17 +469,18 @@ module.exports = class extends Extendable {
 
     if (!profile) return this._noProfile(true);
 
-    if (profile.reputation.find((rep) => rep.guildID === guildID))
-      return MessageEmbed({
-        title: 'Already Configured',
-        description: 'Your profile is already configured for this server',
-        color: '#f44336',
+    if (!profile.reputation.find((rep) => rep.guildID === guildID))
+      profile.reputation.push({
+        guildID: guildID,
+        rep: this.client.guilds.get(guildID).settings.startingRep,
       });
 
-    profile.reputation.push({
-      guildID: guildID,
-      rep: this.client.guilds.get(guildID).settings.startingRep,
-    });
+    if (!profile.level.find((level) => level.guildID === guildID))
+      profile.level.push({
+        guildID: guildID,
+        level: 1,
+        exp: 0,
+      });
 
     await profile.save();
 

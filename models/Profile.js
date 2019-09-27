@@ -34,6 +34,13 @@ const profileSchema = new Schema({
       daysAgo: Number,
     },
   ],
+  level: [
+    {
+      guildID: String,
+      exp: Number,
+      level: Number,
+    },
+  ],
 });
 
 //Schema Methods
