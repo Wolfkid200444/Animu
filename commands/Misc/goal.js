@@ -22,9 +22,16 @@ module.exports = class extends Command {
             value: `$${this.client.settings.patreonCurrent}/month`,
           },
           {
-            name: 'Next Goal',
-            value: `$200\n${(this.client.settings.patreonCurrent / 200) *
-              100}% Achieved\nGuilds will be added upon hitting this goal`,
+            name: '$100/month',
+            value: '> Music\n> More perks for Verified Role',
+          },
+          {
+            name: '$200/month',
+            value: `> Guilds\n> Image Profiles`,
+          },
+          {
+            name: '$300/month',
+            value: `> AI based auto moderation`,
           },
         ],
         color: '#2196f3',
