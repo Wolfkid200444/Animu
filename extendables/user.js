@@ -443,7 +443,7 @@ module.exports = class extends Extendable {
 
     profile.reputation.push({
       guildID: guildID,
-      rep: 50,
+      rep: this.client.guilds.get(guildID).settings.startingRep,
     });
 
     await profile.save();

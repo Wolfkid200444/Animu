@@ -20,7 +20,7 @@ module.exports = class extends Event {
     ) {
       profileFind.reputation.push({
         guildID: member.guild.id,
-        rep: 50,
+        rep: member.guild.settings.startingRep,
       });
 
       await profileFind.save();
