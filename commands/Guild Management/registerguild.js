@@ -29,6 +29,17 @@ module.exports = class extends Command {
         }),
       );
 
+    const keyDb = await Key.findOne({ key }).exec();
+
+    if (!keyDb)
+      return msg.send(
+        new MessageEmbed({
+          title: 'Key invalid',
+          description: "The key you're trying to use is invalid",
+          color: '#f44336',
+        }),
+      );
+
     const keyUsed = await Guild.findOne({ key }).exec();
 
     if (keyUsed)
