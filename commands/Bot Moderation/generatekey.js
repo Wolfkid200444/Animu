@@ -35,7 +35,7 @@ module.exports = class extends Command {
     msg.send(
       new MessageEmbed({
         title: 'Key Generated',
-        description: `${key}`,
+        description: `**${key}**\n\nValid for **${days}** days`,
         color: '#2196f3',
       }),
     );
