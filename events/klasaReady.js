@@ -24,5 +24,12 @@ module.exports = class extends Event {
       )
     )
       this.client.schedule.create('changedbanner', '0 0 * * *');
+
+    if (
+      !this.client.schedule.tasks.find(
+        (task) => task.taskName === 'keysdaysleft',
+      )
+    )
+      this.client.schedule.create('keysdaysleft', '0 0 * * *');
   }
 ***REMOVED***
