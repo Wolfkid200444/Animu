@@ -1,7 +1,6 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
-const _ = require('lodash');
 
 //Init
 const Profile = mongoose.model('Profile');
@@ -10,13 +9,12 @@ const Inventory = mongoose.model('Inventory');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       aliases: ['leaderboard'],
       cooldown: 10,
       description: 'View leaderboards',
-      extendedHelp:
-        'View leaderboards, valid leaderboards are coins, reputation',
-      usage: '<coins|reputation>',
+      extendedHelp: 'View leaderboards',
+      usage: '<coins>',
     });
   }
 
