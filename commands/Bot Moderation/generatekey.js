@@ -13,7 +13,8 @@ module.exports = class extends Command {
       cooldown: 10,
       permissionLevel: 8,
       description: 'Generate Key',
-      extendedHelp: 'Generate Animu Subscription Key',
+      extendedHelp:
+        'Generate Animu Subscription Key, use -1 in days field for infinite days',
       usage: '<lite|plus|pro> <days:number>',
       usageDelim: ' ',
     });
@@ -35,7 +36,9 @@ module.exports = class extends Command {
     msg.send(
       new MessageEmbed({
         title: 'Key Generated',
-        description: `**${key}**\n\nValid for **${days}** days`,
+        description: `**${key}**\n\nValid for **${
+          days > 0 ? days : 'infinite'
+        }** days`,
         color: '#2196f3',
       }),
     );
