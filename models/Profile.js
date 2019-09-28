@@ -108,6 +108,8 @@ profileSchema.methods.addExp = async function(expToAdd, guildID) {
     (guildLev) => guildLev.guildID === guildID,
   );
 
+  if (index < 0) return true;
+
   if (this.level[index].level === 100) return true;
 
   const levelUp = async (exp) => {
