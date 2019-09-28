@@ -504,7 +504,7 @@ module.exports = class extends Extendable {
 
     await profile.save();
 
-    return MessageEmbed({
+    return new MessageEmbed({
       title: 'Setup complete',
       description: 'Your profile is configured for this server',
       color: '#2196f3',
