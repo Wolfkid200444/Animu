@@ -31,7 +31,15 @@ module.exports = class extends Command {
           },
           {
             name: '$300/month',
-            value: `> AI based auto moderation`,
+            value: `> AI based auto moderation\n> Basic Web UI`,
+          },
+          {
+            name: '$500/month',
+            value: '> Complete Web UI',
+          },
+          {
+            name: '$800/month',
+            value: '> Mobile App',
           },
         ],
         color: '#2196f3',
