@@ -8,7 +8,6 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
-      aliases: ['genkey', 'keygen'],
       cooldown: 10,
       permissionLevel: 8,
       description: 'Increase days of a key',
