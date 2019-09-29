@@ -9,10 +9,10 @@ module.exports = class extends Command {
       cooldown: 10,
       permissionLevel: 6,
       description: 'Give badge',
-      extendedHelp:
-        'Give a badge to a member',
-      usage: '<member:user> <badge:string>',
+      extendedHelp: 'Give a badge to a member',
+      usage: '<member:user> <badge:...string>',
       usageDelim: ' ',
+      quotedStringSupport: true,
     });
   }
 
