@@ -429,15 +429,17 @@ module.exports = class extends Extendable {
    *
    * @param {Number} expToAdd - Amount of Exp to add
    * @param {String} guildID - ID of guild to add exp for
-   * @returns {Boolean} - True
+   * @returns {Promise<Array<Role>|False>} - Array if a role is to be added, False otherwise
    */
   async addExp(expToAdd, guildID) {
-    let profile = await Profile.findOne({ memberID: this.id }).exec();
+    return new Promise((resolve) => {
+      Profile.findOne({ memberID: this.id }).then(async (profile) => {
+        if (!profile) return true;
 
-    if (!profile) return true;
-
-    await profile.addExp(expToAdd, guildID);
-    return true;
+        const res = await profile.addExp(expToAdd, guildID);
+        resolve(res);
+      });
+    });
   }
 
   /**

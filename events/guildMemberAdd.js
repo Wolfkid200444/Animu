@@ -1,5 +1,6 @@
 //Dependencies
 const { Event } = require('klasa');
+const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
@@ -48,5 +49,21 @@ module.exports = class extends Event {
       member.roles.add(member.guild.settings.mutedRole, 'Assigning Muted role');
     else if (member.guild.settings.joinRole)
       member.roles.add(member.guild.settings.joinRole, 'Assigning Member role');
+
+    if (member.guild.settings.welcomeChannel) {
+      // Send Welcome message
+      const welcomeEmbed = new MessageEmbed()
+        .setTitle(`${member}, Welcome to ${member.guild.name}`)
+        .setColor('#2196f3');
+
+      if (member.guild.settings.welcomeMessage)
+        welcomeEmbed.setDescription(member.guild.settings.welcomeMessage);
+      if (member.guild.settings.welcomeImageURL)
+        welcomeEmbed.setImage(member.guild.settings.welcomeImageURL);
+
+      member.guild.channels
+        .get(member.guild.settings.welcomeChannel)
+        .send(welcomeEmbed);
+    }
   }
 ***REMOVED***

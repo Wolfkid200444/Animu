@@ -172,7 +172,7 @@ profileSchema.methods.addExp = async function(expToAdd, guildID) {
   else this.level[index].exp += expToAdd;
 
   await this.save();
-  return rolesToAdd.length > 0 ? rolesToAdd : true;
+  return rolesToAdd.length > 0 ? rolesToAdd : false;
 ***REMOVED***
 
 //Helper Functions

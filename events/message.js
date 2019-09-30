@@ -13,9 +13,9 @@ module.exports = class extends Event {
     }
 
     if (proceedExp) {
-      const res = message.author.addExp(1, message.guild.id);
+      const res = await message.author.addExp(1, message.guild.id);
 
-      if (typeof res === 'object') {
+      if (res) {
         res.forEach((roleName) => {
           const role = message.guild.roles.find((r) => r.name === roleName);
 
