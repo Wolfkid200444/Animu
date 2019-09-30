@@ -27,6 +27,9 @@ Client.defaultGuildSchema.add('startingRep', 'number', { default: 50 });
 Client.defaultGuildSchema.add('banOnLowRep', 'boolean');
 Client.defaultGuildSchema.add('ignoreRepRoles', 'role', { array: true });
 Client.defaultGuildSchema.add('ignoreLevelRoles', 'role', { array: true });
+Client.defaultGuildSchema.add('welcomeChannel', 'channel');
+Client.defaultGuildSchema.add('welcomeMessage', 'string');
+Client.defaultGuildSchema.add('welcomeImageURL', 'string');
 Client.defaultGuildSchema.add('ignoreExpChannels', 'channel', { array: true });
 Client.defaultGuildSchema.add('logChannels', (folder) =>
   folder.add('deletedMessages', 'textchannel'),
@@ -64,6 +67,20 @@ mongoose
     useCreateIndex: true,
   })
   .then(async () => {
+    //->Creating models
+    require('./models/Reaction');
+    require('./models/Action');
+    require('./models/Inventory');
+    require('./models/Profile');
+    require('./models/Item');
+    require('./models/Partner');
+    require('./models/Pet');
+    require('./models/SelfRole');
+    require('./models/Log');
+    require('./models/Key');
+    require('./models/Guild');
+    require('./models/Config');
+
     //-> Klasa Client
     const client = await new Client({
       fetchAllMembers: false,
@@ -86,20 +103,6 @@ mongoose
     });
 
     await client.login(keys.discordBotToken);
-
-    //->Creating models
-    require('./models/Reaction');
-    require('./models/Action');
-    require('./models/Profile')(client);
-    require('./models/Inventory');
-    require('./models/Item');
-    require('./models/Partner');
-    require('./models/Pet');
-    require('./models/SelfRole');
-    require('./models/Log');
-    require('./models/Key');
-    require('./models/Guild');
-    require('./models/Config');
 
     //-> Adding client-dependent routes
     require('./routes/webhooks')(app, client);

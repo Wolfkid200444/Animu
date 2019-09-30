@@ -13,7 +13,15 @@ module.exports = class extends Event {
     }
 
     if (proceedExp) {
-      message.author.addExp(1, message.guild.id);
+      const res = message.author.addExp(1, message.guild.id);
+
+      if (typeof res === 'object') {
+        res.forEach((roleName) => {
+          const role = message.guild.roles.find((r) => r.name === roleName);
+
+          message.member.roles.add(role);
+        });
+      }
     }
   }
 ***REMOVED***
