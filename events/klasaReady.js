@@ -7,7 +7,7 @@ module.exports = class extends Event {
     this.client.settings.aldoviaDescription =
       'An anime server made for weebs by weebs';
     this.client.settings.aldoviaSeniorMods = [];
-    this.client.settings.patreonCurrent = 46;
+    this.client.settings.patreonCurrent = 0;
 
     this.client.guilds.get('556442896719544320').members.forEach((member) => {
       if (member.roles.find((r) => r.name === '🛡 Senior Moderator'))
