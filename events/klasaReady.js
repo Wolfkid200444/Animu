@@ -2,7 +2,7 @@ const { Event } = require('klasa');
 
 module.exports = class extends Event {
   async run() {
-    this.client.user.setActivity('over Aldovia Network', { type: 'WATCHING' });
+    this.client.user.setActivity('over Weebs', { type: 'WATCHING' });
     this.client.settings.aldoviaInviteLink = 'https://discord.gg/JGsgBsN';
     this.client.settings.aldoviaDescription =
       'An anime server made for weebs by weebs';
