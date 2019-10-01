@@ -125,7 +125,7 @@ profileSchema.methods.addExp = async function(expToAdd, guildID) {
       (level) => level.level === this.level[index].level,
     );
 
-    if (levelPerkIndex) {
+    if (levelPerkIndex >= 0) {
       // If perks are found
       //-> Giving Badge
       if (guild.levelPerks[levelPerkIndex].badge) {
