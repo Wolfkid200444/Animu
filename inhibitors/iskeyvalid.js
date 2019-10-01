@@ -1,6 +1,5 @@
 const { Inhibitor } = require('klasa');
 const { model } = require('mongoose');
-const _ = require('lodash');
 
 const Guild = model('Guild');
 const Key = model('Key');
@@ -12,13 +11,11 @@ module.exports = class extends Inhibitor {
       enabled: true,
       spamProtection: false,
     });
-
-    this.validGuilds = [];
   }
 
   async run(message, command) {
     if (command.name === 'registerguild') return false;
-    else if (!_.includes(this.validGuilds, message.guild.id)) return true;
+    else if (!require('../data/validGuilds').has(message.guild.id)) return true;
     else return false;
   }
 
@@ -28,7 +25,7 @@ module.exports = class extends Inhibitor {
     guilds.forEach(async (guild) => {
       const key = await Key.findOne({ key: guild.key }).exec();
 
-      if (key != 0) this.validGuilds.push(guild.guildID);
+      if (key.daysLeft != 0) require('../data/validGuilds').add(guild.guildID);
     });
   }
 ***REMOVED***

@@ -58,6 +58,8 @@ module.exports = class extends Command {
       levelPerks: [],
     }).save();
 
+    require('../../data/validGuilds').add(msg.guild.id);
+
     msg.send(
       new MessageEmbed({
         title: 'Registered',

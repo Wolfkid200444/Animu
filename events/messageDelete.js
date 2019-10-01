@@ -10,6 +10,8 @@ module.exports = class extends Event {
 
     if (message.author.id === this.client.user.id) return;
 
+    if (!require('../data/validGuilds').has(message.guild.id)) return;
+
     await new Log({
       guildID: message.guild.id,
       event: 'messageDelete',
