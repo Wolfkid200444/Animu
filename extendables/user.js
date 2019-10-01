@@ -269,29 +269,36 @@ module.exports = class extends Extendable {
 
     let badgesString = '';
 
-    if (
-      profile.badges.find((guildBadges) => guildBadges.guildID === guildID) &&
-      profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
-        .badges.length < 1
-    )
-      badgesString = false;
-    else
-      profile.badges
-        .find((guildBadges) => guildBadges.guildID === guildID)
-        .badges.forEach((badge) => (badgesString += `${badge}\n`));
-
-    return new MessageEmbed()
-      .setTitle(
-        `${this.client.users.get(profile.memberID).username ||
-          'Unknown'}'s Badges`,
-      )
-      .addField(
-        'Active Badge',
+    if (profile.badges.find((guildBadges) => guildBadges.guildID === guildID)) {
+      if (
         profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
-          .activeBadge || '[No active badge]',
+          .badges.length < 1
       )
-      .addField('All Badges', badgesString || '[No badges]')
-      .setColor('#2196f3');
+        badgesString = false;
+      else
+        profile.badges
+          .find((guildBadges) => guildBadges.guildID === guildID)
+          .badges.forEach((badge) => (badgesString += `${badge}\n`));
+
+      return new MessageEmbed()
+        .setTitle(
+          `${this.client.users.get(profile.memberID).username ||
+            'Unknown'}'s Badges`,
+        )
+        .addField(
+          'Active Badge',
+          profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+            .activeBadge || '[No active badge]',
+        )
+        .addField('All Badges', badgesString || '[No badges]')
+        .setColor('#2196f3');
+    } else {
+      return new MessageEmbed({
+        title: 'Badges',
+        description: 'No badges found',
+        color: '#2196f3',
+      });
+    }
   }
 
   /**
@@ -456,14 +463,25 @@ module.exports = class extends Extendable {
 
     if (!profile.badges.find((guildBadges) => guildBadges.guildID === guildID))
       return false;
-    else {
+
+    if (
+      _.includes(
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+          .badges,
+        badgeName,
+      )
+    ) {
       if (
         profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
           .activeBadge
       )
         profile.badges
           .find((guildBadges) => guildBadges.guildID === guildID)
-          .badges.push(profile.activeBadge);
+          .badges.push(
+            profile.badges.find(
+              (guildBadges) => guildBadges.guildID === guildID,
+            ).activeBadge,
+          );
 
       profile.badges.find(
         (guildBadges) => guildBadges.guildID === guildID,
@@ -474,9 +492,11 @@ module.exports = class extends Extendable {
       ).badges = profile.badges
         .find((guildBadges) => guildBadges.guildID === guildID)
         .badges.filter((badge) => badge !== badgeName);
-    }
 
-    await profile.save();
+      await profile.save();
+    } else {
+      return false;
+    }
 
     return true;
   }
