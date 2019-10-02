@@ -19,8 +19,15 @@ module.exports = class extends Event {
     const profile = await Profile.findOne({ memberID: member.id }).exec();
 
     // Deleting Messages
-    if (member.guild.settings.deleteMessagesChannels.length > 0)
-      member.guild.settings.deleteMessagesChannels.forEach((channel) => {});
+    if (require('../data/validGuilds').has(member.guild.id)) {
+      if (member.guild.settings.deleteMessagesChannels.length > 0)
+        member.guild.settings.deleteMessagesChannels.forEach(async (ch) => {
+          const channel = member.guild.channels.get(ch);
+          let messages = await channel.messages.fetch({ limit: 100 });
+          messages = messages.filter((msg) => msg.author.id === member.id);
+          channel.bulkDelete(messages);
+        });
+    }
 
     if (
       profile &&
