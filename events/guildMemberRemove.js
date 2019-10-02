@@ -18,6 +18,10 @@ module.exports = class extends Event {
     //Store roles in profile
     const profile = await Profile.findOne({ memberID: member.id }).exec();
 
+    // Deleting Messages
+    if (member.guild.settings.deleteMessagesChannels.length > 0)
+      member.guild.settings.deleteMessagesChannels.forEach((channel) => {});
+
     if (
       profile &&
       member.guild.settings.mutedRole &&

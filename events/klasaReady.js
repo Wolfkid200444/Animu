@@ -1,4 +1,5 @@
 const { Event } = require('klasa');
+const { botEnv } = require('../config/keys');
 
 module.exports = class extends Event {
   async run() {
@@ -9,10 +10,14 @@ module.exports = class extends Event {
     this.client.settings.aldoviaSeniorMods = [];
     this.client.settings.patreonCurrent = 0;
 
-    this.client.guilds.get('556442896719544320').members.forEach((member) => {
-      if (member.roles.find((r) => r.name === '🛡 Senior Moderator'))
-        this.client.settings.aldoviaSeniorMods.push(member.id);
-    });
+    if (botEnv === 'production') {
+      this.client.guilds.get('556442896719544320').members.forEach((member) => {
+        if (member.roles.find((r) => r.name === '🛡 Senior Moderator'))
+          this.client.settings.aldoviaSeniorMods.push(member.id);
+      });
+    } else {
+      this.client.settings.aldoviaSeniorMods = [];
+    }
 
     //-> Scheduling Tasks
     if (!this.client.schedule.tasks.find((task) => task.taskName === 'petfed'))

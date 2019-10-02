@@ -6,6 +6,9 @@ const SelfRole = mongoose.model('SelfRole');
 
 module.exports = class extends Event {
   async run(messageReaction, user) {
+    //If guild isn't valid
+    if (!require('../data/validGuilds').has(member.guild.id)) return;
+
     if (messageReaction.message.partial) await messageReaction.message.fetch();
 
     const selfRole = await SelfRole.findOne({
@@ -17,14 +20,14 @@ module.exports = class extends Event {
             messageReaction._emoji.name +
             ':' +
             messageReaction._emoji.id +
-            '>'}`
-        }
-      ]
+            '>'}`,
+        },
+      ],
     }).exec();
 
     if (selfRole) {
       const guild = this.client.guilds.get(selfRole.guildID);
-      const role = guild.roles.find(r => r.name === selfRole.roleName);
+      const role = guild.roles.find((r) => r.name === selfRole.roleName);
       const member = guild.members.get(user.id);
 
       //Assign Role

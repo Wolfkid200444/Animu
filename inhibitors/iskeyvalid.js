@@ -27,5 +27,7 @@ module.exports = class extends Inhibitor {
 
       if (key.daysLeft != 0) require('../data/validGuilds').add(guild.guildID);
     });
+
+    require('../data/validGuilds').add('628931282851856394'); //Adding Dev Server
   }
 ***REMOVED***

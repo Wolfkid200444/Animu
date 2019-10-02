@@ -30,6 +30,9 @@ Client.defaultGuildSchema.add('ignoreLevelRoles', 'role', { array: true });
 Client.defaultGuildSchema.add('welcomeChannel', 'channel');
 Client.defaultGuildSchema.add('welcomeMessage', 'string');
 Client.defaultGuildSchema.add('welcomeImageURL', 'string');
+Client.defaultGuildSchema.add('deleteMessagesChannels', 'textchannel', {
+  array: true,
+});
 Client.defaultGuildSchema.add('ignoreExpChannels', 'channel', { array: true });
 Client.defaultGuildSchema.add('logChannels', (folder) =>
   folder.add('deletedMessages', 'textchannel'),

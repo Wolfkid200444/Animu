@@ -9,6 +9,9 @@ const Profile = mongoose.model('Profile');
 
 module.exports = class extends Event {
   async run(member) {
+    //If guild isn't valid
+    if (!require('../data/validGuilds').has(member.guild.id)) return;
+
     //Register Profile
     const profile = await Profile.register(member.id);
 
