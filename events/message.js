@@ -3,7 +3,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
   async run(message) {
     //If guild isn't valid
-    if (!require('../data/validGuilds').has(member.guild.id)) return;
+    if (!require('../data/validGuilds').has(message.guild.id)) return;
 
     let proceedExp = true;
 

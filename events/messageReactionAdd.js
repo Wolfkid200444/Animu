@@ -6,10 +6,11 @@ const SelfRole = mongoose.model('SelfRole');
 
 module.exports = class extends Event {
   async run(messageReaction, user) {
-    //If guild isn't valid
-    if (!require('../data/validGuilds').has(member.guild.id)) return;
-
     if (messageReaction.message.partial) await messageReaction.message.fetch();
+
+    //If guild isn't valid
+    if (!require('../data/validGuilds').has(messageReaction.message.guild.id))
+      return;
 
     const selfRole = await SelfRole.findOne({
       messageID: messageReaction.message.id,
