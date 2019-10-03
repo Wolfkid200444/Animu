@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 //Init
 const Key = mongoose.model('Key');
+const Guild = mongoose.model('Guild');
 
 module.exports = class extends Task {
   async run() {
@@ -10,6 +11,10 @@ module.exports = class extends Task {
 
     keys.forEach(async (key) => {
       if (!key.daysLeft > 0) key.daysLeft--;
+      else if (key.daysLeft === 0) {
+        const guild = await Guild.findOne({ key: key.key }).exec();
+        require('../data/validGuilds').remove(guild.guildID);
+      }
       await key.save();
     });
   }
