@@ -12,6 +12,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       aliases: ['marriage', 'wed', 'propose'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 60,
       description: 'Marry someone',
       extendedHelp:

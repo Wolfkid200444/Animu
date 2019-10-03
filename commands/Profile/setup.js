@@ -4,6 +4,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 120,
       description: 'Setup profile for this guild',
       extendedHelp: 'Set up necessary stuff for this guild',

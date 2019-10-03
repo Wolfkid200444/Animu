@@ -7,6 +7,7 @@ module.exports = class extends Command {
     super(...args, {
       description: 'Show details about an anime',
       cooldown: 10,
+      requiredPermissions: ['EMBED_LINKS'],
       extendedHelp:
         'Show details about an anime. The argument provided is anime name',
       usage: '<animeName:...string>',

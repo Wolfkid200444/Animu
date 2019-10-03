@@ -10,11 +10,12 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['changepetname', 'updatepetname'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 120,
       description: 'Change name of your pet',
       extendedHelp: 'Change name of your pet',
       usage: '<name:...string{1,15}>',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
   }
 
@@ -26,7 +27,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle(`Oooops!`)
           .setDescription("You don't own a pet")
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     pet.petName = name;
@@ -37,7 +38,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`Changed name`)
         .setDescription(`Your pet's new name is ${name}`)
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***

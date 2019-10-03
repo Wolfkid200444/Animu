@@ -4,7 +4,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       permissionLevel: 6,
-      requiredPermissions: ['BAN_MEMBERS'],
+      requiredPermissions: ['BAN_MEMBERS', 'EMBED_LINKS'],
       runIn: ['text'],
       description: 'Unbans a user.',
       usage: '<user:user> [reason:...string]',

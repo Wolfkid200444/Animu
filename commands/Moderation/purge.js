@@ -4,11 +4,11 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       permissionLevel: 6,
-      requiredPermissions: ['MANAGE_MESSAGES'],
+      requiredPermissions: ['MANAGE_MESSAGES', 'EMBED_LINKS'],
       runIn: ['text'],
       description: 'Purges a certain amount of messages w/o filter.',
       usage: '[limit:integer] [link|invite|bots|you|me|upload|user:user]',
-      usageDelim: ' '
+      usageDelim: ' ',
     });
   }
 
@@ -22,29 +22,29 @@ module.exports = class extends Command {
     messages = messages.array().slice(0, limit);
     await msg.channel.bulkDelete(messages);
     return msg.sendMessage(
-      `Successfully deleted ${messages.length} messages from ${limit}.`
+      `Successfully deleted ${messages.length} messages from ${limit}.`,
     );
   }
 
   getFilter(msg, filter, user) {
     switch (filter) {
       case 'link':
-        return mes => /https?:\/\/[^ /.]+\.[^ /.]+/.test(mes.content);
+        return (mes) => /https?:\/\/[^ /.]+\.[^ /.]+/.test(mes.content);
       case 'invite':
-        return mes =>
+        return (mes) =>
           /(https?:\/\/)?(www\.)?(discord\.(gg|li|me|io)|discordapp\.com\/invite)\/.+/.test(
-            mes.content
+            mes.content,
           );
       case 'bots':
-        return mes => mes.author.bot;
+        return (mes) => mes.author.bot;
       case 'you':
-        return mes => mes.author.id === this.client.user.id;
+        return (mes) => mes.author.id === this.client.user.id;
       case 'me':
-        return mes => mes.author.id === msg.author.id;
+        return (mes) => mes.author.id === msg.author.id;
       case 'upload':
-        return mes => mes.attachments.size > 0;
+        return (mes) => mes.attachments.size > 0;
       case 'user':
-        return mes => mes.author.id === user.id;
+        return (mes) => mes.author.id === user.id;
       default:
         return () => true;
     }

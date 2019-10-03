@@ -6,6 +6,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['sb', 'activeBadge', 'selectBadge'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 30,
       description: 'Set a badge as active badge',
       usage: '<badge:...string>',

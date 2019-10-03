@@ -11,6 +11,7 @@ module.exports = class extends Command {
       permissionLevel: 7,
       aliases: ['viewlevelperks', 'getlevelperks'],
       runIn: ['text'],
+      requiredPermissions: ['EMBED_LINKS'],
       description: 'View perks for leveling up',
     });
   }

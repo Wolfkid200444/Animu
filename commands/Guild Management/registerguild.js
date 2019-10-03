@@ -11,6 +11,7 @@ module.exports = class extends Command {
     super(...args, {
       permissionLevel: 7,
       runIn: ['text'],
+      requiredPermissions: ['EMBED_LINKS'],
       description: 'Register your guild',
       usage: '<key:string>',
       quotedStringSupport: true,

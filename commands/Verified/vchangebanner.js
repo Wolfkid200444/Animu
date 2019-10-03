@@ -10,11 +10,12 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       aliases: ['vcbanner', 'vchangeb', 'vcb'],
+      requiredPermissions: ['MANAGE_GUILD', 'EMBED_LINKS'],
       cooldown: 60,
       description: 'Change Server Banner (Verified members only)',
       extendedHelp:
         'You can only change server banner once per 30 days. Please note that the image must be at least 1920x1080',
-      usage: '<bannerURL:string>'
+      usage: '<bannerURL:string>',
     });
   }
 
@@ -24,8 +25,8 @@ module.exports = class extends Command {
         new MessageEmbed({
           title: 'No verified Role',
           description: "This guild doesn't have a verified role set up",
-          color: '#f44336'
-        })
+          color: '#f44336',
+        }),
       );
 
     if (msg.guild.premiumTier < 2)
@@ -33,8 +34,8 @@ module.exports = class extends Command {
         new MessageEmbed({
           title: 'Not enough boosts',
           description: "This guild hasn't yet unlocked guild banner",
-          color: '#f44336'
-        })
+          color: '#f44336',
+        }),
       );
 
     if (!msg.member.roles.has(msg.guild.settings.verifiedRole))
@@ -42,14 +43,14 @@ module.exports = class extends Command {
         new MessageEmbed({
           title: 'Not verified',
           description: 'You must be a verified member to use this command',
-          color: '#f44336'
-        })
+          color: '#f44336',
+        }),
       );
 
     const profile = await Profile.findOne({ memberID: msg.author.id }).exec();
 
     const lastChangedRaw = profile.lastBannerChange.find(
-      guild => guild.guildID === msg.guild.id
+      (guild) => guild.guildID === msg.guild.id,
     );
 
     let lastChanged = 30;
@@ -62,8 +63,8 @@ module.exports = class extends Command {
           title: 'On Cooldown',
           description: `You can only change banner once per 30 days, you last changed banner **${lastChanged}** days ago, you can change it again in **${30 -
             lastChanged}** days`,
-          color: '#f44336'
-        })
+          color: '#f44336',
+        }),
       );
 
     //Change Banner
@@ -72,7 +73,7 @@ module.exports = class extends Command {
     //Save changes to Databse
     if (lastChangedRaw)
       profile.lastBannerChange.find(
-        guild => guild.guildID === msg.guild.id
+        (guild) => guild.guildID === msg.guild.id,
       ).daysAgo = 0;
     else profile.lastBannerChange.push({ guildID: msg.guild.id, daysAgo: 0 });
 
@@ -83,8 +84,8 @@ module.exports = class extends Command {
       new MessageEmbed({
         title: 'Banner Changed',
         description: `Banner of ${msg.guild.name} is successfully changed`,
-        color: '#2196f3'
-      })
+        color: '#2196f3',
+      }),
     );
   }
 ***REMOVED***

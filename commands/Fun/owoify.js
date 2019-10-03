@@ -6,6 +6,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       aliases: ['owo', 'owofy'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Owoify your text',
       usage: '<text:string>',

@@ -5,12 +5,13 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       aliases: ['remind', 'rm'],
+      requiredPermissions: ['EMBED_LINKS'],
       description: 'Creates a reminder',
       extendedHelp:
         'Create a reminder, the arguments are time (when you want to be reminded) and text that you want to get on specified time',
       cooldown: 20,
       usage: '<when:time> <text:...str>',
-      usageDelim: ', '
+      usageDelim: ', ',
     });
   }
 
@@ -19,20 +20,20 @@ module.exports = class extends Command {
       data: {
         channel: msg.channel.id,
         user: msg.author.id,
-        text
-      }
+        text,
+      },
     });
     return msg.sendEmbed(
       new MessageEmbed()
         .setAuthor(
           msg.author.username,
-          msg.author.displayAvatarURL({ size: 32 })
+          msg.author.displayAvatarURL({ size: 32 }),
         )
         .setTitle('Reminder Created')
         .setDescription(
-          `A reminder was created with the id: \`${reminder.id}\``
+          `A reminder was created with the id: \`${reminder.id}\``,
         )
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***

@@ -5,9 +5,10 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 60,
       description: 'Register profile',
-      extendedHelp: 'Register your profile'
+      extendedHelp: 'Register your profile',
     });
   }
 
@@ -19,9 +20,9 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Profile already exists')
           .setDescription(
-            'Your profile already exists, use `profile` command to view your profile'
+            'Your profile already exists, use `profile` command to view your profile',
           )
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     msg.sendEmbed(await msg.author.getProfileEmbed());

@@ -5,10 +5,11 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
+      requiredPermissions: ['EMBED_LINKS'],
       bucker: 3,
       cooldown: 10,
       description: 'Roll D8 Dice',
-      extendedHelp: 'Roll a D8 dice'
+      extendedHelp: 'Roll a D8 dice',
     });
   }
 
@@ -17,9 +18,9 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`${msg.member.displayName} rolled D8`)
         .setDescription(
-          `Rolling a D8... 🎲 **${Math.ceil(Math.random() * 8)}**`
+          `Rolling a D8... 🎲 **${Math.ceil(Math.random() * 8)}**`,
         )
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***

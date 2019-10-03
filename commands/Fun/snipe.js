@@ -10,6 +10,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       aliases: ['snipe', 'undelete'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 60,
       description: 'Express your reactions',
       extendedHelp: 'Express different reactions',

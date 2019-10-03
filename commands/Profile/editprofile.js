@@ -5,6 +5,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['ep', 'profiledit', 'pedit', 'editp', 'edit', 'editprofile'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Edit profile',
       extendedHelp:

@@ -11,6 +11,7 @@ module.exports = class extends Command {
       permissionLevel: 7,
       aliases: ['updatelevelperk', 'updatelevelperks', 'addlevelperks'],
       runIn: ['text'],
+      requiredPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
       description: 'Add perks for leveling up',
       usage: '<level:number> <badge|rep|role> <perkValue:...string>',
       usageDelim: ' ',

@@ -7,8 +7,9 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['dog', 'dpic', 'doggo'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'View random cat pic'
+      description: 'View random cat pic',
     });
   }
 
@@ -21,7 +22,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`🐶 Doggo 🐶`)
         .setImage(image)
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***

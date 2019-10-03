@@ -4,6 +4,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      requiredPermissions: ['EMBED_LINKS'],
       description: "Sends a randomly generated Waifu that doesn't exist",
     });
   }

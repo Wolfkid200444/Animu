@@ -9,12 +9,13 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 30,
       description: 'View Shop',
       extendedHelp: 'View all the items available for purhcase',
       usage: '[page:integer]',
       usageDelim: '',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
   }
 
@@ -28,7 +29,7 @@ module.exports = class extends Command {
 
     if (items.length < 1) itemStr = '[No items on this page]';
 
-    items.forEach(item => {
+    items.forEach((item) => {
       let priceStr = '';
 
       if (item.discount === 0) priceStr = `${item.price} Coins`;
@@ -45,7 +46,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle('Shop')
         .setDescription(itemStr)
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***

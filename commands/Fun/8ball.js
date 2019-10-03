@@ -7,6 +7,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['8', 'eightball', 'ball', 'magicball'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Ask 8ball',
       extendedHelp:

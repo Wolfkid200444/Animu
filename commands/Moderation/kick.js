@@ -4,7 +4,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       permissionLevel: 6,
-      requiredPermissions: ['KICK_MEMBERS'],
+      requiredPermissions: ['KICK_MEMBERS', 'EMBED_LINKS'],
       runIn: ['text'],
       description: 'Kicks a mentioned user.',
       usage: '<member:member> [reason:...string]',

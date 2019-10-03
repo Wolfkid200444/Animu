@@ -6,9 +6,10 @@ module.exports = class extends Command {
     super(...args, {
       description: "Shows a user's avatar",
       cooldown: 10,
+      requiredPermissions: ['EMBED_LINKS'],
       extendedHelp:
         "Mention a member to show their avatar or don't mention anyone to view your own avatar",
-      usage: '[user:user]'
+      usage: '[user:user]',
     });
   }
 
@@ -19,7 +20,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setAuthor(user.username, avatar)
         .setImage(avatar)
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***

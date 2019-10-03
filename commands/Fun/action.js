@@ -12,17 +12,18 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       aliases: ['a', 'act'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 5,
       description: 'Perform an action',
       extendedHelp: 'Perform an action on/with someone',
       usage: '<actionName:string> <member:member>',
-      usageDelim: ' '
+      usageDelim: ' ',
     });
   }
 
   async run(msg, [actionName, member]) {
     const action = await Action.findOne({
-      name: actionName.toLowerCase()
+      name: actionName.toLowerCase(),
     }).exec();
 
     if (!action)
@@ -30,17 +31,15 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Action not found')
           .setDescription(
-            `Please notify a senior mod or server admin that the \`${actionName}\` action doesn't exist`
+            `Please notify a senior mod or server admin that the \`${actionName}\` action doesn't exist`,
           )
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     if (action.requireConsent) {
       const res = await prompt.reaction(msg.channel, {
-        question: `${member}, do you want to allow ${
-          msg.member.displayName
-        } to ${action.name} you?`,
-        userId: member.id
+        question: `${member}, do you want to allow ${msg.member.displayName} to ${action.name} you?`,
+        userId: member.id,
       });
 
       if (!res || res === 'no')
@@ -48,11 +47,9 @@ module.exports = class extends Command {
           new MessageEmbed()
             .setTitle('Ooops')
             .setDescription(
-              `${msg.member}, ${member.displayName} denied your request to ${
-                action.name
-              } them...`
+              `${msg.member}, ${member.displayName} denied your request to ${action.name} them...`,
             )
-            .setColor('#2196f3')
+            .setColor('#2196f3'),
         );
 
       this.sendReactionImage(msg, action, member);
@@ -63,10 +60,10 @@ module.exports = class extends Command {
     return msg.sendEmbed(
       new MessageEmbed()
         .setTitle(
-          `${msg.member.displayName} ${action.pastTense} ${member.displayName}`
+          `${msg.member.displayName} ${action.pastTense} ${member.displayName}`,
         )
         .setImage(_.sample(action.urls))
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***

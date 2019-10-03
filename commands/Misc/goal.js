@@ -6,6 +6,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['target', 'goals', 'targets', 'patreon', 'patron'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 120,
       description: 'View Goals of Animu',
     });

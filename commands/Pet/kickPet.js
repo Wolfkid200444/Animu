@@ -10,10 +10,11 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
+      requiredPermissions: ['EMBED_LINKS'],
       aliases: ['removepet'],
       cooldown: 120,
       description: 'Kick your pet',
-      extendedHelp: 'Kick your pet out of your home (how cruel...)'
+      extendedHelp: 'Kick your pet out of your home (how cruel...)',
     });
   }
 
@@ -25,12 +26,12 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle(`Oooops!`)
           .setDescription("You don't own a pet")
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     const res = await prompt.reaction(msg.channel, {
       question: `Are you sure you want to kick ${pet.petName}?`,
-      userId: msg.author.id
+      userId: msg.author.id,
     });
 
     if (res !== 'yes') return;
@@ -41,7 +42,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`Kicked Pet...`)
         .setDescription(`You kicked your pet out of your home`)
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***

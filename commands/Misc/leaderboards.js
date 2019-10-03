@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
 
 //Init
-const Profile = mongoose.model('Profile');
+// const Profile = mongoose.model('Profile');
 const Inventory = mongoose.model('Inventory');
 
 module.exports = class extends Command {
@@ -11,6 +11,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       aliases: ['leaderboard'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'View leaderboards',
       extendedHelp: 'View leaderboards',

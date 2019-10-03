@@ -5,12 +5,13 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       aliases: ['role', 'roleinfo', 'rinfo'],
+      requiredPermissions: ['EMBED_LINKS'],
       description: 'Get information on a role with name',
       cooldown: 10,
       extendedHelp:
         'Get information about a role including role permissions, color, name, creation date, and other details',
       usage: '<role:...string>',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
     this.perms = {
       ADMINISTRATOR: 'Administrator',
@@ -40,24 +41,24 @@ module.exports = class extends Command {
       MUTE_MEMBERS: 'Mute Members',
       DEAFEN_MEMBERS: 'Deafen Members',
       MOVE_MEMBERS: 'Move Members',
-      USE_VAD: 'Use Voice Activity'
+      USE_VAD: 'Use Voice Activity',
     ***REMOVED***
     this.timestamp = new Timestamp('dddd, MMMM d YYYY');
   }
 
   run(msg, [role]) {
-    role = msg.guild.roles.find(r => r.name === role);
+    role = msg.guild.roles.find((r) => r.name === role);
 
     if (!role)
       return new MessageEmbed()
         .setTitle('Role not found')
         .setDescription(
-          "The role you're trying to get info for doesn't exist, double check your spelling and capitalization"
+          "The role you're trying to get info for doesn't exist, double check your spelling and capitalization",
         )
         .setColor('#f44336');
 
     const allPermissions = Object.entries(role.permissions.serialize())
-      .filter(perm => perm[1])
+      .filter((perm) => perm[1])
       .map(([perm]) => this.perms[perm])
       .join(', ');
 
@@ -70,11 +71,11 @@ module.exports = class extends Command {
         .addField(
           '❯ Creation Date',
           this.timestamp.display(role.createdAt),
-          true
+          true,
         )
         .addField('❯ Hoisted', role.hoist ? 'Yes' : 'No', true)
         .addField('❯ Mentionable', role.mentionable ? 'Yes' : 'No', true)
-        .addField('❯ Permissions', allPermissions || 'None')
+        .addField('❯ Permissions', allPermissions || 'None'),
     );
   }
 ***REMOVED***

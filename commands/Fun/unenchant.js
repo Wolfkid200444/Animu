@@ -6,9 +6,10 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       aliases: ['unenchantify'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Translate minecraft enchantement table text to English',
-      usage: '<text:string>'
+      usage: '<text:string>',
     });
   }
 
@@ -43,9 +44,9 @@ module.exports = class extends Command {
             .replace(/∴/gi, 'w')
             .replace(/·\//gi, 'x')
             .replace(/\|\|/gi, 'y')
-            .replace(/⨅/gi, 'z')
+            .replace(/⨅/gi, 'z'),
         )
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***

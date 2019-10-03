@@ -6,6 +6,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       aliases: ['enchantify'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Translate your text to minecraft enchantment table',
       usage: '<text:string>',

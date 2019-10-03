@@ -9,20 +9,21 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 5,
       description: 'Ship 2 people',
       usage: '<member1:user> <member2:user>',
-      usageDelim: ' '
+      usageDelim: ' ',
     });
   }
 
   async run(msg, [member1, member2]) {
     let profile = await Profile.findOne({
-      memberID: member1.id
+      memberID: member1.id,
     }).exec();
 
     let profile2 = await Profile.findOne({
-      memberID: member2.id
+      memberID: member2.id,
     }).exec();
 
     let randNum;
@@ -43,7 +44,7 @@ module.exports = class extends Command {
       .setTitle(
         `${msg.guild.members.get(member1.id).displayName} ❤️ ${
           msg.guild.members.get(member2.id).displayName
-        }`
+        }`,
       )
       .addField('Chances of sailing', `${randNum}%`)
       .setColor('#2196f3');

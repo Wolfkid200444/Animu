@@ -5,6 +5,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['b', 'badge'],
+      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'View your badges',
     });

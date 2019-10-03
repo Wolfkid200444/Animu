@@ -10,6 +10,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
+      requiredPermissions: ['EMBED_LINKS'],
       bucket: 2,
       cooldown: 10,
       description: 'View an Item',
@@ -17,7 +18,7 @@ module.exports = class extends Command {
         'View details about an item such as description, pricing, etc',
       usage: '<itemName:...string>',
       usageDelim: ' ',
-      quotedStringSupport: true
+      quotedStringSupport: true,
     });
   }
 
@@ -26,7 +27,7 @@ module.exports = class extends Command {
 
     const fuse = new Fuse(itemArr, {
       keys: ['name'],
-      threshold: 0.2
+      threshold: 0.2,
     });
 
     const item = fuse.search(itemName)[0];
@@ -36,7 +37,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Invalid Item Name')
           .setDescription('The item with given name was not found')
-          .setColor('#f44336')
+          .setColor('#f44336'),
       );
 
     let priceStr = '';
@@ -53,7 +54,7 @@ module.exports = class extends Command {
         .addField('❯ Name', item.name)
         .addField('❯ Description', item.description)
         .addField('❯ Price', priceStr)
-        .setColor('#2196f3')
+        .setColor('#2196f3'),
     );
   }
 ***REMOVED***
