@@ -25,6 +25,6 @@ module.exports = class extends Command {
           .setColor('#f44336'),
       );
 
-    msg.sendEmbed(await msg.author.getProfileEmbed());
+    msg.sendEmbed(await msg.author.getProfileEmbed(msg.guild.id));
   }
 ***REMOVED***
