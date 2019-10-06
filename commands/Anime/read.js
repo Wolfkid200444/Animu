@@ -120,9 +120,8 @@ module.exports = class extends Command {
               if (!title.text())
                 return msg.send(
                   new MessageEmbed({
-                    title: 'Invalid Chapter/Manga',
-                    description:
-                      'Please go to: manganelo.com and make sure the chapter/manga you wish to read exists there.\n\nPlease note that manga name DOES NOT always match manga link',
+                    title: 'Invalid Chapter',
+                    description: "The chapter you wish to read doesn't exist",
                     color: '#f44336',
                   }),
                 );
