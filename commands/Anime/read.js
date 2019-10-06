@@ -20,70 +20,154 @@ module.exports = class extends Command {
 
   async run(msg, [mangaName, chapter]) {
     let pageNumber = 1;
+    let searchResults = [];
     let imagesArr = [];
-
-    const url = `https://manganelo.com/chapter/${_.snakeCase(
-      mangaName.toLowerCase(),
-    )}/chapter_${chapter}`;
 
     request(
       {
         method: 'GET',
-        url,
+        url: `https://manganelo.com/search/${_.snakeCase(mangaName)}`,
       },
-      (err, res, body) => {
-        let $ = cheerio.load(body);
+      async (err, res, body) => {
+        let $s = cheerio.load(body);
 
-        let title = $('.info-top-chapter h2');
-
-        if (!title.text())
-          return msg.send(
-            new MessageEmbed({
-              title: 'Invalid Chapter/Manga',
-              description:
-                'Please go to: manganelo.com and make sure the chapter/manga you wish to read exists there.\n\nPlease note that manga name DOES NOT always match manga link',
-              color: '#f44336',
-            }),
-          );
-
-        $('#vungdoc img').each((i, elem) => {
-          imagesArr.push(elem.attribs.src);
+        $s('.panel_story_list .story_item').each((i, elem) => {
+          searchResults.push({
+            title: $s(elem)
+              .find('.story_name a')
+              .text(),
+            url: $s(elem)
+              .find('.story_name a')
+              .attr('href'),
+          });
         });
 
-        const embed = new MessageEmbed()
-          .setTitle(title.text())
-          .setImage(imagesArr[pageNumber - 1])
-          .setColor('#2196f3');
+        if (searchResults.length > 5) searchResults.slice(0, 5);
 
-        msg.send(embed).then((sentMsg) => {
-          sentMsg.react('⬅');
-          sentMsg.react('➡');
+        const sentMsg1 = await msg.send(
+          new MessageEmbed({
+            title: 'Result(s) Found',
+            description:
+              searchResults.length > 0
+                ? searchResults
+                    .map((result, i) => `**${i + 1})** ${result.title}`)
+                    .join('\n')
+                : 'No Manga Found',
+            color: searchResults.length > 0 ? '#2196f3' : '#f44336',
+          }),
+        );
 
-          const filter = (reaction, user) =>
-            _.includes(['⬅', '➡'], reaction.emoji.name) &&
-            user.id === msg.author.id;
+        let validReactions = [];
 
-          const reactions = sentMsg.createReactionCollector(filter, {
-            time: 600000,
-          });
+        if (searchResults.length === 0) return;
+        if (searchResults.length > 0) {
+          sentMsg1.react('1⃣');
+          validReactions.push('1⃣');
+        }
+        if (searchResults.length > 1) {
+          sentMsg1.react('2⃣');
+          validReactions.push('2⃣');
+        }
+        if (searchResults.length > 2) {
+          sentMsg1.react('3⃣');
+          validReactions.push('3⃣');
+        }
+        if (searchResults.length > 3) {
+          sentMsg1.react('4⃣');
+          validReactions.push('4⃣');
+        }
+        if (searchResults.length > 4) {
+          sentMsg1.react('5⃣');
+          validReactions.push('5⃣');
+        }
 
-          reactions.on('collect', async (r) => {
-            const emojiName = r._emoji.name;
-            if (emojiName === '➡' && pageNumber < imagesArr.length + 1)
-              pageNumber++;
-            if (emojiName === '⬅' && pageNumber > 1) pageNumber--;
+        const filter1 = (reaction, user) =>
+          _.includes(validReactions, reaction.emoji.name) &&
+          user.id === msg.author.id;
 
-            msg.send(
-              new MessageEmbed()
+        const reactionsSearch = sentMsg1.createReactionCollector(filter1, {
+          time: 30000,
+        });
+
+        let mangaUrl;
+
+        reactionsSearch.on('collect', (r) => {
+          const emojiName = r._emoji.name;
+          if (emojiName === '1⃣') mangaUrl = searchResults[0].url;
+          if (emojiName === '2⃣') mangaUrl = searchResults[1].url;
+          if (emojiName === '3⃣') mangaUrl = searchResults[2].url;
+          if (emojiName === '4⃣') mangaUrl = searchResults[3].url;
+          if (emojiName === '5⃣') mangaUrl = searchResults[4].url;
+          sentMsg1.reactions.removeAll();
+
+          const url = `${mangaUrl.replace(
+            '/manga/',
+            '/chapter/',
+          )}/chapter_${chapter}`;
+
+          console.log(url);
+
+          request(
+            {
+              method: 'GET',
+              url,
+            },
+            (err, res, body2) => {
+              let $ = cheerio.load(body2);
+
+              let title = $('.info-top-chapter h2');
+
+              if (!title.text())
+                return msg.send(
+                  new MessageEmbed({
+                    title: 'Invalid Chapter/Manga',
+                    description:
+                      'Please go to: manganelo.com and make sure the chapter/manga you wish to read exists there.\n\nPlease note that manga name DOES NOT always match manga link',
+                    color: '#f44336',
+                  }),
+                );
+
+              $('#vungdoc img').each((i, elem) => {
+                imagesArr.push(elem.attribs.src);
+              });
+
+              const embed = new MessageEmbed()
                 .setTitle(title.text())
                 .setImage(imagesArr[pageNumber - 1])
-                .setColor('#2196f3'),
-            );
+                .setColor('#2196f3');
 
-            sentMsg.reactions
-              .find((r) => r.emoji.name === emojiName)
-              .users.remove(msg.author.id);
-          });
+              msg.send(embed).then((sentMsg) => {
+                sentMsg.react('⬅');
+                sentMsg.react('➡');
+
+                const filter = (reaction, user) =>
+                  _.includes(['⬅', '➡'], reaction.emoji.name) &&
+                  user.id === msg.author.id;
+
+                const reactions = sentMsg.createReactionCollector(filter, {
+                  time: 600000,
+                });
+
+                reactions.on('collect', async (r) => {
+                  const emojiName = r._emoji.name;
+                  if (emojiName === '➡' && pageNumber < imagesArr.length + 1)
+                    pageNumber++;
+                  if (emojiName === '⬅' && pageNumber > 1) pageNumber--;
+
+                  msg.send(
+                    new MessageEmbed()
+                      .setTitle(title.text())
+                      .setImage(imagesArr[pageNumber - 1])
+                      .setColor('#2196f3'),
+                  );
+
+                  sentMsg.reactions
+                    .find((r) => r.emoji.name === emojiName)
+                    .users.remove(msg.author.id);
+                });
+              });
+            },
+          );
         });
       },
     );
