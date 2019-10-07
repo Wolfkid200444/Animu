@@ -42,7 +42,7 @@ module.exports = class extends Command {
           });
         });
 
-        if (searchResults.length > 5) searchResults.slice(0, 5);
+        if (searchResults.length > 5) searchResults = searchResults.slice(0, 5);
 
         const sentMsg1 = await msg.send(
           new MessageEmbed({
