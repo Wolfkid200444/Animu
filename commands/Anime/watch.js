@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
   async run(msg, [animeName, episode]) {
     const loadingEmoji = this.client.emojis.find((e) => e.name === 'loading');
-    msg.send(`Searching ${loadingEmoji}`);
+    const loadingMsg = await msg.send(`Searching ${loadingEmoji}`);
 
     let searchResults = [];
 
@@ -48,9 +48,9 @@ module.exports = class extends Command {
           });
         });
 
-        console.log(searchResults);
-
         if (searchResults.length > 5) searchResults = searchResults.slice(0, 5);
+
+        loadingMsg.delete();
 
         const sentMsg1 = await msg.send(
           new MessageEmbed({
@@ -60,7 +60,7 @@ module.exports = class extends Command {
                 ? searchResults
                     .map((result, i) => `**${i + 1})** ${result.title}`)
                     .join('\n')
-                : 'No Manga Found',
+                : 'No Anime Found',
             color: searchResults.length > 0 ? '#2196f3' : '#f44336',
           }),
         );
@@ -107,14 +107,6 @@ module.exports = class extends Command {
           if (emojiName === '4⃣') animeUrl = searchResults[3].url;
           if (emojiName === '5⃣') animeUrl = searchResults[4].url;
           sentMsg1.reactions.removeAll();
-
-          console.log(
-            `${baseURL}${_.replace(
-              animeUrl,
-              '/category/',
-              '/',
-            )}-episode-${episode}`,
-          );
 
           request(
             {
