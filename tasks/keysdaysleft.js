@@ -10,7 +10,7 @@ module.exports = class extends Task {
     const keys = await Key.find({}).exec();
 
     keys.forEach(async (key) => {
-      if (!key.daysLeft > 0) key.daysLeft--;
+      if (key.daysLeft > 0) key.daysLeft--;
       else if (key.daysLeft === 0) {
         const guild = await Guild.findOne({ key: key.key }).exec();
         require('../data/validGuilds').remove(guild.guildID);
