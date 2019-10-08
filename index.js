@@ -104,7 +104,6 @@ mongoose
       partials: ['MESSAGE'],
       readyMessage: () => 'Bot ready',
     });
-    console.log('READDDYYYY');
 
     await client.login(keys.discordBotToken);
 
