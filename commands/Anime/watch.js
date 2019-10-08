@@ -50,8 +50,6 @@ module.exports = class extends Command {
 
         if (searchResults.length > 5) searchResults = searchResults.slice(0, 5);
 
-        loadingMsg.delete();
-
         const sentMsg1 = await msg.send(
           new MessageEmbed({
             title: 'Result(s) Found',
