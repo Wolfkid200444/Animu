@@ -14,6 +14,7 @@ module.exports = class extends Inhibitor {
   }
 
   async run(message, command) {
+    console.log(require('../data/validGuilds').has(message.guild.id));
     if (command.name === 'registerguild') return false;
     else if (!require('../data/validGuilds').has(message.guild.id)) return true;
     else return false;
