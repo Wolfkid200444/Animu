@@ -4,7 +4,7 @@
   "description": "Aldovia bot for Aldovia Network of Servers",
   "main": ".eslintrc.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node -r dotenv/config index.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "cheerio": "^1.0.0-rc.3",
     "discord.js": "discordjs/discord.js",
     "discordjs-prompter": "^1.0.0",
+    "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "fuse.js": "^3.4.5",
     "klasa": "dirigeants/klasa#master",
