@@ -1,8 +1,7 @@
-const { Event } = require('klasa');
+const { Monitor } = require('klasa');
 
-module.exports = class extends Event {
+module.exports = class extends Monitor {
   async run(message) {
-    //If guild isn't valid
     if (!require('../data/validGuilds').has(message.guild.id)) return;
 
     let proceedExp = true;
