@@ -122,6 +122,14 @@ module.exports = class extends Command {
   }
 
   async play(guildID, msg, connection, song, volume) {
+    let keyVersion;
+
+    if (botEnv === 'production') {
+      const guild = await Guild.findOne({ guildID }).exec();
+      const key = await Key.findOne({ key: guild.key }).exec();
+      keyVersion = key.version;
+    } else keyVersion = 'pro';
+
     if (!song) {
       this.client.guilds.get(guildID).me.voice.channel.leave();
       await MusicQueue.deleteOne({ guildID }).exec();
@@ -136,15 +144,17 @@ module.exports = class extends Command {
       }),
     );
 
-    const dispatcher = connection
+    connection
       .play(
         await ytdl(song.url, {
+          quality: 'highestaudio',
           filter: () => ['45'],
           highWaterMark: 1 << 25,
         }),
         {
           volume: volume / 200,
           type: 'opus',
+          bitrate: keyVersion === 'lite' ? 92000 : 192000,
         },
       )
       .on('end', async () => {
@@ -159,16 +169,5 @@ module.exports = class extends Command {
           musicQueue.volume,
         );
       });
-
-    if (dispatcher.bitrateEditable) {
-      if (connection.channel.bitrate <= 96000) dispatcher.setBitrate('auto');
-      else {
-        if (botEnv === 'development') dispatcher.setBitrate('auto');
-        const guild = await Guild.findOne({ guildID }).exec();
-        const key = await Key.findOne({ key: guild.key }).exec();
-        if (key !== 'lite') dispatcher.setBitrate(128000);
-        else dispatcher.setBitrate(96000);
-      }
-    }
   }
 ***REMOVED***
