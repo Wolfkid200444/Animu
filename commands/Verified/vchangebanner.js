@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 
 //Init
 const Profile = mongoose.model('Profile');
+const Guild = mongoose.model('Guild');
+const Key = mongoose.model('Key');
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -20,6 +22,11 @@ module.exports = class extends Command {
   }
 
   async run(msg, [bannerURL]) {
+    const guild = await Guild.findOne({ guildID: msg.guild.id }).exec();
+    const key = await Key.findOne({ key: guild.key }).exec();
+
+    if (key === 'lite') return;
+
     if (!msg.guild.settings.verifiedRole)
       return msg.sendEmbed(
         new MessageEmbed({
