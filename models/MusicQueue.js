@@ -14,9 +14,9 @@ const musicQueueSchema = new Schema({
     min: 1,
     max: 100,
   },
-  playing: {
-    type: Boolean,
-    default: true,
+  skipVotes: {
+    type: Number,
+    default: 0,
   },
 });
 

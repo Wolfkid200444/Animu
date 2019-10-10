@@ -38,6 +38,21 @@ module.exports = class extends Command {
         }),
       );
 
+    if (
+      !(await msg.hasAtLeastPermissionLevel(6)) &&
+      !msg.member.roles.find(
+        (r) =>
+          r.id === msg.guild.settings.djRole || r.name.toLowerCase() === 'dj',
+      )
+    )
+      return msg.send(
+        new MessageEmbed({
+          title: 'DJ Only Command',
+          description: 'Only members with DJ role can use this command',
+          color: '#f44336',
+        }),
+      );
+
     musicQueue.songs = [];
     await musicQueue.save();
     this.client.guilds.get(msg.guild.id).me.voice.connection.dispatcher.end();

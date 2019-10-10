@@ -23,6 +23,7 @@ Client.defaultGuildSchema.add('defaultVolume', 'number', {
   min: 1,
   max: 100,
 });
+Client.defaultGuildSchema.add('djRole', 'role');
 Client.defaultGuildSchema.add('joinRole', 'role');
 Client.defaultGuildSchema.add('verifiedRole', 'role');
 Client.defaultGuildSchema.add('mutedRole', 'role');

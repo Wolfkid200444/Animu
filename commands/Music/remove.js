@@ -12,7 +12,7 @@ module.exports = class extends Command {
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Remove a song from Queue',
-      usage: '<index:number>',
+      usage: '<index:number{2}>',
     });
   }
 
@@ -25,7 +25,7 @@ module.exports = class extends Command {
       return msg.send(
         new MessageEmbed({
           title: 'Not in VC',
-          description: 'You must be in a voice channel to skip a song',
+          description: 'You must be in a voice channel to remove a song',
           color: '#f44336',
         }),
       );
@@ -35,6 +35,21 @@ module.exports = class extends Command {
         new MessageEmbed({
           title: 'No song playing',
           description: 'No song is playing currently',
+          color: '#f44336',
+        }),
+      );
+
+    if (
+      !(await msg.hasAtLeastPermissionLevel(6)) &&
+      !msg.member.roles.find(
+        (r) =>
+          r.id === msg.guild.settings.djRole || r.name.toLowerCase() === 'dj',
+      )
+    )
+      return msg.send(
+        new MessageEmbed({
+          title: 'DJ Only Command',
+          description: 'Only members with DJ role can use this command',
           color: '#f44336',
         }),
       );

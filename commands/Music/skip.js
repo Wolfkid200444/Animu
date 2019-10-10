@@ -37,8 +37,14 @@ module.exports = class extends Command {
           color: '#f44336',
         }),
       );
-
-    this.client.guilds.get(msg.guild.id).me.voice.connection.dispatcher.end();
+    if (
+      (await msg.hasAtLeastPermissionLevel(6)) ||
+      msg.member.roles.find(
+        (r) =>
+          r.id === msg.guild.settings.djRole || r.name.toLowerCase() === 'dj',
+      )
+    )
+      this.client.guilds.get(msg.guild.id).me.voice.connection.dispatcher.end();
 
     msg.send(
       new MessageEmbed({
