@@ -14,10 +14,7 @@ const musicQueueSchema = new Schema({
     min: 1,
     max: 100,
   },
-  skipVotes: {
-    type: Number,
-    default: 0,
-  },
+  skipVotes: [String],
 });
 
 model('MusicQueue', musicQueueSchema);

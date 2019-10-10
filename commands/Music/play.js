@@ -160,6 +160,7 @@ module.exports = class extends Command {
       .on('end', async () => {
         const musicQueue = await MusicQueue.findOne({ guildID }).exec();
         musicQueue.songs.shift();
+        musicQueue.skipVotes = [];
         await musicQueue.save();
         this.play(
           guildID,
