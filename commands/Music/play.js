@@ -7,6 +7,8 @@ const ytdlDis = require('ytdl-core-discord');
 
 //Init
 const MusicQueue = model('MusicQueue');
+const Guild = model('Guild');
+const Key = model('Key');
 const youtube = new Youtube(youtubeAPIKey);
 
 module.exports = class extends Command {
@@ -148,7 +150,13 @@ module.exports = class extends Command {
       });
 
     if (dispatcher.bitrateEditable) {
-      dispatcher.setBitrate('auto');
+      if (connection.channel.bitrate <= 96) dispatcher.setBitrate('auto');
+      else {
+        const guild = await Guild.findOne({ guildID }).exec();
+        const key = await Key.findOne({ key: guild.key }).exec();
+        if (key !== 'lite') dispatcher.setBitrate(128);
+        else dispatcher.setBitrate(96);
+      }
     }
   }
 ***REMOVED***
