@@ -64,6 +64,16 @@ module.exports = class extends Command {
       }
     }
 
+    if (!video)
+      return msg.send(
+        new MessageEmbed({
+          title: 'Music Not Found',
+          description:
+            "The music you're trying to play wasn't found on YouTube",
+          color: '#f44336',
+        }),
+      );
+
     if (!musicQueue) {
       const queue = new MusicQueue({
         guildID: msg.guild.id,
