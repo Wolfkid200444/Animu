@@ -1,9 +1,9 @@
 const { Command } = require('klasa');
 const { MessageEmbed, Util } = require('discord.js');
 const { model } = require('mongoose');
-const { youtubeAPIKey } = require('../../config/keys');
+const { youtubeAPIKey, botEnv } = require('../../config/keys');
 const Youtube = require('simple-youtube-api');
-const ytdlDis = require('ytdl-core-discord');
+const ytdl = require('ytdl-core-discord');
 
 //Init
 const MusicQueue = model('MusicQueue');
@@ -25,13 +25,10 @@ module.exports = class extends Command {
   }
 
   async run(msg, [music]) {
-    console.time('Fetching Queue');
     const musicQueue = await MusicQueue.findOne({
       guildID: msg.guild.id,
     }).exec();
-    console.timeEnd('Fetching Queue');
 
-    console.time('VC & Perms');
     const voiceChannel = msg.member.voice.channel;
 
     if (!voiceChannel)
@@ -48,9 +45,7 @@ module.exports = class extends Command {
       return msg.send(
         "It seems I don't have perms in Voice Channel that you're currently in",
       );
-    console.timeEnd('VC & Perms');
 
-    console.time('Fetching Song Info');
     let video;
     try {
       video = await youtube.getVideo(music);
@@ -68,12 +63,12 @@ module.exports = class extends Command {
         );
       }
     }
-    console.timeEnd('Fetching Song Info');
 
     if (!musicQueue) {
       const queue = new MusicQueue({
         guildID: msg.guild.id,
         songs: [],
+        volume: msg.guild.settings.defaultVolume,
       });
 
       queue.songs.push({
@@ -103,16 +98,6 @@ module.exports = class extends Command {
       });
 
       await musicQueue.save();
-
-      msg.send(
-        new MessageEmbed({
-          title: `Added to Queue`,
-          description: `**${Util.escapeMarkdown(
-            video.title,
-          )}** is added to queue`,
-          color: '#2196f3',
-        }),
-      );
     }
   }
 
@@ -132,10 +117,16 @@ module.exports = class extends Command {
     );
 
     const dispatcher = connection
-      .play(await ytdlDis(song.url), {
-        volume: volume / 200,
-        type: 'opus',
-      })
+      .play(
+        await ytdl(song.url, {
+          filter: () => ['45'],
+          highWaterMark: 1 << 25,
+        }),
+        {
+          volume: volume / 200,
+          type: 'opus',
+        },
+      )
       .on('end', async () => {
         const musicQueue = await MusicQueue.findOne({ guildID }).exec();
         musicQueue.songs.shift();
@@ -150,12 +141,13 @@ module.exports = class extends Command {
       });
 
     if (dispatcher.bitrateEditable) {
-      if (connection.channel.bitrate <= 96) dispatcher.setBitrate('auto');
+      if (connection.channel.bitrate <= 96000) dispatcher.setBitrate('auto');
       else {
+        if (botEnv === 'development') dispatcher.setBitrate('auto');
         const guild = await Guild.findOne({ guildID }).exec();
         const key = await Key.findOne({ key: guild.key }).exec();
-        if (key !== 'lite') dispatcher.setBitrate(128);
-        else dispatcher.setBitrate(96);
+        if (key !== 'lite') dispatcher.setBitrate(128000);
+        else dispatcher.setBitrate(96000);
       }
     }
   }
