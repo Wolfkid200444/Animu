@@ -18,6 +18,11 @@ Client.defaultClientSchema.add('aldoviaDescription', 'String');
 Client.defaultClientSchema.add('patreonCurrent', 'number');
 
 //-> Guild Schema
+Client.defaultGuildSchema.add('defaultVolume', 'number', {
+  default: 50,
+  min: 1,
+  max: 100,
+});
 Client.defaultGuildSchema.add('joinRole', 'role');
 Client.defaultGuildSchema.add('verifiedRole', 'role');
 Client.defaultGuildSchema.add('mutedRole', 'role');
