@@ -98,6 +98,16 @@ module.exports = class extends Command {
       });
 
       await musicQueue.save();
+
+      msg.send(
+        new MessageEmbed({
+          title: `Added to Queue`,
+          description: `**${Util.escapeMarkdown(
+            video.title,
+          )}** is added to queue`,
+          color: '#2196f3',
+        }),
+      );
     }
   }
 
