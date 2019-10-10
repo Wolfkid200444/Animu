@@ -1,5 +1,6 @@
 const { Task } = require('klasa');
 const mongoose = require('mongoose');
+const { botEnv } = require('../config/keys');
 
 //Init
 const Key = mongoose.model('Key');
@@ -7,6 +8,8 @@ const Guild = mongoose.model('Guild');
 
 module.exports = class extends Task {
   async run() {
+    if (!botEnv === 'production') return;
+
     const keys = await Key.find({}).exec();
 
     keys.forEach(async (key) => {
