@@ -3,7 +3,7 @@ const { MessageEmbed, Util } = require('discord.js');
 const { model } = require('mongoose');
 const { youtubeAPIKey, botEnv } = require('../../config/keys');
 const Youtube = require('simple-youtube-api');
-const ytdl = require('ytdl-core-discord');
+const ytdl = require('ytdl-core');
 
 //Init
 const MusicQueue = model('MusicQueue');
@@ -146,14 +146,15 @@ module.exports = class extends Command {
 
     connection
       .play(
-        await ytdl(song.url, {
+        ytdl(song.url, {
           quality: 'highestaudio',
-          filter: () => ['45'],
+          filter: 'audioonly',
           highWaterMark: 1 << 25,
         }),
         {
           volume: volume / 200,
-          type: 'opus',
+          // type: 'opus',
+          highWaterMark: 1,
           bitrate: keyVersion === 'lite' ? 92000 : 192000,
         },
       )

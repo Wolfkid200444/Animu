@@ -27,6 +27,7 @@
     "discordjs-prompter": "^1.0.0",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "ffmpeg-static": "^2.7.0",
     "fuse.js": "^3.4.5",
     "klasa": "dirigeants/klasa#v1.0.0-alpha",
     "lodash": "^4.17.11",
