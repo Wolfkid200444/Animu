@@ -57,6 +57,7 @@ module.exports = class extends Command {
       music.toLowerCase().trim(),
     );
     if (!cached) {
+      console.log('Using Search API');
       try {
         video = await youtube.getVideo(music);
       } catch (error) {
@@ -79,6 +80,7 @@ module.exports = class extends Command {
         }
       }
     } else {
+      console.log('Using Cache');
       video = await youtube.getVideo(cached);
     }
 
