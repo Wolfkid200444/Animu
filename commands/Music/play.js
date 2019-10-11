@@ -4,12 +4,17 @@ const { model } = require('mongoose');
 const { youtubeAPIKey, botEnv } = require('../../config/keys');
 const Youtube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 //Init
 const MusicQueue = model('MusicQueue');
 const Guild = model('Guild');
 const Key = model('Key');
+
+bluebird.promisifyAll(redis.RedisClient.prototype);
 const youtube = new Youtube(youtubeAPIKey);
+const redisClient = redis.createClient();
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -47,21 +52,34 @@ module.exports = class extends Command {
       );
 
     let video;
-    try {
-      video = await youtube.getVideo(music);
-    } catch (error) {
+    const cached = await redisClient.hgetAsync(
+      'yt_searches',
+      music.toLowerCase().trim(),
+    );
+    if (!cached) {
       try {
-        video = (await youtube.search(music, 1))[0];
+        video = await youtube.getVideo(music);
       } catch (error) {
-        return msg.send(
-          new MessageEmbed({
-            title: 'Music Not Found',
-            description:
-              "The music you're trying to play wasn't found on YouTube",
-            color: '#f44336',
-          }),
-        );
+        try {
+          video = (await youtube.search(music, 1))[0];
+          await redisClient.hsetAsync(
+            'yt_searches',
+            music.toLowerCase().trim(),
+            video.url,
+          );
+        } catch (error) {
+          return msg.send(
+            new MessageEmbed({
+              title: 'Music Not Found',
+              description:
+                "The music you're trying to play wasn't found on YouTube",
+              color: '#f44336',
+            }),
+          );
+        }
       }
+    } else {
+      video = await youtube.getVideo(cached);
     }
 
     if (!video)
