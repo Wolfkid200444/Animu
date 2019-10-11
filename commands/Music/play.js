@@ -178,7 +178,11 @@ module.exports = class extends Command {
       )
       .on('end', async () => {
         const musicQueue = await MusicQueue.findOne({ guildID }).exec();
-        musicQueue.songs.shift();
+
+        if (musicQueue.loop === 'disabled') musicQueue.songs.shift();
+        else if (musicQueue.loop === 'queue')
+          musicQueue.songs.push(musicQueue.songs.shift());
+
         musicQueue.skipVotes = [];
         await musicQueue.save();
         this.play(
