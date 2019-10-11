@@ -18,6 +18,7 @@ module.exports = class extends Task {
       if (key.daysLeft === 0) {
         const guild = await Guild.findOne({ key: key.key }).exec();
         if (guild) require('../data/validGuilds').remove(guild.guildID);
+        console.log(this.client.guilds.get(guild.guildID).name);
       }
       await key.save();
     });
