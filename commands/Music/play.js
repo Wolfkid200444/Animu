@@ -159,9 +159,9 @@ module.exports = class extends Command {
     msg.send(
       new MessageEmbed({
         title: 'Playing',
-        description: `Playing **${song.title}**`,
+        description: `[${song.title}](${song.url})`,
         color: '#2196f3',
-      }),
+      }).setFooter('Animu Music Beta'),
     );
 
     connection

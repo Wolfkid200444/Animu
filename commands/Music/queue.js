@@ -33,21 +33,36 @@ module.exports = class extends Command {
 
     const embedsArr = [];
     let songList = '';
+    const nowPlaying = musicQueue.songs.shift();
 
-    musicQueue.songs.forEach((song, i) => {
-      songList += `${i + 1} **-** ${song.title}\n`;
-      if ((i + 1) % 10 === 0 || i === musicQueue.songs.length - 1) {
-        embedsArr.push(
-          new MessageEmbed({
-            title: 'Server Queue',
-            description: songList,
-            color: '#2196f3',
-          }),
-        );
-        songList = '';
-      }
-    });
+    if (musicQueue.songs.length > 0)
+      musicQueue.songs.forEach((song, i) => {
+        songList += `${i + 1} **-** ${song.title}\n\n`;
+        if ((i + 1) % 10 === 0 || i === musicQueue.songs.length - 1) {
+          embedsArr.push(this.createQueueEmbed(nowPlaying, songList));
+          songList = '';
+        }
+      });
+    else
+      embedsArr.push(this.createQueueEmbed(nowPlaying, '[No Songs in Queue]'));
 
     paginationEmbed(msg, embedsArr);
+  }
+
+  createQueueEmbed(nowPlaying, songList) {
+    return new MessageEmbed({
+      title: 'Server Queue',
+      fields: [
+        {
+          name: 'Now Playing',
+          value: nowPlaying.title,
+        },
+        {
+          name: 'Queued Songs',
+          value: songList,
+        },
+      ],
+      color: '#2196f3',
+    });
   }
 ***REMOVED***
