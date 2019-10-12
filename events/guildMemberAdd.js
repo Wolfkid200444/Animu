@@ -3,14 +3,19 @@ const { Event } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
 const _ = require('lodash');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 //Init
 const Profile = mongoose.model('Profile');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Event {
   async run(member) {
     //If guild isn't valid
-    if (!require('../data/validGuilds').has(member.guild.id)) return;
+    if (!(await redisClient.sismemberAsync('valid_guilds', member.guild.id)))
+      return;
 
     //Register Profile
     const profile = await Profile.register(member.id);

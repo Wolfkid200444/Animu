@@ -1,8 +1,12 @@
 const { Event } = require('klasa');
 const { model } = require('mongoose');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 // Init
 const Log = model('Log');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Event {
   async run(message) {
@@ -10,7 +14,8 @@ module.exports = class extends Event {
 
     if (message.author.id === this.client.user.id) return;
 
-    if (!require('../data/validGuilds').has(message.guild.id)) return;
+    if (!(await redisClient.sismemberAsync('valid_guilds', message.guild.id)))
+      return;
 
     await new Log({
       guildID: message.guild.id,

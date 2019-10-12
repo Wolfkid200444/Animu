@@ -2,9 +2,13 @@
 const { Event } = require('klasa');
 const mongoose = require('mongoose');
 const _ = require('lodash');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 //Init
 const Profile = mongoose.model('Profile');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Event {
   constructor(...args) {
@@ -19,7 +23,7 @@ module.exports = class extends Event {
     const profile = await Profile.findOne({ memberID: member.id }).exec();
 
     // Deleting Messages
-    if (require('../data/validGuilds').has(member.guild.id)) {
+    if (await redisClient.sismemberAsync('valid_guilds', member.guild.id)) {
       if (member.guild.settings.deleteMessagesChannels.length > 0)
         member.guild.settings.deleteMessagesChannels.forEach(async (ch) => {
           const channel = member.guild.channels.get(ch);

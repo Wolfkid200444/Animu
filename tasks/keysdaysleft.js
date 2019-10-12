@@ -1,10 +1,14 @@
 const { Task } = require('klasa');
 const mongoose = require('mongoose');
 const { botEnv } = require('../config/keys');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 //Init
 const Key = mongoose.model('Key');
 const Guild = mongoose.model('Guild');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Task {
   async run() {
@@ -17,8 +21,8 @@ module.exports = class extends Task {
 
       if (key.daysLeft === 0) {
         const guild = await Guild.findOne({ key: key.key }).exec();
-        if (guild) require('../data/validGuilds').remove(guild.guildID);
-        console.log(this.client.guilds.get(guild.guildID).name);
+
+        if (guild) await redisClient.sremAsync('valid_guilds', guild.guildID);
       }
       await key.save();
     });

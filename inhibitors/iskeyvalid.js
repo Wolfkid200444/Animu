@@ -1,21 +1,20 @@
 const { Inhibitor } = require('klasa');
 const { model } = require('mongoose');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 const Guild = model('Guild');
 const Key = model('Key');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Inhibitor {
-  constructor(...args) {
-    super(...args, {
-      name: 'iskeyvlaid',
-      enabled: true,
-      spamProtection: false,
-    });
-  }
-
   async run(message, command) {
     if (command.name === 'registerguild') return false;
-    else if (!require('../data/validGuilds').has(message.guild.id)) return true;
+    else if (
+      !(await redisClient.sismemberAsync('valid_guilds', message.guild.id))
+    )
+      return true;
     else return false;
   }
 
@@ -25,9 +24,10 @@ module.exports = class extends Inhibitor {
     guilds.forEach(async (guild) => {
       const key = await Key.findOne({ key: guild.key }).exec();
 
-      if (key.daysLeft != 0) require('../data/validGuilds').add(guild.guildID);
+      if (key.daysLeft != 0)
+        await redisClient.saddAsync('valid_guilds', guild.guildID);
     });
 
-    require('../data/validGuilds').add('628931282851856394'); //Adding Dev Server
+    await redisClient.saddAsync('valid_guilds', '628931282851856394'); //Adding Dev Server
   }
 ***REMOVED***

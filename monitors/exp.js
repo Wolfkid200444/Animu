@@ -1,8 +1,14 @@
 const { Monitor } = require('klasa');
+const redis = require('redis');
+const bluebird = require('bluebird');
+
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Monitor {
   async run(message) {
-    if (!require('../data/validGuilds').has(message.guild.id)) return;
+    if (!(await redisClient.sismemberAsync('valid_guilds', message.guild.id)))
+      return;
 
     let proceedExp = true;
 
