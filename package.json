@@ -4,7 +4,8 @@
   "description": "Aldovia bot for Aldovia Network of Servers",
   "main": ".eslintrc.js",
   "scripts": {
-    "start": "node -r dotenv/config index.js"
+    "start": "node -r dotenv/config index.js",
+    "test": "echo No Test Provided"
   },
   "repository": {
     "type": "git",
