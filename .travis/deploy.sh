@@ -1,5 +1,10 @@
-ssh lightyagami@140.82.39.61
-cd /srv/Animu
-git clone https://github.com/LightYagami200/Animu
-cd Animu
-pm2 start
+#!/bin/bash
+
+git config --global push.default matching
+git remote add deploy ssh://lightyagami@140.82.39.61/srv/Animu
+git push deploy master
+
+ssh lightyagami@140.82.39.61 <<EOF
+  cd /srv/Animu
+  pm2 start
+EOF
