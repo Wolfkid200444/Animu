@@ -1,3 +1,5 @@
 #!/bin/bash
 set -e
-ssh lightyagami@140.82.29.61 -v exit
+git config --global push.default simple
+git remote add production ssh://lightyagami@140.82.39.61/srv/Animu
+git push production master
