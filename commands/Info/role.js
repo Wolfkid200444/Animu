@@ -4,7 +4,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
-      aliases: ['role', 'roleinfo', 'rinfo'],
+      aliases: ['role-info', 'roleinfo', 'rinfo'],
       requiredPermissions: ['EMBED_LINKS'],
       description: 'Get information on a role with name',
       cooldown: 10,

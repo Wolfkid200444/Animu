@@ -11,7 +11,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
-      aliases: ['guild', 'server', 'serverinfo', 'sinfo'],
+      aliases: ['guild', 'server-info', 'serverinfo', 'sinfo'],
       requiredPermissions: ['EMBED_LINKS'],
       description: 'Get information on the current server.',
       cooldown: 10,
