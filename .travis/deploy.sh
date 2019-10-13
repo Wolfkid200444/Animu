@@ -11,5 +11,6 @@ ssh lightyagami@140.82.39.61 <<EOF
   cd /srv/Animu
   ls -a
   yarn
-  pm2 restart
+  pm2 delete 0
+  pm2 start
 EOF
