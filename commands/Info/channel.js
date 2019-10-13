@@ -10,7 +10,7 @@ module.exports = class extends Command {
       requiredPermissions: ['EMBED_LINKS'],
       description: 'Get information about a channel',
       cooldown: 10,
-      usage: '<channel:channel>',
+      usage: '[channel:channel]',
     });
     this.types = {
       dm: 'DM',
@@ -22,7 +22,7 @@ module.exports = class extends Command {
     ***REMOVED***
   }
 
-  async run(msg, [channel]) {
+  async run(msg, [channel = msg.channel]) {
     const embed = new MessageEmbed()
       .setColor(0x2196f3)
       .addField(
