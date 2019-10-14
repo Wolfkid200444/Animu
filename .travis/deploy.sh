@@ -9,7 +9,8 @@ ssh lightyagami@140.82.39.61 <<EOF
   PATH="/home/lightyagami/.nvm/versions/node/v12.12.0/bin:$PATH"
   cp /srv/env/.env /srv/Animu/
   cd /srv/Animu
-  ls -a
+  git fetch origin master
+  git merge origin master
   yarn
   pm2 delete 0
   pm2 start
