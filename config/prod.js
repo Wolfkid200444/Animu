@@ -5,5 +5,6 @@
   aldoviaAPIKey: process.env.ALDOVIA_API_KEY,
   nasaAPIKey: process.env.NASA_API_KEY,
   booksAPIKey: process.env.BOOKS_API_KEY,
+  websterAPIKey: process.env.WEBSTER_API_KEY,
   botEnv: process.env.BOT_ENV,
 ***REMOVED***
