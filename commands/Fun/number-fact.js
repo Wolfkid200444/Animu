@@ -14,7 +14,7 @@ module.exports = class extends Command {
   }
 
   async run(msg, [number]) {
-    const { res, data } = await axios.get(`http://numbersapi.com/${number}`);
+    const { data } = await axios.get(`http://numbersapi.com/${number}`);
 
     msg.sendEmbed(
       new MessageEmbed()
