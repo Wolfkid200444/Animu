@@ -6,7 +6,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['dark-light'],
-      requiredPermissions: ['EMBED_LINKS'],
+      requiredPermissions: ['ATTACH_FILES'],
       cooldown: 10,
       description: "Whether you're using light theme or dark theme?",
     });

@@ -6,7 +6,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['dark-light'],
-      requiredPermissions: ['EMBED_LINKS'],
+      requiredPermissions: ['ATTACH_FILES'],
       cooldown: 10,
       description: 'Get a fly on your screen',
     });

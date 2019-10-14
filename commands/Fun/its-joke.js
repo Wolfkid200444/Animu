@@ -5,7 +5,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['is-joke'],
-      requiredPermissions: ['EMBED_LINKS'],
+      requiredPermissions: ['ATTACH_FILES'],
       cooldown: 10,
       description: "It's Joke",
     });
