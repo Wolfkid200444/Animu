@@ -13,10 +13,10 @@ module.exports = class extends Command {
   }
 
   async run(msg) {
-    const meme = _.sample(['default', 'moth']);
+    const meme = _.sample(['1', '2']);
 
     msg.send({
-      files: [`${__dirname}/../../images/${meme}.png`],
+      files: [`${__dirname}/../../images/lightdark-${meme}.png`],
     });
   }
 ***REMOVED***
