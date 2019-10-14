@@ -1,5 +1,4 @@
 const { Command } = require('klasa');
-const _ = require('lodash');
 
 module.exports = class extends Command {
   constructor(...args) {
