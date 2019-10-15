@@ -14,5 +14,6 @@
   OSUAPIKey: process.env.OSU_API_KEY,
   stackoverflowKey: process.env.STACKOVERFLOW_KEY,
   alphaVantageAPIKey: process.env.ALPHA_VANTAGE_API_KEY,
+  openWeatherAPIKey: process.env.OPEN_WEATHER_API_KEY,
   botEnv: process.env.BOT_ENV,
 ***REMOVED***
