@@ -12,5 +12,6 @@
   githubPassword: process.env.GITHUB_PASSWORD,
   TMBDAPIKey: process.env.TMBD_API_KEY,
   OSUAPIKey: process.env.OSU_API_KEY,
+  stackoverflowKey: process.env.STACKOVERFLOW_KEY,
   botEnv: process.env.BOT_ENV,
 ***REMOVED***
