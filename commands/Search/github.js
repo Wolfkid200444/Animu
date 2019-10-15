@@ -2,7 +2,7 @@ const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
 const moment = require('moment');
-const { shorten, formatNumber, base64 } = require('../../util/Util');
+const { shorten, formatNumber, base64 } = require('../../util/util');
 const { githubUsername, githubPassword } = require('../../config/keys');
 
 module.exports = class extends Command {

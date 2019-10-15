@@ -1,7 +1,7 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
-const { shorten } = require('../../util/Util');
+const { shorten } = require('../../util/util');
 
 module.exports = class extends Command {
   constructor(...args) {
