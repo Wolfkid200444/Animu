@@ -12,7 +12,6 @@ module.exports = class extends Command {
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
       usage: '<user:string>',
-      usageDelim: ' ',
       quotedStringSupport: true,
     });
   }
