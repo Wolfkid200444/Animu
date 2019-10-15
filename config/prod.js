@@ -8,5 +8,7 @@
   websterAPIKey: process.env.WEBSTER_API_KEY,
   deviantartClientID: process.env.DEVIANTART_CLIENT_ID,
   deviantartClientSecret: process.env.DEVIANTART_CLIENT_SECRET,
+  githubUsername: process.env.GITHUB_USERNAME,
+  githubPassword: process.env.GITHUB_PASSWORD,
   botEnv: process.env.BOT_ENV,
 ***REMOVED***
