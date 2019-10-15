@@ -10,5 +10,6 @@
   deviantartClientSecret: process.env.DEVIANTART_CLIENT_SECRET,
   githubUsername: process.env.GITHUB_USERNAME,
   githubPassword: process.env.GITHUB_PASSWORD,
+  TMBDAPIKey: process.env.TMBD_API_KEY,
   botEnv: process.env.BOT_ENV,
 ***REMOVED***
