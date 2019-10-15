@@ -13,6 +13,9 @@ module.exports = class extends Command {
   }
 
   async run(msg, [user = msg.author]) {
+    if (user.id === this.client.user.id)
+      return msg.reply("B-baka I don't have a dick!");
+
     const clientAuthor = user.id === this.client.user.id;
     const random = MersenneTwister19937.seed(
       clientAuthor ? msg.author.id : user.id,
