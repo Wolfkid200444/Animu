@@ -9,7 +9,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
-      description: 'Search discord.js docs for your query',
+      description: 'Get info on a Github Repo',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
       usage: '<author:string> <repository:...string>',
