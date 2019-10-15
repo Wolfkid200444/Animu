@@ -6,5 +6,7 @@
   nasaAPIKey: process.env.NASA_API_KEY,
   booksAPIKey: process.env.BOOKS_API_KEY,
   websterAPIKey: process.env.WEBSTER_API_KEY,
+  deviantartClientID: process.env.DEVIANTART_CLIENT_ID,
+  deviantartClientSecret: process.env.DEVIANTART_CLIENT_SECRET,
   botEnv: process.env.BOT_ENV,
 ***REMOVED***
