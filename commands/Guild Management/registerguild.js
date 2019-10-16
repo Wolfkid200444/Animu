@@ -1,10 +1,14 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 //Init
 const Guild = mongoose.model('Guild');
 const Key = mongoose.model('Key');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -59,7 +63,7 @@ module.exports = class extends Command {
       levelPerks: [],
     }).save();
 
-    require('../../data/validGuilds').add(msg.guild.id);
+    await redisClient.saddAsync('valid_guilds', msg.guild.id);
 
     msg.send(
       new MessageEmbed({
