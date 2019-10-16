@@ -10,7 +10,6 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
-      aliases: ['cool'],
       cooldown: 10,
       description: 'The last to pump the balloon before if pops is the loser',
       usage: '<opponent:user>',

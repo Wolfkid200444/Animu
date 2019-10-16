@@ -11,7 +11,6 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
-      aliases: ['cool'],
       cooldown: 10,
       description:
         'Engage in a turn-based battle against another user or the AI',

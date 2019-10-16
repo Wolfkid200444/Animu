@@ -10,7 +10,6 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
-      aliases: ['cool'],
       cooldown: 10,
       description: 'Play a game of blackjack',
       usage: '[deckCount:int{1,8}]',
