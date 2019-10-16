@@ -27,6 +27,16 @@
   randomRange: function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   },
+  shuffle: function(array) {
+    const arr = array.slice(0);
+    for (let i = arr.length - 1; i >= 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
+    return arr;
+  },
   base64: function(text, mode = 'encode') {
     if (mode === 'encode') return Buffer.from(text).toString('base64');
     if (mode === 'decode')
