@@ -21,7 +21,7 @@ module.exports = class extends Command {
           params: { q: query },
         },
       );
-      if (!body.results.length) return msg.say('Could not find any results.');
+      if (!body.results.length) return msg.send('Could not find any results.');
       const recipe =
         body.results[Math.floor(Math.random() * body.results.length)];
       const embed = new MessageEmbed()

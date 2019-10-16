@@ -27,7 +27,7 @@ module.exports = class extends Command {
       },
     );
     const images = body.collection.items;
-    if (!images.length) return msg.say('Could not find any results.');
+    if (!images.length) return msg.send('Could not find any results.');
     const data = images[Math.floor(Math.random() * images.length)];
     const embed = new MessageEmbed()
       .setTitle(shorten(data.data[0].title, 256))

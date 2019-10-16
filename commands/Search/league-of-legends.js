@@ -28,7 +28,7 @@ module.exports = class extends Command {
 
     if (!this.version) await this.fetchVersion();
     const data = await this.fetchChampion(champion);
-    if (!data) return msg.say('Could not find any results.');
+    if (!data) return msg.send('Could not find any results.');
     const tips = [].concat(data.allytips, data.enemytips);
     const embed = new MessageEmbed()
       .setColor(0x002366)

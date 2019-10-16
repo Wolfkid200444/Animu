@@ -17,7 +17,7 @@ module.exports = class extends Command {
 
   async run(msg, [query]) {
     const location = await this.search(query);
-    if (!location) return msg.say('Could not find any results.');
+    if (!location) return msg.send('Could not find any results.');
     const data = await this.fetchMeme(location);
     const embed = new MessageEmbed()
       .setColor(0x12133f)

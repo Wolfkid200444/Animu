@@ -26,7 +26,7 @@ module.exports = class extends Command {
       },
     });
     if (!search.data.results.length)
-      return msg.say('Could not find any results.');
+      return msg.send('Could not find any results.');
 
     const { data: body } = await axios.get(
       `https://api.themoviedb.org/3/movie/${search.data.results[0].id}`,

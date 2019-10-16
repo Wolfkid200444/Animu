@@ -24,7 +24,7 @@ module.exports = class extends Command {
         type: 'string',
       },
     });
-    if (!body.length) return msg.say('Could not find any results.');
+    if (!body.length) return msg.send('Could not find any results.');
     const data = body[0];
     const embed = new MessageEmbed()
       .setColor(0xff66aa)
