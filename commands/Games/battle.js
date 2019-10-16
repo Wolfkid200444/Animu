@@ -13,7 +13,8 @@ module.exports = class extends Command {
       runIn: ['text'],
       aliases: ['cool'],
       cooldown: 10,
-      description: 'The last to pump the balloon before if pops is the loser',
+      description:
+        'Engage in a turn-based battle against another user or the AI',
       usage: '[opponent:user]',
     });
   }
