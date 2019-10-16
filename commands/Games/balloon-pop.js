@@ -1,5 +1,5 @@
 const { Command } = require('klasa');
-const { randomRange, verify } = require('../../util/Util');
+const { randomRange, verify } = require('../../util/uril');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
