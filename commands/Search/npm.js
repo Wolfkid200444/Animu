@@ -9,7 +9,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['nasa-image', 'search-nasa'],
-      description: 'Search NASA archives for an image',
+      description: 'Show information about an NPM package',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
       usage: '<pkg:string>',
@@ -20,7 +20,8 @@ module.exports = class extends Command {
   async run(msg, [pkg]) {
     pkg = encodeURIComponent(pkg.replace(/ /g, '-'));
     const { data: body } = await axios.get(`https://registry.npmjs.com/${pkg}`);
-    if (body.time.unpublished) return msg.send('This package no longer exists.');
+    if (body.time.unpublished)
+      return msg.send('This package no longer exists.');
     const version = body.versions[body['dist-tags'].latest];
     const maintainers = trimArray(body.maintainers.map((user) => user.name));
     const dependencies = version.dependencies

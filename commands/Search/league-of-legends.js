@@ -5,7 +5,8 @@ const axios = require('axios');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Get info about a meme',
+      description:
+        'Get complete information about a League Of Legends Champion',
       cooldown: 10,
       aliases: [
         'league-of-legends-champion',

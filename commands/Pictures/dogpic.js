@@ -9,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['dog', 'dpic', 'doggo'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'View random cat pic',
+      description: 'View random dog pic',
     });
   }
 

@@ -12,8 +12,7 @@ module.exports = class extends Command {
       aliases: ['snipe', 'undelete'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 60,
-      description: 'Express your reactions',
-      extendedHelp: 'Express different reactions',
+      description: 'Show last deleted message in a channel',
     });
   }
 

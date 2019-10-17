@@ -12,7 +12,7 @@ module.exports = class extends Command {
       aliases: ['vol'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 5,
-      description: 'View Currently Playing Song',
+      description: 'View or change volume',
       usage: '[volume:int{1,100}]',
     });
   }

@@ -6,7 +6,7 @@ const { openWeatherAPIKey } = require('../../config/keys');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Show details about an anime',
+      description: 'Show weather info of a location',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
       usage: '<location:string>',
@@ -45,7 +45,7 @@ module.exports = class extends Command {
             .map((data) => `${data.main} (${data.description})`)
             .join('\n'),
         )
-        .addField('❯ Temperature', `${body.main.temp}°F`, true)
+        .addField('❯ Temperature', `${body.main.temp}°C`, true)
         .addField('❯ Humidity', `${body.main.humidity}%`, true)
         .addField('❯ Wind Speed', `${body.wind.speed} mph`, true);
       return msg.send(embed);

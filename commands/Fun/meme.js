@@ -7,7 +7,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
-      aliases: ['m', 'reddit'],
+      aliases: ['m'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'View memes from Reddit',

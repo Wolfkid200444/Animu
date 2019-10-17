@@ -12,7 +12,7 @@ module.exports = class extends Command {
       runIn: ['text'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Stop Music',
+      description: 'Skip currently playing song',
     });
   }
 
