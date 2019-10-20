@@ -5,13 +5,12 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
-      aliases: ['coin'],
       cooldown: 10,
       permissionLevel: 8,
       description: 'Modify coins',
       extendedHelp: 'Modify coins of a member.',
       usage: '<member:user> <+|-> <amount:integer>',
-      usageDelim: ' '
+      usageDelim: ' ',
     });
   }
 
@@ -19,7 +18,7 @@ module.exports = class extends Command {
     await member.editCoins(change, amount);
 
     msg.sendEmbed(
-      new MessageEmbed().setTitle('Coins Modified').setColor('#2196f3')
+      new MessageEmbed().setTitle('Coins Modified').setColor('#2196f3'),
     );
   }
 ***REMOVED***
