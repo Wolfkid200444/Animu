@@ -86,7 +86,7 @@ module.exports = class extends Command {
           user.id === msg.author.id;
 
         const reactionsSearch = sentMsg1.createReactionCollector(filter1, {
-          time: 30000,
+          time: 60000,
         });
 
         let mangaUrl;
