@@ -3,6 +3,11 @@ const { MessageEmbed } = require('discord.js');
 const _ = require('lodash');
 const cheerio = require('cheerio');
 const request = require('request');
+const redis = require('redis');
+const bluebird = require('bluebird');
+
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -105,14 +110,12 @@ module.exports = class extends Command {
             '/chapter/',
           )}/chapter_${chapter}`;
 
-          console.log(url);
-
           request(
             {
               method: 'GET',
               url,
             },
-            (err, res, body2) => {
+            async (err, res, body2) => {
               let $ = cheerio.load(body2);
 
               let title = $('.info-top-chapter h2');
@@ -129,6 +132,13 @@ module.exports = class extends Command {
               $('#vungdoc img').each((i, elem) => {
                 imagesArr.push(elem.attribs.src);
               });
+
+              const readStatus = await redisClient.hgetAsync(
+                'manga_status',
+                `${msg.author.id}:${title}:${chapter}`,
+              );
+
+              if (readStatus) pageNumber = readStatus;
 
               const embed = new MessageEmbed()
                 .setTitle(title.text())
@@ -163,6 +173,12 @@ module.exports = class extends Command {
                   sentMsg.reactions
                     .find((r) => r.emoji.name === emojiName)
                     .users.remove(msg.author.id);
+
+                  await redisClient.hsetAsync(
+                    'manga_status',
+                    `${msg.author.id}:${title}:${chapter}`,
+                    pageNumber,
+                  );
                 });
               });
             },
