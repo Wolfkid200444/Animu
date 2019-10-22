@@ -9,8 +9,6 @@ const bluebird = require('bluebird');
 
 //Init
 const MusicQueue = model('MusicQueue');
-const Guild = model('Guild');
-const Key = model('Key');
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const youtube = new Youtube(youtubeAPIKey);
@@ -142,13 +140,11 @@ module.exports = class extends Command {
   }
 
   async play(guildID, msg, connection, song, volume) {
-    let keyVersion;
+    let tier;
 
     if (botEnv === 'production') {
-      const guild = await Guild.findOne({ guildID }).exec();
-      const key = await Key.findOne({ key: guild.key }).exec();
-      keyVersion = key.version;
-    } else keyVersion = 'pro';
+      tier = await redisClient.hgetAsync('guild_tiers', msg.guild.id);
+    } else tier = 'pro';
 
     if (!song) {
       this.client.guilds.get(guildID).me.voice.channel.leave();
@@ -175,7 +171,7 @@ module.exports = class extends Command {
           volume: volume / 200,
           // type: 'opus',
           highWaterMark: 1,
-          bitrate: keyVersion === 'lite' ? 92000 : 192000,
+          bitrate: tier === 'lite' ? 92000 : 192000,
         },
       )
       .on('end', async () => {

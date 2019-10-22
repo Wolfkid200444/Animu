@@ -5,7 +5,6 @@ const redis = require('redis');
 const bluebird = require('bluebird');
 
 //Init
-const Key = mongoose.model('Key');
 const Guild = mongoose.model('Guild');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
@@ -14,17 +13,16 @@ module.exports = class extends Task {
   async run() {
     if (!botEnv === 'production') return;
 
-    const keys = await Key.find({}).exec();
+    const guilds = await Guild.find({}).exec();
 
-    keys.forEach(async (key) => {
-      if (key.daysLeft > 0) key.daysLeft--;
+    guilds.forEach(async (guild) => {
+      if (guild.daysLeft > 0) guild.daysLeft--;
 
-      if (key.daysLeft === 0) {
-        const guild = await Guild.findOne({ key: key.key }).exec();
-
-        if (guild) await redisClient.sremAsync('valid_guilds', guild.guildID);
+      if (guild.daysLeft === 0) {
+        await redisClient.sremAsync('valid_guilds', guild.guildID);
+        await redisClient.hdelAsync('guild_tiers', guild.guildID);
       }
-      await key.save();
+      await guild.save();
     });
   }
 ***REMOVED***

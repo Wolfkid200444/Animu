@@ -1,11 +1,13 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 //Init
 const Profile = mongoose.model('Profile');
-const Guild = mongoose.model('Guild');
-const Key = mongoose.model('Key');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -22,10 +24,9 @@ module.exports = class extends Command {
   }
 
   async run(msg, [bannerURL]) {
-    const guild = await Guild.findOne({ guildID: msg.guild.id }).exec();
-    const key = await Key.findOne({ key: guild.key }).exec();
+    const tier = await redisClient.hgetAsync('guild_tiers', msg.guild.id);
 
-    if (key === 'lite') return;
+    if (tier === 'lite') return;
 
     if (!msg.guild.settings.verifiedRole)
       return msg.sendEmbed(

@@ -3,9 +3,12 @@ const { MessageEmbed } = require('discord.js');
 const moment = require('moment');
 const { model } = require('mongoose');
 const _ = require('lodash');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 const Guild = model('Guild');
-const Key = model('Key');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -35,16 +38,12 @@ module.exports = class extends Command {
 
     if (!guild) return false;
 
-    const key = await Key.findOne({ key: guild.key }).exec();
+    const tier = await redisClient.hgetAsync('guild_tiers', msg.guild.id);
 
     return msg.sendEmbed(
       new MessageEmbed()
         .setColor(
-          key.version === 'lite'
-            ? '#ffeb3b'
-            : key.version === 'plus'
-            ? '#f44336'
-            : '#9c27b0',
+          tier === 'lite' ? '#ffeb3b' : tier === 'plus' ? '#f44336' : '#9c27b0',
         )
         .setThumbnail(msg.guild.iconURL())
         .addField('❯ Name', msg.guild.name, true)
@@ -71,7 +70,7 @@ module.exports = class extends Command {
           true,
         )
         .addField('❯ Members', msg.guild.memberCount, true)
-        .setFooter(`Animu ${_.capitalize(key.version)}`),
+        .setFooter(`Animu ${_.capitalize(tier)}`),
     );
   }
 ***REMOVED***

@@ -2,7 +2,11 @@ const { Schema, model } = require('mongoose');
 
 const guildSchema = new Schema({
   guildID: String,
-  key: String,
+  tier: {
+    type: String,
+    enum: ['lite', 'plus', 'pro'],
+  },
+  daysLeft: Number, // Days left till this guild's registration expires
   levelPerks: [
     {
       level: Number,

@@ -86,7 +86,6 @@ mongoose
     require('./models/Pet');
     require('./models/SelfRole');
     require('./models/Log');
-    require('./models/Key');
     require('./models/Guild');
     require('./models/MusicQueue');
     require('./models/Config');

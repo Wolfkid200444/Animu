@@ -4,16 +4,12 @@ const redis = require('redis');
 const bluebird = require('bluebird');
 
 const Guild = model('Guild');
-const Key = model('Key');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
 
 module.exports = class extends Inhibitor {
-  async run(message, command) {
-    if (command.name === 'registerguild') return false;
-    else if (
-      !(await redisClient.sismemberAsync('valid_guilds', message.guild.id))
-    )
+  async run(message) {
+    if (!(await redisClient.sismemberAsync('valid_guilds', message.guild.id)))
       return true;
     else return false;
   }
@@ -22,12 +18,13 @@ module.exports = class extends Inhibitor {
     const guilds = await Guild.find({}).exec();
 
     guilds.forEach(async (guild) => {
-      const key = await Key.findOne({ key: guild.key }).exec();
-
-      if (key.daysLeft != 0)
+      if (guild.daysLeft != 0) {
         await redisClient.saddAsync('valid_guilds', guild.guildID);
+        await redisClient.hsetAsync('guild_tiers', guild.guildID, guild.tier);
+      }
     });
 
     await redisClient.saddAsync('valid_guilds', '628931282851856394'); //Adding Dev Server
+    await redisClient.hsetAsync('guild_tiers', '628931282851856394', 'pro'); //Setting Dev Server's Tier to 'pro'
   }
 ***REMOVED***
