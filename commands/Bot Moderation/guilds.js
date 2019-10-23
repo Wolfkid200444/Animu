@@ -27,7 +27,7 @@ module.exports = class extends Command {
     let str = '';
     let totalNumber = guilds.length;
 
-    guilds.splice(0, 20);
+    guilds.slice(0, 20);
 
     guilds.forEach(async (guild) => {
       str += `**${this.client.guilds.get(guild.guildID).name}** (${
