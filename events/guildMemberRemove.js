@@ -40,7 +40,7 @@ module.exports = class extends Event {
     ) {
       profile.mutedIn.push(member.guild.id);
       await profile.save();
-    } else if (_.includes(profile.mutedIn, member.guild.id)) {
+    } else if (profile && _.includes(profile.mutedIn, member.guild.id)) {
       const index = profile.mutedIn.indexOf(member.guild.id);
       profile.mutedIn.splice(index, 1);
       profile.save();
