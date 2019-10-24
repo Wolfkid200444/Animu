@@ -6,12 +6,16 @@ bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
 
 module.exports = class extends Monitor {
+  constructor(...args) {
+    super(...args, {
+      ignoreOthers: false,
+    });
+  }
+
   async run(message) {
-    console.log(message.guild.id);
+    console.log('MESSAGE RECEIVED');
     if (!(await redisClient.sismemberAsync('valid_guilds', message.guild.id)))
       return;
-
-    console.log('MONITOR UP');
 
     let proceedExp = true;
 
