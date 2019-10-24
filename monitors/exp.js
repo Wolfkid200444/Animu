@@ -7,8 +7,11 @@ const redisClient = redis.createClient();
 
 module.exports = class extends Monitor {
   async run(message) {
+    console.log(message.guild.id);
     if (!(await redisClient.sismemberAsync('valid_guilds', message.guild.id)))
       return;
+
+    console.log('MONITOR UP');
 
     let proceedExp = true;
 
@@ -21,6 +24,7 @@ module.exports = class extends Monitor {
     }
 
     if (proceedExp) {
+      console.log('ADDING EXP');
       const res = await message.author.addExp(1, message.guild.id);
 
       if (typeof res === 'object') {

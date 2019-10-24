@@ -46,13 +46,13 @@ module.exports = class extends Command {
       );
 
     await new Guild({
-      guildID: msg.guild.id,
+      guildID: guildID,
       tier,
       daysLeft,
       levelPerks: [],
     }).save();
 
-    await redisClient.saddAsync('valid_guilds', msg.guild.id);
+    await redisClient.saddAsync('valid_guilds', guildID);
     await redisClient.hsetAsync('guild_tiers', guildID, tier);
 
     msg.send(

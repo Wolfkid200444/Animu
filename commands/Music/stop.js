@@ -55,7 +55,9 @@ module.exports = class extends Command {
 
     musicQueue.songs = [];
     await musicQueue.save();
-    this.client.guilds.get(msg.guild.id).me.voice.connection.dispatcher.end();
+    if (this.client.guilds.get(msg.guild.id).me.voice.connection)
+      this.client.guilds.get(msg.guild.id).me.voice.connection.dispatcher.end();
+    else console.log(this.client.guilds.get(msg.guild.id).me.voice.connection);
 
     msg.send(
       new MessageEmbed({
