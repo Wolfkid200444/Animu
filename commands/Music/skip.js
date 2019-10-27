@@ -58,9 +58,7 @@ module.exports = class extends Command {
         }),
       );
 
-    console.log(
-      this.client.guilds.get(msg.guild.id).me.voice.connection.dispatcher,
-    );
+    console.log(this.client.guilds.get(msg.guild.id).me.voice.connection);
 
     // Voting
     musicQueue.skipVotes.push(msg.author.id);
