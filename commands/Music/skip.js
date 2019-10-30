@@ -39,14 +39,29 @@ module.exports = class extends Command {
         }),
       );
 
-    if (
-      (await msg.hasAtLeastPermissionLevel(6)) ||
-      msg.member.roles.find(
-        (r) =>
-          r.id === msg.guild.settings.djRole || r.name.toLowerCase() === 'dj',
+    try {
+      if (
+        (await msg.hasAtLeastPermissionLevel(6)) ||
+        msg.member.roles.find(
+          (r) =>
+            r.id === msg.guild.settings.djRole || r.name.toLowerCase() === 'dj',
+        )
       )
-    )
-      this.client.guilds.get(msg.guild.id).me.voice.connection.dispatcher.end();
+        this.client.guilds
+          .get(msg.guild.id)
+          .me.voice.connection.dispatcher.end();
+    } catch (e) {
+      this.client.guilds.get(msg.guild.id).me.voice.channel.leave();
+      await MusicQueue.deleteOne({ guildID: msg.guild.id }).exec();
+
+      return msg.send(
+        new MessageEmbed({
+          title: 'No song playing',
+          description: 'No song is playing currently',
+          color: '#f44336',
+        }),
+      );
+    }
 
     // If already Voted
     if (_.includes(musicQueue.skipVotes, msg.author.id))
@@ -58,23 +73,37 @@ module.exports = class extends Command {
         }),
       );
 
-    console.log(this.client.guilds.get(msg.guild.id).me.voice.connection);
-
     // Voting
     musicQueue.skipVotes.push(msg.author.id);
+
     if (
       musicQueue.skipVotes.length >=
-      (msg.guild.me.voice.channel.members.size - 1) / 2
+      Math.round((msg.guild.me.voice.channel.members.size - 1) / 2)
     ) {
-      this.client.guilds.get(msg.guild.id).me.voice.connection.dispatcher.end();
+      try {
+        this.client.guilds
+          .get(msg.guild.id)
+          .me.voice.connection.dispatcher.end();
 
-      msg.send(
-        new MessageEmbed({
-          title: 'Skipped',
-          description: `**${musicQueue.songs[0].title}** skipped`,
-          color: '#2196f3',
-        }),
-      );
+        msg.send(
+          new MessageEmbed({
+            title: 'Skipped',
+            description: `**${musicQueue.songs[0].title}** skipped`,
+            color: '#2196f3',
+          }),
+        );
+      } catch (e) {
+        this.client.guilds.get(msg.guild.id).me.voice.channel.leave();
+        await MusicQueue.deleteOne({ guildID: msg.guild.id }).exec();
+
+        return msg.send(
+          new MessageEmbed({
+            title: 'No song playing',
+            description: 'No song is playing currently',
+            color: '#f44336',
+          }),
+        );
+      }
     } else {
       await musicQueue.save();
 
@@ -83,7 +112,9 @@ module.exports = class extends Command {
           title: 'Voted',
           description: `You voted to skip current song, **${
             musicQueue.skipVotes.length
-          }/${(msg.guild.me.voice.channel.members.size - 1) / 2} Votes**`,
+          }/${Math.round(
+            (msg.guild.me.voice.channel.members.size - 1) / 2,
+          )} Votes**`,
           color: '#2196f3',
         }),
       );

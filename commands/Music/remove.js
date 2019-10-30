@@ -12,7 +12,7 @@ module.exports = class extends Command {
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Remove a song from Queue',
-      usage: '<index:number{2}>',
+      usage: '<index:number{1}>',
     });
   }
 
@@ -54,7 +54,7 @@ module.exports = class extends Command {
         }),
       );
 
-    if (!musicQueue.songs[index - 1])
+    if (!musicQueue.songs[index])
       return msg.send(
         new MessageEmbed({
           title: 'Not Found',
@@ -64,9 +64,9 @@ module.exports = class extends Command {
         }),
       );
 
-    const song = musicQueue.songs.filter((song, i) => i === index - i)[0];
+    const song = musicQueue.songs.filter((song, i) => i === index)[0];
 
-    musicQueue.songs = musicQueue.songs.filter((song, i) => i !== index - 1);
+    musicQueue.songs = musicQueue.songs.filter((song, i) => i !== index);
 
     await musicQueue.save();
 
