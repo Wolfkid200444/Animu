@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 const { Command, Stopwatch } = require('klasa');
 const { createHash } = require('crypto');
 
