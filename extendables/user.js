@@ -57,12 +57,12 @@ module.exports = class extends Extendable {
       if (owner.id === this.id) isOwner = true;
 
     //If is owner
-    if (isOwner) profileEmbed.setFooter('👑 Aldovia Admin 👑');
+    if (isOwner) profileEmbed.setFooter('👑 Bot Owner 👑');
     //If is 🛡 Senior Moderator
     else if (
       _.includes(this.client.settings.aldoviaSeniorMods, profile.memberID)
     )
-      profileEmbed.setFooter('🛡 Senior Moderator');
+      profileEmbed.setFooter('🛡 Bot Staff');
     //Else
     else {
       if (
@@ -155,7 +155,7 @@ module.exports = class extends Extendable {
           .find((guild) => guild.members.get(profile.marriedTo) !== undefined)
           .members.get(profile.marriedTo).displayName ||
           this.client.users.get(profile.marriedTo).username ||
-          '[Left Aldovia Network...]',
+          '[Not Found...]',
         true,
       );
 
@@ -223,9 +223,7 @@ module.exports = class extends Extendable {
     )
       return new MessageEmbed()
         .setTitle('No Inventory')
-        .setDescription(
-          "🛡 Senior Moderators and Server Admins can't view/use their inventory",
-        )
+        .setDescription("🛡 Bot Staff and Owners can't view/use their inventory")
         .setColor('#f44336');
 
     return new MessageEmbed()
@@ -262,9 +260,7 @@ module.exports = class extends Extendable {
     )
       return new MessageEmbed()
         .setTitle('No Badges')
-        .setDescription(
-          "🛡 Senior Moderators and Server Admins can't view/use their badges",
-        )
+        .setDescription("🛡 Bot Staff and Owners can't view/use their badges")
         .setColor('#f44336');
 
     let badgesString = '';
