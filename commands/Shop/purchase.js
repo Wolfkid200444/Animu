@@ -11,6 +11,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
+      aliases: ['buy'],
       requiredPermissions: ['EMBED_LINKS'],
       bucket: 3,
       cooldown: 10,
