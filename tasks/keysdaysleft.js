@@ -21,6 +21,11 @@ module.exports = class extends Task {
       if (guild.daysLeft === 0) {
         await redisClient.sremAsync('valid_guilds', guild.guildID);
         await redisClient.hdelAsync('guild_tiers', guild.guildID);
+        this.client.guilds
+          .get(guild.guildID)
+          .owner.send(
+            'Your trial of Animu has expired, Join patreon to continue using Anime: https://patreon.com/Aldovia',
+          );
       }
       await guild.save();
     });
