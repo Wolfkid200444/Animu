@@ -103,60 +103,38 @@ profileSchema.methods.edit = async function(field, value) {
   return this;
 ***REMOVED***
 
-profileSchema.methods.addExp = async function(expToAdd, guildID) {
-  const index = this.level.findIndex(
-    (guildLev) => guildLev.guildID === guildID,
-  );
-  let rolesToAdd = [];
+profileSchema.methods.addExp = async function(
+  expToAdd,
+  guildID,
+  defaultRep = 50,
+) {
+  let index = this.level.findIndex((guildLev) => guildLev.guildID === guildID);
 
-  if (index < 0) return true;
+  if (index < 0) {
+    if (!this.reputation.find((rep) => rep.guildID === guildID))
+      this.reputation.push({
+        guildID: guildID,
+        rep: defaultRep,
+      });
+
+    if (!this.level.find((level) => level.guildID === guildID))
+      this.level.push({
+        guildID: guildID,
+        level: 1,
+        exp: 0,
+      });
+
+    index = this.level.findIndex((guildLev) => guildLev.guildID === guildID);
+  }
 
   if (this.level[index].level === 100) return true;
 
   const levelUp = async (exp) => {
     this.level[index].level++;
 
-    // Giving Perks
-    const guild = await this.model('Guild')
-      .findOne({ guildID })
-      .exec();
-
-    const levelPerkIndex = guild.levelPerks.findIndex(
-      (level) => level.level === this.level[index].level,
-    );
-
-    if (levelPerkIndex >= 0) {
-      // If perks are found
-      //-> Giving Badge
-      if (guild.levelPerks[levelPerkIndex].badge) {
-        const badgesIndex = this.badges.findIndex(
-          (guildBadges) => guildBadges.guildID === guildID,
-        );
-        if (badgesIndex >= 0)
-          this.badges[badgesIndex].badges.push(
-            guild.levelPerks[levelPerkIndex].badge,
-          );
-        else
-          this.badges.push({
-            guildID,
-            badges: [guild.levelPerks[levelPerkIndex].badge],
-          });
-      }
-      //-> Giving Rep
-      if (guild.levelPerks[levelPerkIndex].rep) {
-        const repIndex = this.reputation.findIndex(
-          (guildRep) => guildRep.guildID === guildID,
-        );
-        this.reputation[repIndex].rep += guild.levelPerks[levelPerkIndex].rep;
-      }
-      //-> Giving Roles
-      if (guild.levelPerks[levelPerkIndex].role) {
-        rolesToAdd.push(guild.levelPerks[levelPerkIndex].role);
-      }
-    }
-
     const expLeft =
       exp - expToNextLevel(this.level[index].level - 1, this.level[index].exp);
+
     if (
       expLeft >= expToNextLevel(this.level[index].level, this.level[index].exp)
     )
@@ -172,7 +150,7 @@ profileSchema.methods.addExp = async function(expToAdd, guildID) {
   else this.level[index].exp += expToAdd;
 
   await this.save();
-  return rolesToAdd.length > 0 ? rolesToAdd : false;
+  return true;
 ***REMOVED***
 
 //Helper Functions

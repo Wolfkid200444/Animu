@@ -18,6 +18,7 @@ module.exports = class extends Monitor {
 
     let proceedExp = true;
 
+    //Blacklisted channels
     for (let i = 0; i < message.guild.settings.ignoreExpChannels.length; i++) {
       const ignoreExpChannel = message.guild.settings.ignoreExpChannels[i];
       if (message.channel.id === ignoreExpChannel) {
@@ -26,19 +27,35 @@ module.exports = class extends Monitor {
       }
     }
 
+    //If recently sent a message
+    if (
+      await redisClient.sismemberAsync(
+        `recent_messages:${message.guild.id}`,
+        message.author.id,
+      )
+    )
+      proceedExp = false;
+
     if (proceedExp) {
       const res = await message.author.addExp(
         1 * message.guild.settings.expRate,
         message.guild.id,
       );
 
-      if (typeof res === 'object') {
-        res.forEach((roleName) => {
-          const role = message.guild.roles.find((r) => r.name === roleName);
+      console.log(res);
 
-          message.member.roles.add(role);
-        });
-      }
+      //Adding to cache
+      await redisClient.saddAsync(
+        `recent_messages:${message.guild.id}`,
+        message.author.id,
+      );
+      setTimeout(async () => {
+        //Remove from cache
+        await redisClient.sremAsync(
+          `recent_messages:${message.guild.id}`,
+          message.author.id,
+        );
+      }, message.guild.settings.expTime * 1000);
     }
   }
 ***REMOVED***

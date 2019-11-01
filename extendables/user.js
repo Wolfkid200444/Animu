@@ -149,15 +149,13 @@ module.exports = class extends Extendable {
 
     //If member is married
     if (profile.marriedTo)
-      profileEmbed.addField(
-        '❯ Married To',
-        this.client.guilds
-          .find((guild) => guild.members.get(profile.marriedTo) !== undefined)
-          .members.get(profile.marriedTo).displayName ||
-          this.client.users.get(profile.marriedTo).username ||
-          '[Not Found...]',
-        true,
-      );
+      if (this.client.users.has(profile.marriedTo))
+        profileEmbed.addField(
+          '❯ Married To',
+          this.client.users.get(profile.marriedTo).username,
+          true,
+        );
+      else profileEmbed.addField('❯ Married To', '[Not found...]', true);
 
     profileEmbed.addField('❯ Favorite Anime', profile.favoriteAnime, true);
 
@@ -437,9 +435,13 @@ module.exports = class extends Extendable {
   async addExp(expToAdd, guildID) {
     return new Promise((resolve) => {
       Profile.findOne({ memberID: this.id }).then(async (profile) => {
-        if (!profile) return true;
+        if (!profile) profile = await Profile.register(this.id);
 
-        const res = await profile.addExp(expToAdd, guildID);
+        const res = await profile.addExp(
+          expToAdd,
+          guildID,
+          this.client.guilds.get(guildID).settings.startingRep,
+        );
         resolve(res);
       });
     });

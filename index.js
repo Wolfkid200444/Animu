@@ -28,6 +28,11 @@ Client.defaultGuildSchema.add('expRate', 'number', {
   min: 0.1,
   max: 10,
 });
+Client.defaultGuildSchema.add('expTime', 'number', {
+  default: 3,
+  min: 1,
+  max: 60,
+});
 Client.defaultGuildSchema.add('djRole', 'role');
 Client.defaultGuildSchema.add('joinRole', 'role');
 Client.defaultGuildSchema.add('verifiedRole', 'role');
