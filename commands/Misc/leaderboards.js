@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
 
 //Init
-// const Profile = mongoose.model('Profile');
+const Profile = mongoose.model('Profile');
 const Inventory = mongoose.model('Inventory');
 
 module.exports = class extends Command {
@@ -15,7 +15,7 @@ module.exports = class extends Command {
       cooldown: 10,
       description: 'View leaderboards',
       extendedHelp: 'View leaderboards',
-      usage: '<coins>',
+      usage: '<coins|reputation>',
     });
   }
 
@@ -40,6 +40,45 @@ module.exports = class extends Command {
       msg.sendEmbed(
         new MessageEmbed({
           title: 'Top 10 Richest People in Animu',
+          description: str,
+          color: '#2196f3',
+        }),
+      );
+    } else if (leaderboard === 'reputation') {
+      const members = await Profile.find({
+        reputation: { $elemMatch: { guildID: msg.guild.id } },
+      });
+
+      members.sort((a, b) => {
+        const indexA = a.reputation.findIndex(
+          (r) => r.guildID === msg.guild.id,
+        );
+        const indexB = b.reputation.findIndex(
+          (r) => r.guildID === msg.guild.id,
+        );
+        return a.reputation[indexA].rep > b.reputation[indexB].rep ? -1 : 1;
+      });
+
+      const top10 = members.slice(0, 10);
+
+      let str = '';
+
+      top10.forEach((profile, i) => {
+        const index = profile.reputation.findIndex(
+          (r) => r.guildID === msg.guild.id,
+        );
+
+        if (this.client.users.get(profile.memberID))
+          str += `${i + 1}) ${
+            this.client.users.get(profile.memberID).username
+          } - 🏆 ${profile.reputation[index].rep} ${
+            i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''
+          }\n\n`;
+      });
+
+      msg.sendEmbed(
+        new MessageEmbed({
+          title: `Top 10 Reputable members of ${msg.guild.name}`,
           description: str,
           color: '#2196f3',
         }),
