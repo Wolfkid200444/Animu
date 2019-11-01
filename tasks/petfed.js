@@ -1,4 +1,5 @@
 const { Task } = require('klasa');
+const { botEnv } = require('../config/keys');
 const mongoose = require('mongoose');
 
 //Init
@@ -6,9 +7,11 @@ const Pet = mongoose.model('Pet');
 
 module.exports = class extends Task {
   async run() {
+    if (!botEnv === 'production') return;
+
     const pets = await Pet.find({}).exec();
 
-    pets.forEach(async pet => {
+    pets.forEach(async (pet) => {
       const lastFed = await pet.notFedInHour();
 
       if (lastFed >= 24) {
