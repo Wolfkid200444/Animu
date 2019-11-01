@@ -1,9 +1,11 @@
 const { Monitor } = require('klasa');
 const redis = require('redis');
 const bluebird = require('bluebird');
+const { model } = require('mongoose');
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
+const Guild = model('Guild');
 
 module.exports = class extends Monitor {
   constructor(...args) {
@@ -13,6 +15,8 @@ module.exports = class extends Monitor {
   }
 
   async run(message) {
+    if (message.attachments.size > 0) return;
+
     if (!(await redisClient.sismemberAsync('valid_guilds', message.guild.id)))
       return;
 
@@ -37,12 +41,45 @@ module.exports = class extends Monitor {
       proceedExp = false;
 
     if (proceedExp) {
-      const res = await message.author.addExp(
+      const levelUps = await message.author.addExp(
         1 * message.guild.settings.expRate,
         message.guild.id,
       );
 
-      console.log(res);
+      //If member actually levelled up
+      if (levelUps.length) {
+        const guild = await Guild.findOne({ guildID: message.guild.id });
+        levelUps.forEach((level) => {
+          message.author.send(
+            `Congrats, you just levelled up and reached Level ${level} in ${message.guild.name} 🎉`,
+          );
+
+          const index = guild.levelPerks.findIndex((l) => l.level === level);
+          if (!index) return true;
+
+          //Assign reward(s)
+          if (guild.levelPerks[index].badge)
+            message.author.giveBadge(
+              guild.levelPerks[index].badge,
+              message.guild.id,
+            );
+
+          if (guild.levelPerks[index].role) {
+            const role = message.guild.roles.get(
+              (r) => r.name === guild.levelPerks[index].role,
+            );
+
+            message.member.roles.add(role);
+          }
+
+          if (guild.levelPerks[index].rep)
+            message.author.editReputation(
+              '+',
+              guild.levelPerks[index].rep,
+              message.guild.id,
+            );
+        });
+      }
 
       //Adding to cache
       await redisClient.saddAsync(

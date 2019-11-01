@@ -109,6 +109,7 @@ profileSchema.methods.addExp = async function(
   defaultRep = 50,
 ) {
   let index = this.level.findIndex((guildLev) => guildLev.guildID === guildID);
+  let levelUps = [];
 
   if (index < 0) {
     if (!this.reputation.find((rep) => rep.guildID === guildID))
@@ -131,6 +132,7 @@ profileSchema.methods.addExp = async function(
 
   const levelUp = async (exp) => {
     this.level[index].level++;
+    levelUps.push(this.level[index].level);
 
     const expLeft =
       exp - expToNextLevel(this.level[index].level - 1, this.level[index].exp);
@@ -150,7 +152,7 @@ profileSchema.methods.addExp = async function(
   else this.level[index].exp += expToAdd;
 
   await this.save();
-  return true;
+  return levelUps;
 ***REMOVED***
 
 //Helper Functions
