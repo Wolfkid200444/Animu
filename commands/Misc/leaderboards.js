@@ -15,7 +15,7 @@ module.exports = class extends Command {
       cooldown: 10,
       description: 'View leaderboards',
       extendedHelp: 'View leaderboards',
-      usage: '<coins|reputation>',
+      usage: '<coins|reputation|levels>',
     });
   }
 
@@ -79,6 +79,41 @@ module.exports = class extends Command {
       msg.sendEmbed(
         new MessageEmbed({
           title: `Top 10 Reputable members of ${msg.guild.name}`,
+          description: str,
+          color: '#2196f3',
+        }),
+      );
+    } else if (leaderboard === 'levels') {
+      const members = await Profile.find({
+        level: { $elemMatch: { guildID: msg.guild.id } },
+      });
+
+      members.sort((a, b) => {
+        const indexA = a.level.findIndex((r) => r.guildID === msg.guild.id);
+        const indexB = b.level.findIndex((r) => r.guildID === msg.guild.id);
+        return a.level[indexA].level > b.level[indexB].level ? -1 : 1;
+      });
+
+      const top10 = members.slice(0, 10);
+
+      let str = '';
+
+      top10.forEach((profile, i) => {
+        const index = profile.level.findIndex(
+          (r) => r.guildID === msg.guild.id,
+        );
+
+        if (this.client.users.get(profile.memberID))
+          str += `${i + 1}) ${
+            this.client.users.get(profile.memberID).username
+          } - Level ${profile.level[index].level} ${
+            i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''
+          }\n\n`;
+      });
+
+      msg.sendEmbed(
+        new MessageEmbed({
+          title: `Top 10 Active members of ${msg.guild.name}`,
           description: str,
           color: '#2196f3',
         }),
