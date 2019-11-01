@@ -23,6 +23,11 @@ Client.defaultGuildSchema.add('defaultVolume', 'number', {
   min: 1,
   max: 100,
 });
+Client.defaultGuildSchema.add('expRate', 'number', {
+  default: 1,
+  min: 0.1,
+  max: 10,
+});
 Client.defaultGuildSchema.add('djRole', 'role');
 Client.defaultGuildSchema.add('joinRole', 'role');
 Client.defaultGuildSchema.add('verifiedRole', 'role');

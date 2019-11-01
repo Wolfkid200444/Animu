@@ -27,7 +27,10 @@ module.exports = class extends Monitor {
     }
 
     if (proceedExp) {
-      const res = await message.author.addExp(1, message.guild.id);
+      const res = await message.author.addExp(
+        1 * message.guild.settings.expRate,
+        message.guild.id,
+      );
 
       if (typeof res === 'object') {
         res.forEach((roleName) => {
