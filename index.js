@@ -33,6 +33,7 @@ Client.defaultGuildSchema.add('expTime', 'number', {
   min: 1,
   max: 60,
 });
+Client.defaultGuildSchema.add('enableLevels', 'boolean', { default: true });
 Client.defaultGuildSchema.add('djRole', 'role');
 Client.defaultGuildSchema.add('joinRole', 'role');
 Client.defaultGuildSchema.add('verifiedRole', 'role');

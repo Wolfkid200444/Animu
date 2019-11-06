@@ -15,6 +15,8 @@ module.exports = class extends Monitor {
   }
 
   async run(message) {
+    if (!message.guild.settings.enableLevels) return;
+
     if (message.attachments.size > 0) return;
 
     if (!(await redisClient.sismemberAsync('valid_guilds', message.guild.id)))
