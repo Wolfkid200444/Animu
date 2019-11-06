@@ -113,7 +113,7 @@ module.exports = class extends Extendable {
 
       let proceedLevel = true;
 
-      if (!thisGuild.guild.settings.enableLevels) proceedLevel = false;
+      if (!thisGuild.settings.enableLevels) proceedLevel = false;
 
       for (let i = 0; i < thisGuild.settings.ignoreLevelRoles.length; i++) {
         const ignoreLevelRole = thisGuild.settings.ignoreLevelRoles[i];
