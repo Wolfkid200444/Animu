@@ -187,7 +187,8 @@ module.exports = class extends Command {
     } else tier = 'pro';
 
     if (!song) {
-      this.client.guilds.get(guildID).me.voice.channel.leave();
+      if (this.cliet.guilds.get(guildID).me.voice.channel)
+        this.client.guilds.get(guildID).me.voice.channel.leave();
       await MusicQueue.deleteOne({ guildID }).exec();
       return;
     }
