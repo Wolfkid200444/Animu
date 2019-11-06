@@ -29,6 +29,16 @@ module.exports = class extends Command {
         }),
       );
 
+    if (msg.member.voice.channel.id !== msg.guild.me.voice.channel.id)
+      return msg.send(
+        new MessageEmbed({
+          title: 'Not in Correct VC',
+          description:
+            'You must be in the same voice channel as Animu to stop music',
+          color: '#f44336',
+        }),
+      );
+
     if (!musicQueue)
       return msg.send(
         new MessageEmbed({

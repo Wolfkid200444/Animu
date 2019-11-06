@@ -26,7 +26,16 @@ module.exports = class extends Command {
       return msg.send(
         new MessageEmbed({
           title: 'Not in VC',
-          description: 'You must be in a voice channel to stop the music',
+          description: 'You must be in a voice channel to loop',
+          color: '#f44336',
+        }),
+      );
+
+    if (msg.member.voice.channel.id !== msg.guild.me.voice.channel.id)
+      return msg.send(
+        new MessageEmbed({
+          title: 'Not in Correct VC',
+          description: 'You must be in the same voice channel as Animu to loop',
           color: '#f44336',
         }),
       );
