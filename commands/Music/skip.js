@@ -21,6 +21,15 @@ module.exports = class extends Command {
       guildID: msg.guild.id,
     }).exec();
 
+    if (!musicQueue)
+      return msg.send(
+        new MessageEmbed({
+          title: 'No song playing',
+          description: 'No song is playing currently',
+          color: '#f44336',
+        }),
+      );
+
     if (!msg.member.voice.channel)
       return msg.send(
         new MessageEmbed({
@@ -36,15 +45,6 @@ module.exports = class extends Command {
           title: 'Not in Correct VC',
           description:
             'You must be in the same voice channel as Animu to skip a song',
-          color: '#f44336',
-        }),
-      );
-
-    if (!musicQueue)
-      return msg.send(
-        new MessageEmbed({
-          title: 'No song playing',
-          description: 'No song is playing currently',
           color: '#f44336',
         }),
       );

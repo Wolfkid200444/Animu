@@ -60,26 +60,28 @@ module.exports = class extends Monitor {
           if (!index) return true;
 
           //Assign reward(s)
-          if (guild.levelPerks[index].badge)
-            message.author.giveBadge(
-              guild.levelPerks[index].badge,
-              message.guild.id,
-            );
+          if (guild.levelPerks[index]) {
+            if (guild.levelPerks[index].badge)
+              message.author.giveBadge(
+                guild.levelPerks[index].badge,
+                message.guild.id,
+              );
 
-          if (guild.levelPerks[index].role) {
-            const role = message.guild.roles.get(
-              (r) => r.name === guild.levelPerks[index].role,
-            );
+            if (guild.levelPerks[index].role) {
+              const role = message.guild.roles.get(
+                (r) => r.name === guild.levelPerks[index].role,
+              );
 
-            message.member.roles.add(role);
+              message.member.roles.add(role);
+            }
+
+            if (guild.levelPerks[index].rep)
+              message.author.editReputation(
+                '+',
+                guild.levelPerks[index].rep,
+                message.guild.id,
+              );
           }
-
-          if (guild.levelPerks[index].rep)
-            message.author.editReputation(
-              '+',
-              guild.levelPerks[index].rep,
-              message.guild.id,
-            );
         });
       }
 
