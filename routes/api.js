@@ -169,12 +169,13 @@ module.exports = (app, client) => {
     membersRaw2.forEach(m => {
       const index = m.level.findIndex(r => r.guildID === guild.id);
 
-      members.push({
-        id: m.memberID,
-        level: m.level[index].level,
-        username: client.users.get(m.memberID).username,
-        avatarURL: client.users.get(m.memberID).displayAvatarURL(),
-      });
+      if (client.users.get(m.memberID))
+        members.push({
+          id: m.memberID,
+          level: m.level[index].level,
+          username: client.users.get(m.memberID).username,
+          avatarURL: client.users.get(m.memberID).displayAvatarURL(),
+        });
     });
 
     return res.json({
