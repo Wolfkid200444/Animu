@@ -3,6 +3,7 @@ const bluebird = require('bluebird');
 const moment = require('moment');
 const { model } = require('mongoose');
 
+const Profile = model('Profile');
 const Log = model('Log');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
@@ -49,6 +50,42 @@ module.exports = (app, client) => {
             m.presence.status === 'dnd'
         ).size,
       },
+    });
+  });
+
+  app.get('/api/channels', async (req, res) => {
+    if (!req.query.token) return res.json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = client.guilds.get(guildID);
+
+    return res.json({
+      channels: guild.channels
+        .filter(c => c.type === 'text')
+        .map(c => {
+          return { id: c.id, name: c.name ***REMOVED***
+        }),
+    });
+  });
+
+  app.get('/api/roles', async (req, res) => {
+    if (!req.query.token) return res.json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = client.guilds.get(guildID);
+
+    return res.json({
+      roles: guild.roles.map(r => {
+        return { id: r.id, name: r.name ***REMOVED***
+      }),
     });
   });
 
@@ -102,6 +139,80 @@ module.exports = (app, client) => {
 
     return res.json({
       logs,
+    });
+  });
+
+  app.get('/api/leaderboards/levels', async (req, res) => {
+    if (!req.query.token) return res.json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = client.guilds.get(guildID);
+
+    const membersRaw = await Profile.find({
+      level: { $elemMatch: { guildID: guild.id } },
+    });
+
+    membersRaw.sort((a, b) => {
+      const indexA = a.level.findIndex(r => r.guildID === guild.id);
+      const indexB = b.level.findIndex(r => r.guildID === guild.id);
+      return a.level[indexA].level > b.level[indexB].level ? -1 : 1;
+    });
+
+    const membersRaw2 = membersRaw.slice(0, 30);
+
+    const members = [];
+
+    membersRaw2.forEach(m => {
+      const index = m.level.findIndex(r => r.guildID === guild.id);
+
+      members.push({
+        id: m.memberID,
+        level: m.level[index].level,
+        username: client.users.get(m.memberID).username,
+        avatarURL: client.users.get(m.memberID).displayAvatarURL(),
+      });
+    });
+
+    return res.json({
+      members,
+    });
+  });
+
+  app.get('/api/settings', async (req, res) => {
+    if (!req.query.token) return res.json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = client.guilds.get(guildID);
+
+    return res.json({
+      settings: guild.settings,
+    });
+  });
+
+  app.post('/api/settings', async (req, res) => {
+    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.body.key)
+      return res.json({ err: 'Key (Setting to update) not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = client.guilds.get(guildID);
+
+    guild.settings[req.body.key] = req.body.value;
+
+    return res.json({
+      settings: guild.settings,
     });
   });
 ***REMOVED***
