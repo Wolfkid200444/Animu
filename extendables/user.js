@@ -66,13 +66,13 @@ module.exports = class extends Extendable {
     //Else
     else {
       if (
-        profile.badges.find((guildBadges) => guildBadges.guildID === guildID) &&
-        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+        profile.badges.find(guildBadges => guildBadges.guildID === guildID) &&
+        profile.badges.find(guildBadges => guildBadges.guildID === guildID)
           .activeBadge
       )
         profileEmbed.setFooter(
-          profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
-            .activeBadge,
+          profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+            .activeBadge
         );
 
       let proceedRep = true;
@@ -94,20 +94,20 @@ module.exports = class extends Extendable {
 
       if (proceedRep) {
         const repRaw = profile.reputation.find(
-          (reputation) => reputation.guildID === guildID,
+          reputation => reputation.guildID === guildID
         );
 
         if (repRaw)
           profileEmbed.addField(
             '❯ Reputation',
             `${repRaw.rep <= 20 ? '⚠️' : ''} ${repRaw.rep} 🏆`,
-            true,
+            true
           );
         else
           profileEmbed.addField(
             '❯ Reputation',
             'Not configured (use `setup`)',
-            true,
+            true
           );
       }
 
@@ -129,22 +129,20 @@ module.exports = class extends Extendable {
       }
 
       if (proceedLevel) {
-        const levelRaw = profile.level.find(
-          (level) => level.guildID === guildID,
-        );
+        const levelRaw = profile.level.find(level => level.guildID === guildID);
 
         if (levelRaw)
           profileEmbed.addField(
             '❯ Level',
             `${levelRaw.level} (${levelRaw.exp}/${10 *
               (levelRaw.level + 1) ** 2} Exp)`,
-            true,
+            true
           );
         else
           profileEmbed.addField(
             '❯ Level',
             'Not configured (use `setup`)',
-            true,
+            true
           );
       }
     }
@@ -155,11 +153,11 @@ module.exports = class extends Extendable {
         profileEmbed.addField(
           '❯ Married To',
           this.client.users.get(profile.marriedTo).username,
-          true,
+          true
         );
       else profileEmbed.addField('❯ Married To', '[Not found...]', true);
 
-    profileEmbed.addField('❯ Favorite Anime', profile.favoriteAnime, true);
+    profileEmbed.addField('❯ Favorite Anime', profile.favoriteAnime);
 
     if (pet)
       profileEmbed.addField(
@@ -167,7 +165,7 @@ module.exports = class extends Extendable {
         `${
           pet.petType === 'cat' ? '🐱' : pet.petType === 'dog' ? '🐶' : '❓'
         } ${pet.petName}`,
-        true,
+        true
       );
 
     return profileEmbed;
@@ -190,7 +188,7 @@ module.exports = class extends Extendable {
       return new MessageEmbed()
         .setTitle('Not married')
         .setDescription(
-          "You can't view your partner's inventory when you have no partner... You did an Ooopsie!",
+          "You can't view your partner's inventory when you have no partner... You did an Ooopsie!"
         )
         .setColor('#f44336');
 
@@ -201,7 +199,7 @@ module.exports = class extends Extendable {
     let inventoryStr = '';
     const inventoryItems = {***REMOVED***
 
-    inventory.inventory.forEach((item) => {
+    inventory.inventory.forEach(item => {
       inventoryItems[item] = inventoryItems[item] + 1 || 1;
     });
 
@@ -229,7 +227,7 @@ module.exports = class extends Extendable {
     return new MessageEmbed()
       .setTitle(
         `${this.client.users.get(inventory.memberID).username ||
-          'Unknown'}'s Inventory`,
+          'Unknown'}'s Inventory`
       )
       .addField('Coins', inventory.coins)
       .addField('Inventory', inventoryStr || '[Inventory is empty]')
@@ -265,26 +263,26 @@ module.exports = class extends Extendable {
 
     let badgesString = '';
 
-    if (profile.badges.find((guildBadges) => guildBadges.guildID === guildID)) {
+    if (profile.badges.find(guildBadges => guildBadges.guildID === guildID)) {
       if (
-        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+        profile.badges.find(guildBadges => guildBadges.guildID === guildID)
           .badges.length < 1
       )
         badgesString = false;
       else
         profile.badges
-          .find((guildBadges) => guildBadges.guildID === guildID)
-          .badges.forEach((badge) => (badgesString += `${badge}\n`));
+          .find(guildBadges => guildBadges.guildID === guildID)
+          .badges.forEach(badge => (badgesString += `${badge}\n`));
 
       return new MessageEmbed()
         .setTitle(
           `${this.client.users.get(profile.memberID).username ||
-            'Unknown'}'s Badges`,
+            'Unknown'}'s Badges`
         )
         .addField(
           'Active Badge',
-          profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
-            .activeBadge || '[No active badge]',
+          profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+            .activeBadge || '[No active badge]'
         )
         .addField('All Badges', badgesString || '[No badges]')
         .setColor('#2196f3');
@@ -401,18 +399,18 @@ module.exports = class extends Extendable {
 
     if (!profile) profile = await Profile.register(this.id);
 
-    if (profile.badges.find((guildBadges) => guildBadges.guildID === guildID)) {
+    if (profile.badges.find(guildBadges => guildBadges.guildID === guildID)) {
       if (
         _.includes(
-          profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+          profile.badges.find(guildBadges => guildBadges.guildID === guildID)
             .badges,
-          badgeName,
+          badgeName
         )
       )
         return false;
       else
         profile.badges
-          .find((guildBadges) => guildBadges.guildID === guildID)
+          .find(guildBadges => guildBadges.guildID === guildID)
           .badges.push(badgeName);
 
       await profile.save();
@@ -435,14 +433,14 @@ module.exports = class extends Extendable {
    * @returns {Promise<Array<Role>|False>} - Array if a role is to be added, False otherwise
    */
   async addExp(expToAdd, guildID) {
-    return new Promise((resolve) => {
-      Profile.findOne({ memberID: this.id }).then(async (profile) => {
+    return new Promise(resolve => {
+      Profile.findOne({ memberID: this.id }).then(async profile => {
         if (!profile) profile = await Profile.register(this.id);
 
         const res = await profile.addExp(
           expToAdd,
           guildID,
-          this.client.guilds.get(guildID).settings.startingRep,
+          this.client.guilds.get(guildID).settings.startingRep
         );
         resolve(res);
       });
@@ -461,37 +459,36 @@ module.exports = class extends Extendable {
 
     if (!profile) return this._noProfile(true);
 
-    if (!profile.badges.find((guildBadges) => guildBadges.guildID === guildID))
+    if (!profile.badges.find(guildBadges => guildBadges.guildID === guildID))
       return false;
 
     if (
       _.includes(
-        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+        profile.badges.find(guildBadges => guildBadges.guildID === guildID)
           .badges,
-        badgeName,
+        badgeName
       )
     ) {
       if (
-        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
+        profile.badges.find(guildBadges => guildBadges.guildID === guildID)
           .activeBadge
       )
         profile.badges
-          .find((guildBadges) => guildBadges.guildID === guildID)
+          .find(guildBadges => guildBadges.guildID === guildID)
           .badges.push(
-            profile.badges.find(
-              (guildBadges) => guildBadges.guildID === guildID,
-            ).activeBadge,
+            profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+              .activeBadge
           );
 
       profile.badges.find(
-        (guildBadges) => guildBadges.guildID === guildID,
+        guildBadges => guildBadges.guildID === guildID
       ).activeBadge = badgeName;
 
       profile.badges.find(
-        (guildBadges) => guildBadges.guildID === guildID,
+        guildBadges => guildBadges.guildID === guildID
       ).badges = profile.badges
-        .find((guildBadges) => guildBadges.guildID === guildID)
-        .badges.filter((badge) => badge !== badgeName);
+        .find(guildBadges => guildBadges.guildID === guildID)
+        .badges.filter(badge => badge !== badgeName);
 
       await profile.save();
     } else {
@@ -511,13 +508,13 @@ module.exports = class extends Extendable {
 
     if (!profile) return this._noProfile(true);
 
-    if (!profile.reputation.find((rep) => rep.guildID === guildID))
+    if (!profile.reputation.find(rep => rep.guildID === guildID))
       profile.reputation.push({
         guildID: guildID,
         rep: this.client.guilds.get(guildID).settings.startingRep,
       });
 
-    if (!profile.level.find((level) => level.guildID === guildID))
+    if (!profile.level.find(level => level.guildID === guildID))
       profile.level.push({
         guildID: guildID,
         level: 1,
@@ -538,13 +535,13 @@ module.exports = class extends Extendable {
       ? new MessageEmbed()
           .setTitle('Profile not found')
           .setDescription(
-            "Your profile doesn't exist, use `register` command to register",
+            "Your profile doesn't exist, use `register` command to register"
           )
           .setColor('#f44336')
       : new MessageEmbed()
           .setTitle('Profile not found')
           .setDescription(
-            "The profile you're looking for doesn't exist, if it's your profile, use `register` command to register",
+            "The profile you're looking for doesn't exist, if it's your profile, use `register` command to register"
           )
           .setColor('#f44336');
   }
