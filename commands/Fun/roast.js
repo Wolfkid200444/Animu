@@ -90,4 +90,5 @@ const roasts = [
   "Aww, it's so cute when you try to talk about things you don't understand.",
   "If I wanted to hear from an asshole, I'd fart.",
   "What's the difference between you and an egg? Eggs get laid!",
+  "You're as useless as the 'ueue' in 'Queue'",
 ];
