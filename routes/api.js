@@ -5,6 +5,7 @@ const { model } = require('mongoose');
 
 const Profile = model('Profile');
 const Log = model('Log');
+const Guild = model('Guild');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
 
@@ -115,6 +116,30 @@ module.exports = (app, client) => {
     });
   });
 
+  app.get('/api/joined', async (req, res) => {
+    if (!req.query.token) return res.json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = client.guilds.get(guildID);
+    const joinedCycle = req.query.cycle || 7;
+    const joined = [];
+
+    for (let i = 0; i < joinedCycle; i++) {
+      const date = moment().subtract(i, 'days');
+      joined.push(
+        guild.members.filter(m => moment(m.joinedAt).isSame(date, 'day')).size
+      );
+    }
+
+    return res.json({
+      joined,
+    });
+  });
+
   app.get('/api/logs', async (req, res) => {
     if (!req.query.token) return res.json({ err: 'Token not provided' });
 
@@ -180,6 +205,46 @@ module.exports = (app, client) => {
 
     return res.json({
       members,
+    });
+  });
+
+  app.get('/api/levelperks', async (req, res) => {
+    if (!req.query.token) return res.json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = await Guild.findOne({ guildID: guildID }).exec();
+
+    return res.json({
+      levelPerks: guild.levelPerks,
+    });
+  });
+
+  app.post('/api/levelperks', async (req, res) => {
+    if (!req.query.token) return res.json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = await Guild.findOne({ guildID: guildID }).exec();
+
+    if (!req.body.level) return res.json({ err: 'No level provided' });
+    if (!req.body.perkName) return res.json({ err: 'No perkName provided' });
+    if (!req.body.perkValue) return res.json({ err: 'No perkValue provided' });
+
+    await guild.addLevelPerk(
+      req.body.level,
+      req.body.perkName,
+      req.body.perkValue
+    );
+
+    return res.json({
+      levelPerks: guild.levelPerks,
     });
   });
 
