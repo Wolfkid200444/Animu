@@ -15,7 +15,6 @@ const bodyParser = require('body-parser');
 Client.defaultClientSchema.add('aldoviaSeniorMods', 'User', { array: true });
 Client.defaultClientSchema.add('aldoviaInviteLink', 'String');
 Client.defaultClientSchema.add('aldoviaDescription', 'String');
-Client.defaultClientSchema.add('patreonCurrent', 'number');
 
 //-> Guild Schema
 Client.defaultGuildSchema.add('defaultVolume', 'number', {
@@ -44,6 +43,10 @@ Client.defaultGuildSchema.add('startingRep', 'number', { default: 50 });
 Client.defaultGuildSchema.add('banOnLowRep', 'boolean');
 Client.defaultGuildSchema.add('ignoreRepRoles', 'role', { array: true });
 Client.defaultGuildSchema.add('ignoreLevelRoles', 'role', { array: true });
+Client.defaultGuildSchema.add('allowExpBottles', 'boolean', { default: true });
+Client.defaultGuildSchema.add('allowProfileWallpaper', 'boolean', {
+  default: true,
+});
 Client.defaultGuildSchema.add('welcomeChannel', 'channel');
 Client.defaultGuildSchema.add('welcomeMessage', 'string');
 Client.defaultGuildSchema.add('welcomeImageURL', 'string');
