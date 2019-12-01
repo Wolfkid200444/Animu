@@ -17,7 +17,6 @@ const itemSchema = new Schema({
   usable: Boolean,
   instantUse: Boolean,
   purchaseMsg: String,
-  useMsg: String,
 });
 
 //Model Methods
@@ -30,7 +29,7 @@ itemSchema.statics.createItem = async function(
   usable,
   instantUse,
   purchaseMsg,
-  useMsg,
+  useMsg
 ) {
   const item = await this.findOne({ name: itemName }).exec();
 
@@ -41,7 +40,7 @@ itemSchema.statics.createItem = async function(
     description: description,
     price,
     discount,
-    roles: roles.split(',').map((role) => role.trim()),
+    roles: roles.split(',').map(role => role.trim()),
     usable,
     instantUse,
     purchaseMsg,
@@ -69,10 +68,10 @@ itemSchema.methods.purchase = async function(msg, memberID) {
 
   //Use item instantly
   if (this.instantUse) {
-    this.roles.forEach((role) => {
+    this.roles.forEach(role => {
       if (role !== 'none') {
         //Assigning role
-        const role = msg.guild.roles.find((r) => r.name === role);
+        const role = msg.guild.roles.find(r => r.name === role);
 
         msg.guild.members.get(memberID).addRole(role.id);
       }

@@ -7,6 +7,7 @@ const _ = require('lodash');
 //Init
 const Profile = model('Profile');
 const Inventory = model('Inventory');
+const Item = model('Item');
 const Pet = model('Pet');
 
 module.exports = class extends Extendable {
@@ -48,6 +49,7 @@ module.exports = class extends Extendable {
       .addField('❯ Name', this.username, true)
       .addField('❯ ID', this.id, true)
       .addField('❯ Description', profile.description)
+      .setImage(profile.profileWallpaper)
       .setColor(profile.profileColor);
 
     //Checking Aldovia Title
@@ -235,6 +237,25 @@ module.exports = class extends Extendable {
   }
 
   /**
+   * Get Profile Wallpapers Embed
+   * @returns {MessageEmbed} - Message embed containing wallpapers
+   */
+  async getWallpapersEmbed() {
+    const inventory = await Inventory.findOne({ memberID: this.id }).exec();
+
+    if (!inventory) return this._noProfile(true);
+
+    return new MessageEmbed({
+      title: 'Profile Wallpapers',
+      description:
+        inventory.profileWallpapers.length === 0
+          ? '[Empty]'
+          : inventory.profileWallpapers.map(w => `• ${w.name}`).join('\n'),
+      color: 0x2196f3,
+    });
+  }
+
+  /**
    * Get Badges embed
    * @param {string} guildID - ID of Guild to get badges embed for
    * @returns {MessageEmbed} - Message embed containing badges
@@ -306,6 +327,26 @@ module.exports = class extends Extendable {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) profile = await Profile.register(this.id);
+
+    if (key === 'profileWallpaper') {
+      const inventory = await Inventory.findOne({ memberID: this.id }).exec();
+
+      const index = inventory.profileWallpapers.findIndex(
+        w => w.name === value
+      );
+
+      if (index < 0) return;
+
+      console.log('MODIFYING');
+
+      inventory.profileWallpapers.map(w => (w.inUse = false));
+
+      inventory.profileWallpapers[index].inUse = true;
+
+      value = inventory.profileWallpapers[index].url;
+
+      await inventory.save();
+    }
 
     await profile.edit(key, value);
     return true;
@@ -499,6 +540,56 @@ module.exports = class extends Extendable {
   }
 
   /**
+   * Use an item from inventory
+   * @param {String} itemName - Name of item to use
+   * @returns {MessageEmbed} - Embed to show to user
+   */
+  async useItem(itemName) {
+    const inventory = await Inventory.findOne({ memberID: this.id }).exec();
+
+    if (!inventory) return this._noProfile(true);
+
+    const index = inventory.inventory.indexOf(itemName);
+
+    if (index < 0)
+      return new MessageEmbed()
+        .setTitle('Item not found')
+        .setDescription(
+          "The item you're trying to use doesn't exist in your inventory"
+        )
+        .setColor('#f44336');
+
+    const item = await Item.findOne({ name: itemName }).exec();
+
+    if (!item.usable)
+      return new MessageEmbed()
+        .setTitle("Item Can't be used")
+        .setDescription("The item you're trying to use can't be used manually")
+        .setColor('#f44336');
+
+    inventory.inventory.splice(index, 1);
+
+    let embed;
+
+    // Custom items
+    if (item.name === 'Profile Wallpapers Box') {
+      const wallpaper = _.sample(profileWallpapers);
+      inventory.profileWallpapers.push(
+        Object.assign(wallpaper, { inUse: false })
+      );
+      embed = new MessageEmbed({
+        title: 'Opened Profile Wallpapers Box!',
+        description: `You got.... **${wallpaper.name}**`,
+        color: 0x2196f3,
+      }).setImage(wallpaper.url);
+    }
+
+    await inventory.save();
+
+    return embed;
+  }
+
+  /**
    * Setup profile for a guild
    * @param {String} guildID - ID of guild to setup this profile for
    * @returns {MessageEmbed} - Embed containing details
@@ -546,3 +637,76 @@ module.exports = class extends Extendable {
           .setColor('#f44336');
   }
 ***REMOVED***
+
+const profileWallpapers = [
+  {
+    name: 'Hatsune Miku 1',
+    url:
+      'https://images.wallpaperscraft.com/image/hatsune_miku_girl_cute_posture_look_25061_2560x1080.jpg',
+  },
+  {
+    name: 'Saitama 1',
+    url:
+      'https://images.wallpaperscraft.com/image/one_punch_man_saitama_character_113257_2560x1080.jpg',
+  },
+  {
+    name: 'Lelouch 1',
+    url:
+      'https://images.wallpaperscraft.com/image/lelouch_lamperouge_code_geass_zero_102069_2560x1080.jpg',
+  },
+  {
+    name: 'Naruto 1',
+    url:
+      'https://images.wallpaperscraft.com/image/naruto_naruto_shippuuden_uzumaki_naruto_112160_2560x1080.jpg',
+  },
+  {
+    name: 'Naruto 2',
+    url:
+      'https://images.wallpaperscraft.com/image/naruto_naruto_shippuden_sasuke_uchiha_112104_2560x1080.jpg',
+  },
+  {
+    name: 'Naruto 3',
+    url:
+      'https://images.wallpaperscraft.com/image/boy_naruto_blond_drop_stern_look_24237_2560x1080.jpg',
+  },
+  {
+    name: 'Goku 1',
+    url:
+      'https://images.wallpaperscraft.com/image/dragon_ball_z_goku_super_saiyan_113565_2560x1080.jpg',
+  },
+  {
+    name: 'Itachi 1',
+    url:
+      'https://images.wallpaperscraft.com/image/naruto_itachi_uchiha_nukenin_112126_2560x1080.jpg',
+  },
+  {
+    name: 'Sakura 1',
+    url:
+      'https://images.wallpaperscraft.com/image/sakura_naruto_face_art_104826_2560x1080.jpg',
+  },
+  {
+    name: 'Toshiro 1',
+    url:
+      'https://images.wallpaperscraft.com/image/toshiro_hitsugaya_bleach_shinigami_art_105451_2560x1080.jpg',
+  },
+  {
+    name: 'Natsu 1',
+    url:
+      'https://images.wallpaperscraft.com/image/fairy_tail_man_fire_hand_look_angry_102300_2560x1080.jpg',
+  },
+  {
+    name: 'Alucard 1',
+    url:
+      'https://images.wallpaperscraft.com/image/hellsing_ultimate_alucard_vampire_108279_2560x1080.jpg',
+  },
+  {
+    name: 'Holo 1',
+    url:
+      'https://images.wallpaperscraft.com/image/spice_and_wolf_holo_girl_fox_tail_102339_2560x1080.jpg',
+  },
+  {
+    name: 'Mikasa 1',
+    url:
+      'https://images.wallpaperscraft.com/image/shingeki_no_kyojin_mikasa_ackerman_art_girl_97530_2560x1080.jpg',
+  },
+];

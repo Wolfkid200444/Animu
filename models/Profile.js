@@ -10,6 +10,7 @@ const profileSchema = new Schema({
   description: String,
   favoriteAnime: String,
   profileColor: String,
+  profileWallpaper: String, // url
   badges: [
     {
       guildID: String,
@@ -72,7 +73,7 @@ profileSchema.statics.register = async function(memberID) {
 ***REMOVED***
 
 profileSchema.methods.addReputation = async function(amount, guildID) {
-  const index = this.reputation.findIndex((rep) => rep.guildID === guildID);
+  const index = this.reputation.findIndex(rep => rep.guildID === guildID);
   this.reputation[index].rep += amount;
 
   this.save();
@@ -80,7 +81,7 @@ profileSchema.methods.addReputation = async function(amount, guildID) {
 ***REMOVED***
 
 profileSchema.methods.deductReputation = async function(amount, guildID) {
-  const index = this.reputation.findIndex((rep) => rep.guildID === guildID);
+  const index = this.reputation.findIndex(rep => rep.guildID === guildID);
   this.reputation[index].rep -= amount;
 
   if (this.reputation <= 0) {
@@ -106,31 +107,31 @@ profileSchema.methods.edit = async function(field, value) {
 profileSchema.methods.addExp = async function(
   expToAdd,
   guildID,
-  defaultRep = 50,
+  defaultRep = 50
 ) {
-  let index = this.level.findIndex((guildLev) => guildLev.guildID === guildID);
+  let index = this.level.findIndex(guildLev => guildLev.guildID === guildID);
   let levelUps = [];
 
   if (index < 0) {
-    if (!this.reputation.find((rep) => rep.guildID === guildID))
+    if (!this.reputation.find(rep => rep.guildID === guildID))
       this.reputation.push({
         guildID: guildID,
         rep: defaultRep,
       });
 
-    if (!this.level.find((level) => level.guildID === guildID))
+    if (!this.level.find(level => level.guildID === guildID))
       this.level.push({
         guildID: guildID,
         level: 1,
         exp: 0,
       });
 
-    index = this.level.findIndex((guildLev) => guildLev.guildID === guildID);
+    index = this.level.findIndex(guildLev => guildLev.guildID === guildID);
   }
 
   if (this.level[index].level === 100) return true;
 
-  const levelUp = async (exp) => {
+  const levelUp = async exp => {
     this.level[index].level++;
     levelUps.push(this.level[index].level);
 

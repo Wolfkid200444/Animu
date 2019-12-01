@@ -1,4 +1,3 @@
-TODO: Add 'allowExpBottles' Config in Guild Settings
 TODO: Create shop items "Small Exp Bottle", "Medium Exp Bottle", "Large Exp Bottle"
 
 What are EXP Bottles?
@@ -7,15 +6,7 @@ What are EXP Bottles?
 - Small Bottle = 100 Exp, Medium Bottle = 300 Exp, Large Bottle = 500 Exp
 - 50% of the price of bottle will be given to server owner
 
-TODO: Add "allowProfileWallpaper" Config in Guild Settings
-TODO: Create shop item "Profile Wallapepers Box"
-TODO: Create "profileWallpapers" array in Profile Model
-
-What are profile wallappers?
-- Profile wallpapers are anime/game wallappers that will show up in profiles (-p) as images
-- Each box will only contain 1 image
-- Users will be able to switch between these images using specific command
-
 TODO: Add ability to transfer coins
 TODO: Add ability to give items to someone else
 TODO: Add anime stocks
+TODO: Add Gambling
