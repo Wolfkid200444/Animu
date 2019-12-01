@@ -30,10 +30,11 @@ module.exports = (app, client) => {
   });
 
   app.get('/api/guild', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -55,10 +56,11 @@ module.exports = (app, client) => {
   });
 
   app.get('/api/channels', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -74,10 +76,11 @@ module.exports = (app, client) => {
   });
 
   app.get('/api/roles', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -91,10 +94,11 @@ module.exports = (app, client) => {
   });
 
   app.get('/api/growth', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -117,10 +121,11 @@ module.exports = (app, client) => {
   });
 
   app.get('/api/joined', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -141,10 +146,11 @@ module.exports = (app, client) => {
   });
 
   app.get('/api/logs', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -158,9 +164,12 @@ module.exports = (app, client) => {
       .limit(parseInt(limit))
       .exec();
 
-    logs.forEach(
-      log => (log.data.authorTag = client.users.get(log.data.authorID).tag)
-    );
+    logs.forEach(log => {
+      log.data.authorTag = client.users.get(log.data.authorID).tag;
+      log.data.authorAvatarUrl = client.users
+        .get(log.data.authorID)
+        .displayAvatarURL();
+    });
 
     return res.json({
       logs,
@@ -168,10 +177,11 @@ module.exports = (app, client) => {
   });
 
   app.get('/api/leaderboards/levels', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -209,10 +219,11 @@ module.exports = (app, client) => {
   });
 
   app.get('/api/levelperks', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -224,10 +235,11 @@ module.exports = (app, client) => {
   });
 
   app.post('/api/levelperks', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -249,10 +261,11 @@ module.exports = (app, client) => {
   });
 
   app.get('/api/settings', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
@@ -264,12 +277,15 @@ module.exports = (app, client) => {
   });
 
   app.post('/api/settings', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
     if (!req.body.key)
-      return res.json({ err: 'Key (Setting to update) not provided' });
+      return res
+        .status(400)
+        .json({ err: 'Key (Setting to update) not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+      return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
 
