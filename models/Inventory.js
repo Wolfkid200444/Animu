@@ -24,8 +24,26 @@ inventorySchema.methods.addCoins = async function(amount) {
   return true;
 ***REMOVED***
 
+inventorySchema.methods.giveItem = async function(itemName) {
+  this.inventory.push(itemName);
+
+  this.save();
+  return true;
+***REMOVED***
+
 inventorySchema.methods.deductCoins = async function(amount) {
   this.coins -= amount;
+
+  this.save();
+  return true;
+***REMOVED***
+
+inventorySchema.methods.takeItem = async function(itemName) {
+  const index = this.inventory.indexOf(itemName);
+
+  if (index < 0) return false;
+
+  this.inventory.splice(index, 1);
 
   this.save();
   return true;

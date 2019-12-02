@@ -7,7 +7,7 @@ module.exports = class extends Command {
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Give Coins or some item to another user',
-      usage: '<coins> <member:user> <value:...string>',
+      usage: '<coins|item> <member:user> <value:...string>',
       usageDelim: ' ',
       quotedStringSupport: true,
     });

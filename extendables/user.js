@@ -212,21 +212,6 @@ module.exports = class extends Extendable {
           ? `${item} x${inventoryItems[item]}\n`
           : `${item}\n`;
 
-    //Checking Aldovia Title
-    let isOwner = false;
-
-    for (const owner of this.client.owners)
-      if (owner.id === inventory.memberID) isOwner = true;
-
-    if (
-      isOwner ||
-      _.includes(this.client.settings.aldoviaSeniorMods, profile.memberID)
-    )
-      return new MessageEmbed()
-        .setTitle('No Inventory')
-        .setDescription("🛡 Bot Staff and Owners can't view/use their inventory")
-        .setColor('#f44336');
-
     return new MessageEmbed()
       .setTitle(
         `${this.client.users.get(inventory.memberID).username ||
@@ -678,8 +663,8 @@ module.exports = class extends Extendable {
 
     if (type === 'coins') {
       value = parseInt(value);
-      senderInv.deductCoins(value);
-      receiverInv.addCoins(value);
+      await senderInv.deductCoins(value);
+      await receiverInv.addCoins(value);
 
       return new MessageEmbed({
         title: `Transaction Successful`,
@@ -688,6 +673,27 @@ module.exports = class extends Extendable {
         .addField('❯ Sender', this.client.users.get(this.id).tag, 'true')
         .addField('❯ Receiver', this.client.users.get(member.id).tag, 'true')
         .addField('❯ Amount Sent', value)
+        .setTimestamp(Date.now());
+    } else if (type === 'item') {
+      const res = await senderInv.takeItem(value);
+
+      if (!res)
+        return new MessageEmbed()
+          .setTitle('Item not found')
+          .setDescription(
+            "The item you're trying to give doesn't exist in your inventory"
+          )
+          .setColor('#f44336');
+
+      await receiverInv.giveItem(value);
+
+      return new MessageEmbed({
+        title: `Transaction Successful`,
+        color: 0x2196f3,
+      })
+        .addField('❯ Sender', this.client.users.get(this.id).tag, 'true')
+        .addField('❯ Receiver', this.client.users.get(member.id).tag, 'true')
+        .addField('❯ Item Sent', value)
         .setTimestamp(Date.now());
     }
   }
