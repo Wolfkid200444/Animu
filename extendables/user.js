@@ -664,6 +664,35 @@ module.exports = class extends Extendable {
   }
 
   /**
+   * Give an item or coins to a user
+   * @param {String} type - Type of item to give
+   * @param {*} value - Value
+   * @param {User} member - User to give item to
+   * @returns {MessageEmbed} - Embed containing result
+   */
+  async give(type, value, member) {
+    const senderInv = await Inventory.findOne({ memberID: this.id });
+    const receiverInv = await Inventory.findOne({ memberID: member.id });
+
+    if (!senderInv || !receiverInv) return this._noProfile();
+
+    if (type === 'coins') {
+      value = parseInt(value);
+      senderInv.deductCoins(value);
+      receiverInv.addCoins(value);
+
+      return new MessageEmbed({
+        title: `Transaction Successful`,
+        color: 0x2196f3,
+      })
+        .addField('❯ Sender', this.client.users.get(this.id).tag, 'true')
+        .addField('❯ Receiver', this.client.users.get(member.id).tag, 'true')
+        .addField('❯ Amount Sent', value)
+        .setTimestamp(Date.now());
+    }
+  }
+
+  /**
    * Setup profile for a guild
    * @param {String} guildID - ID of guild to setup this profile for
    * @returns {MessageEmbed} - Embed containing details
