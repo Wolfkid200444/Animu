@@ -1,11 +1,3 @@
-TODO: Create shop items "Small Exp Bottle", "Medium Exp Bottle", "Large Exp Bottle"
-
-What are EXP Bottles?
-- EXP Bottles will give Exp to the user who used them
-- EXP given to the user = Bottle Size * Exp Rate
-- Small Bottle = 100 Exp, Medium Bottle = 300 Exp, Large Bottle = 500 Exp
-- 50% of the price of bottle will be given to server owner
-
 TODO: Add ability to transfer coins
 TODO: Add ability to give items to someone else
 TODO: Add anime stocks

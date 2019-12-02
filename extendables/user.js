@@ -9,6 +9,7 @@ const Profile = model('Profile');
 const Inventory = model('Inventory');
 const Item = model('Item');
 const Pet = model('Pet');
+const Guild = model('Guild');
 
 module.exports = class extends Extendable {
   constructor(...args) {
@@ -542,9 +543,10 @@ module.exports = class extends Extendable {
   /**
    * Use an item from inventory
    * @param {String} itemName - Name of item to use
+   * @param {String} guildID - ID of the guild
    * @returns {MessageEmbed} - Embed to show to user
    */
-  async useItem(itemName) {
+  async useItem(itemName, guildID) {
     const inventory = await Inventory.findOne({ memberID: this.id }).exec();
 
     if (!inventory) return this._noProfile(true);
@@ -582,6 +584,78 @@ module.exports = class extends Extendable {
         description: `You got.... **${wallpaper.name}**`,
         color: 0x2196f3,
       }).setImage(wallpaper.url);
+    } else if (
+      item.name === 'Small Exp Bottle' ||
+      item.name === 'Medium Exp Bottle' ||
+      item.name === 'Large Exp Bottle'
+    ) {
+      const ownerInventory = await Inventory.findOne({
+        memberID: this.client.guilds.get(guildID).ownerID,
+      }).exec();
+      const guild = await Guild.findOne({
+        guildID: guildID,
+      }).exec();
+
+      let expToAdd;
+      let returnCoins;
+
+      if (item.name === 'Small Exp Bottle') {
+        expToAdd = 100 * this.client.guilds.get(guildID).settings.expRate;
+        returnCoins = 25;
+      } else if (item.name === 'Medium Exp Bottle') {
+        expToAdd = 300 * this.client.guilds.get(guildID).settings.expRate;
+        returnCoins = 75;
+      } else {
+        expToAdd = 500 * this.client.guilds.get(guildID).settings.expRate;
+        returnCoins = 125;
+      }
+
+      if (ownerInventory) ownerInventory.addCoins(returnCoins);
+
+      const levelUps = await this.addExp(expToAdd, guildID);
+
+      //If member actually levelled up
+      if (levelUps.length) {
+        levelUps.forEach(level => {
+          this.client.users
+            .get(this.id)
+            .send(
+              `Congrats, you just levelled up and reached Level ${level} in ${
+                this.client.guilds.get(guildID).name
+              } 🎉`
+            );
+
+          const index = guild.levelPerks.findIndex(l => l.level === level);
+          if (!index) return true;
+
+          //Assign reward(s)
+          if (guild.levelPerks[index]) {
+            if (guild.levelPerks[index].badge)
+              this.giveBadge(guild.levelPerks[index].badge, guildID);
+            if (guild.levelPerks[index].role) {
+              const role = this.client.guilds
+                .get(guildID)
+                .roles.get(r => r.name === guild.levelPerks[index].role);
+
+              this.client.guilds
+                .get(guildID)
+                .members.get(this.id)
+                .roles.add(role);
+            }
+
+            if (guild.levelPerks[index].rep)
+              this.client.users
+                .get(this.id)
+                .editReputation('+', guild.levelPerks[index].rep, guildID);
+          }
+        });
+      }
+
+      embed = new MessageEmbed({
+        title: 'Used Exp Bottle',
+        description: `You got ${expToAdd} Exp`,
+        color: 0x2196f3,
+      });
     }
 
     await inventory.save();

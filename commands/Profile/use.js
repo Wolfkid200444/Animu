@@ -15,6 +15,6 @@ module.exports = class extends Command {
 
   async run(msg, [itemName]) {
     const member = msg.author;
-    msg.sendEmbed(await member.useItem(itemName));
+    msg.sendEmbed(await member.useItem(itemName, msg.guild.id));
   }
 ***REMOVED***
