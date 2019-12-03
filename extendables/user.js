@@ -10,6 +10,7 @@ const Inventory = model('Inventory');
 const Item = model('Item');
 const Pet = model('Pet');
 const Guild = model('Guild');
+const BankAccount = model('BankAccount');
 
 module.exports = class extends Extendable {
   constructor(...args) {
@@ -696,6 +697,85 @@ module.exports = class extends Extendable {
         .addField('❯ Item Sent', value)
         .setTimestamp(Date.now());
     }
+  }
+
+  /**
+   * Deposit a number of coins for a period
+   * @param {int} period - Period for this deposit in weeks
+   * @param {int} coins - Amount of coins to deposit
+   * @returns {MessageEmbed} - MessageEmbed to show to the user
+   */
+  async deposit(period, coins) {
+    const bankAccount = await BankAccount.findOne({ memberID: this.id });
+
+    if (!bankAccount)
+      return new MessageEmbed({
+        title: 'Bank Account Not Found',
+        description:
+          'You need a bank account to deposit coins, use `create-account` command to create a bank account\n\nPlease note that it will cost you **500 Coins** to create a bank account',
+        color: 0xf44336,
+      });
+
+    if (period === 1) coins = coins * 1.01 ** 1;
+    if (period === 4) coins = coins * 1.02 ** 4;
+    if (period === 12) coins = coins * 1.03 ** 12;
+
+    await bankAccount.addDeposit(period, coins);
+
+    return new MessageEmbed({
+      title: 'Deposited',
+      description: `You have successfully deposited ${coins} for ${period} weeks.`,
+      color: 0x2196f3,
+    });
+  }
+
+  /**
+   * Create a new bank account for a user
+   * @returns {MessageEmbed} - Embed to show to the user
+   */
+  async createAccount() {
+    const res = await BankAccount.createAccount(this.id);
+
+    if (res.res === 'already_exists')
+      return new MessageEmbed({
+        title: 'Bank Account Already exists',
+        description: 'You already have a bank account',
+        color: 0xf44336,
+      });
+
+    return new MessageEmbed({
+      title: 'Bank Account Created',
+      description: 'Congrats, now you have a bank account',
+      color: 0x2196f3,
+    });
+  }
+
+  /**
+   * Get Embed for a user's bank account
+   * @returns {MessageEmbed} - Embed containing user's Bank Account info
+   */
+  async getAccountEmbed() {
+    const bankAccount = await BankAccount.findOne({ memberID: this.id });
+
+    if (!bankAccount)
+      return new MessageEmbed({
+        title: 'Bank Account Not Found',
+        description:
+          "You don't have a bank account, use `create-account` command to create a bank account\n\nPlease note that it will cost you **500 Coins** to create a bank account",
+        color: 0xf44336,
+      });
+
+    return new MessageEmbed({
+      title: `${this.username}'s Bank Account`,
+      description: `**Current Deposits**\n${
+        bankAccount.deposits.length > 0
+          ? bankAccount.deposits
+              .map(d => `• ${d.coins} Coins - ${d.period} Days Left`)
+              .join('\n')
+          : '[No Deposits]'
+      }`,
+      color: 0x2196f3,
+    });
   }
 
   /**

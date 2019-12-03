@@ -64,10 +64,10 @@ profileSchema.statics.register = async function(memberID) {
       description: '[No description provided]',
       favoriteAnime: '[No favorite anime provided]',
       profileColor: '#2196f3',
+      mutedIn: [],
       badges: [],
       marriedTo: '',
       reputation: [],
-      previousRoles: [],
     }).save(),
   ***REMOVED***
 ***REMOVED***
