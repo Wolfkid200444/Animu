@@ -706,7 +706,19 @@ module.exports = class extends Extendable {
    * @returns {MessageEmbed} - MessageEmbed to show to the user
    */
   async deposit(period, coins) {
+    const inventory = await Inventory.findOne({ memberID: this.id });
     const bankAccount = await BankAccount.findOne({ memberID: this.id });
+
+    if (!inventory) return this._noProfile(true);
+
+    if (inventory.coins < coins)
+      return new MessageEmbed({
+        title: 'Insufficient Coins',
+        description: "You don't have enough coins to make that deposit",
+        color: 0xf44336,
+      });
+
+    await inventory.deductCoins(coins);
 
     if (!bankAccount)
       return new MessageEmbed({
@@ -724,7 +736,7 @@ module.exports = class extends Extendable {
 
     return new MessageEmbed({
       title: 'Deposited',
-      description: `You have successfully deposited ${coins} for ${period} weeks.`,
+      description: `You have successfully deposited ${coins} Coins for ${period} weeks.`,
       color: 0x2196f3,
     });
   }
