@@ -718,8 +718,6 @@ module.exports = class extends Extendable {
         color: 0xf44336,
       });
 
-    await inventory.deductCoins(coins);
-
     if (!bankAccount)
       return new MessageEmbed({
         title: 'Bank Account Not Found',
@@ -727,6 +725,8 @@ module.exports = class extends Extendable {
           'You need a bank account to deposit coins, use `create-account` command to create a bank account\n\nPlease note that it will cost you **500 Coins** to create a bank account',
         color: 0xf44336,
       });
+
+    await inventory.deductCoins(coins);
 
     if (period === 1) coins = coins * 1.01 ** 1;
     if (period === 4) coins = coins * 1.02 ** 4;
