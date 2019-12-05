@@ -51,6 +51,7 @@ module.exports = (app, client) => {
             m.presence.status === 'idle' ||
             m.presence.status === 'dnd'
         ).size,
+        tier: await redisClient.hgetAsync('guild_tiers', guild.id),
       },
     });
   });
