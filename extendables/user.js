@@ -667,6 +667,14 @@ module.exports = class extends Extendable {
 
     if (type === 'coins') {
       value = parseInt(value);
+
+      if (senderInv.coins < value)
+        return new MessageEmbed({
+          title: 'Not enough Coins',
+          description: "You don't have enough coins",
+          color: 0xf44336,
+        });
+
       await senderInv.deductCoins(value);
       await receiverInv.addCoins(value);
 
