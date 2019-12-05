@@ -44,9 +44,6 @@ Client.defaultGuildSchema.add('banOnLowRep', 'boolean');
 Client.defaultGuildSchema.add('ignoreRepRoles', 'role', { array: true });
 Client.defaultGuildSchema.add('ignoreLevelRoles', 'role', { array: true });
 Client.defaultGuildSchema.add('allowExpBottles', 'boolean', { default: true });
-Client.defaultGuildSchema.add('allowProfileWallpaper', 'boolean', {
-  default: true,
-});
 Client.defaultGuildSchema.add('welcomeChannel', 'channel');
 Client.defaultGuildSchema.add('welcomeMessage', 'string');
 Client.defaultGuildSchema.add('welcomeImageURL', 'string');

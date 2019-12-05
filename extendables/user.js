@@ -324,8 +324,6 @@ module.exports = class extends Extendable {
 
       if (index < 0) return;
 
-      console.log('MODIFYING');
-
       inventory.profileWallpapers.map(w => (w.inUse = false));
 
       inventory.profileWallpapers[index].inUse = true;
@@ -575,6 +573,13 @@ module.exports = class extends Extendable {
       item.name === 'Medium Exp Bottle' ||
       item.name === 'Large Exp Bottle'
     ) {
+      if (!this.client.guilds.get(guildID).settings.allowExpBottles)
+        return new MessageEmbed({
+          title: "Can't use",
+          description: "This guild doesn't allow exp bottles",
+          color: 0xf44336,
+        });
+
       const ownerInventory = await Inventory.findOne({
         memberID: this.client.guilds.get(guildID).ownerID,
       }).exec();
@@ -630,9 +635,7 @@ module.exports = class extends Extendable {
             }
 
             if (guild.levelPerks[index].rep)
-              this.client.users
-                .get(this.id)
-                .editReputation('+', guild.levelPerks[index].rep, guildID);
+              this.editReputation('+', guild.levelPerks[index].rep, guildID);
           }
         });
       }
