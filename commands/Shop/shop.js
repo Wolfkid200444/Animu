@@ -13,17 +13,13 @@ module.exports = class extends Command {
       cooldown: 30,
       description: 'View Shop',
       extendedHelp: 'View all the items available for purhcase',
-      usage: '[page:integer]',
       usageDelim: '',
       quotedStringSupport: true,
     });
   }
 
-  async run(msg, [page = 1]) {
-    const items = await Item.find({})
-      .skip(10 * (page - 1))
-      .limit(10)
-      .exec();
+  async run(msg) {
+    const items = await Item.find({}).exec();
 
     let itemStr = '';
 
