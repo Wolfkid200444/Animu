@@ -53,7 +53,7 @@ profileSchema.statics.register = async function(memberID) {
 
   await new Inventory({
     memberID,
-    coins: 100,
+    coins: 0,
     inventory: [],
   }).save();
 
