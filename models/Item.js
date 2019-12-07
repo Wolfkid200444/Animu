@@ -13,11 +13,11 @@ const itemSchema = new Schema({
     min: 0,
     max: 100,
   },
-  roles: [String],
   usable: Boolean,
   instantUse: Boolean,
   inShop: Boolean,
   purchaseMsg: String,
+  properties: [String],
 });
 
 //Model Methods
@@ -26,11 +26,11 @@ itemSchema.statics.createItem = async function(
   description,
   price,
   discount,
-  roles,
   usable,
   instantUse,
   inShop,
-  purchaseMsg
+  purchaseMsg,
+  properties
 ) {
   const item = await this.findOne({ name: itemName }).exec();
 
@@ -41,11 +41,11 @@ itemSchema.statics.createItem = async function(
     description: description,
     price,
     discount,
-    roles: roles.split(',').map(role => role.trim()),
     usable,
     instantUse,
     inShop,
     purchaseMsg,
+    properties: properties.split(',').map(role => role.trim()),
   }).save();
 ***REMOVED***
 

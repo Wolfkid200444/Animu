@@ -51,7 +51,6 @@ module.exports = class extends Extendable {
       .addField('❯ Name', this.username, true)
       .addField('❯ ID', this.id, true)
       .addField('❯ Description', profile.description)
-      .setImage(profile.profileWallpaper)
       .setColor(profile.profileColor);
 
     //Checking Aldovia Title
@@ -171,6 +170,12 @@ module.exports = class extends Extendable {
         } ${pet.petName}`,
         true
       );
+
+    if (profile.profileWallpaper) {
+      const wallpaper = await Item.findOne({ name: profile.profileWallpaper });
+
+      profileEmbed.setImage(wallpaper.imageURL);
+    }
 
     return profileEmbed;
   }
@@ -318,20 +323,15 @@ module.exports = class extends Extendable {
     if (key === 'profileWallpaper') {
       const inventory = await Inventory.findOne({ memberID: this.id }).exec();
 
-      const index = inventory.profileWallpapers.findIndex(
-        w => w.name === value
-      );
+      const res = await inventory.takeItem(value);
 
-      if (index < 0) return;
+      if (!res) return false;
 
-      inventory.profileWallpapers.map(w => (w.inUse = false));
-
-      inventory.profileWallpapers[index].inUse = true;
-
-      value = inventory.profileWallpapers[index].url;
-
-      await inventory.save();
+      if (profile.profileWallpaper)
+        await inventory.giveItem(profile.profileWallpaper);
     }
+
+    console.log(value);
 
     await profile.edit(key, value);
     return true;
@@ -559,15 +559,16 @@ module.exports = class extends Extendable {
 
     // Custom items
     if (item.name === 'Profile Wallpapers Box') {
-      const wallpaper = _.sample(profileWallpapers);
-      inventory.profileWallpapers.push(
-        Object.assign(wallpaper, { inUse: false })
-      );
+      const wallpapers = await Item.find({ properties: 'profile_wallpaper' });
+      const wallpaper = _.sample(wallpapers);
+
+      inventory.giveItem(wallpaper.name);
+
       embed = new MessageEmbed({
         title: 'Opened Profile Wallpapers Box!',
         description: `You got.... **${wallpaper.name}**`,
         color: 0x2196f3,
-      }).setImage(wallpaper.url);
+      }).setImage(wallpaper.imageURL);
     } else if (
       item.name === 'Small Exp Bottle' ||
       item.name === 'Medium Exp Bottle' ||
@@ -849,91 +850,3 @@ module.exports = class extends Extendable {
           .setColor('#f44336');
   }
 ***REMOVED***
-
-const profileWallpapers = [
-  {
-    name: 'Hatsune Miku 1',
-    url:
-      'https://images.wallpaperscraft.com/image/hatsune_miku_girl_cute_posture_look_25061_2560x1080.jpg',
-  },
-  {
-    name: 'Saitama 1',
-    url:
-      'https://images.wallpaperscraft.com/image/one_punch_man_saitama_character_113257_2560x1080.jpg',
-  },
-  {
-    name: 'Lelouch 1',
-    url:
-      'https://images.wallpaperscraft.com/image/lelouch_lamperouge_code_geass_zero_102069_2560x1080.jpg',
-  },
-  {
-    name: 'Naruto 1',
-    url:
-      'https://images.wallpaperscraft.com/image/naruto_naruto_shippuuden_uzumaki_naruto_112160_2560x1080.jpg',
-  },
-  {
-    name: 'Naruto 2',
-    url:
-      'https://images.wallpaperscraft.com/image/naruto_naruto_shippuden_sasuke_uchiha_112104_2560x1080.jpg',
-  },
-  {
-    name: 'Naruto 3',
-    url:
-      'https://images.wallpaperscraft.com/image/boy_naruto_blond_drop_stern_look_24237_2560x1080.jpg',
-  },
-  {
-    name: 'Goku 1',
-    url:
-      'https://images.wallpaperscraft.com/image/dragon_ball_z_goku_super_saiyan_113565_2560x1080.jpg',
-  },
-  {
-    name: 'Itachi 1',
-    url:
-      'https://images.wallpaperscraft.com/image/naruto_itachi_uchiha_nukenin_112126_2560x1080.jpg',
-  },
-  {
-    name: 'Sakura 1',
-    url:
-      'https://images.wallpaperscraft.com/image/sakura_naruto_face_art_104826_2560x1080.jpg',
-  },
-  {
-    name: 'Toshiro 1',
-    url:
-      'https://images.wallpaperscraft.com/image/toshiro_hitsugaya_bleach_shinigami_art_105451_2560x1080.jpg',
-  },
-  {
-    name: 'Natsu 1',
-    url:
-      'https://images.wallpaperscraft.com/image/fairy_tail_man_fire_hand_look_angry_102300_2560x1080.jpg',
-  },
-  {
-    name: 'Alucard 1',
-    url:
-      'https://images.wallpaperscraft.com/image/hellsing_ultimate_alucard_vampire_108279_2560x1080.jpg',
-  },
-  {
-    name: 'Holo 1',
-    url:
-      'https://images.wallpaperscraft.com/image/spice_and_wolf_holo_girl_fox_tail_102339_2560x1080.jpg',
-  },
-  {
-    name: 'Mikasa 1',
-    url:
-      'https://images.wallpaperscraft.com/image/shingeki_no_kyojin_mikasa_ackerman_art_girl_97530_2560x1080.jpg',
-  },
-  {
-    name: 'Zero Two 1',
-    url:
-      'https://wallpapersmug.com/download/2560x1080/e0f289/hot-girl-zero-two.jpg',
-  },
-  {
-    name: 'Zero Two 2',
-    url:
-      'https://wallpapersmug.com/download/2560x1080/80f437/zero-two-beautiful.jpg',
-  },
-  {
-    name: 'Zero Two 3',
-    url:
-      'https://hdqwalls.com/download/zero-two-darling-in-the-franxx-anime-4k-5h-2560x1080.jpg',
-  },
-];

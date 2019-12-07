@@ -97,6 +97,7 @@ profileSchema.methods.deductReputation = async function(amount, guildID) {
 ***REMOVED***
 
 profileSchema.methods.edit = async function(field, value) {
+  console.log(field, value);
   this[field] = value;
 
   await this.save();
