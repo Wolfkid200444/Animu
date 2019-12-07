@@ -322,6 +322,12 @@ module.exports = class extends Extendable {
 
     if (key === 'profileWallpaper') {
       const inventory = await Inventory.findOne({ memberID: this.id }).exec();
+      const item = await Item.findOne({
+        name: value,
+        properties: 'profile_wallpaper',
+      });
+
+      if (!item) return false;
 
       const res = await inventory.takeItem(value);
 
