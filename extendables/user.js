@@ -793,7 +793,7 @@ module.exports = class extends Extendable {
       description: `**Current Deposits**\n${
         bankAccount.deposits.length > 0
           ? bankAccount.deposits
-              .map(d => `• ${d.coins} Coins - ${d.period} Days Left`)
+              .map(d => `• ${d.coins} Coins - ${d.daysLeft} Days Left`)
               .join('\n')
           : '[No Deposits]'
       }`,
