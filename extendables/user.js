@@ -575,6 +575,19 @@ module.exports = class extends Extendable {
         description: `You got.... **${wallpaper.name}**`,
         color: 0x2196f3,
       }).setImage(wallpaper.imageURL);
+    } else if (item.name === 'Golden Profile Wallpapers Box') {
+      const wallpapers = await Item.find({
+        properties: { $all: ['profile_wallpaper', 'legendary_wallpaper'] },
+      });
+      const wallpaper = _.sample(wallpapers);
+
+      inventory.giveItem(wallpaper.name);
+
+      embed = new MessageEmbed({
+        title: 'Opened Golden Profile Wallpapers Box!',
+        description: `You got.... **${wallpaper.name}**`,
+        color: 0x2196f3,
+      }).setImage(wallpaper.imageURL);
     } else if (
       item.name === 'Small Exp Bottle' ||
       item.name === 'Medium Exp Bottle' ||
