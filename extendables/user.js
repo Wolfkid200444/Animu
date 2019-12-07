@@ -921,4 +921,19 @@ const profileWallpapers = [
     url:
       'https://images.wallpaperscraft.com/image/shingeki_no_kyojin_mikasa_ackerman_art_girl_97530_2560x1080.jpg',
   },
+  {
+    name: 'Zero Two 1',
+    url:
+      'https://wallpapersmug.com/download/2560x1080/e0f289/hot-girl-zero-two.jpg',
+  },
+  {
+    name: 'Zero Two 2',
+    url:
+      'https://wallpapersmug.com/download/2560x1080/80f437/zero-two-beautiful.jpg',
+  },
+  {
+    name: 'Zero Two 3',
+    url:
+      'https://hdqwalls.com/download/zero-two-darling-in-the-franxx-anime-4k-5h-2560x1080.jpg',
+  },
 ];

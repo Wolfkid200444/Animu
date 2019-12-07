@@ -29,7 +29,9 @@ module.exports = class extends Command {
 
     if (items.length < 1) itemStr = '[No items on this page]';
 
-    items.forEach((item) => {
+    items.forEach(item => {
+      if (!item.inShop) return;
+
       let priceStr = '';
 
       if (item.discount === 0) priceStr = `${item.price} Coins`;
@@ -46,7 +48,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle('Shop')
         .setDescription(itemStr)
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

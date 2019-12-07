@@ -37,7 +37,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Invalid Item Name')
           .setDescription('The item with given name was not found')
-          .setColor('#f44336'),
+          .setColor('#f44336')
       );
 
     let priceStr = '';
@@ -53,8 +53,8 @@ module.exports = class extends Command {
         .setThumbnail(item.imageURL)
         .addField('❯ Name', item.name)
         .addField('❯ Description', item.description)
-        .addField('❯ Price', priceStr)
-        .setColor('#2196f3'),
+        .addField('❯ Price', item.inShop ? priceStr : '-')
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

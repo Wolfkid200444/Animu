@@ -16,6 +16,7 @@ const itemSchema = new Schema({
   roles: [String],
   usable: Boolean,
   instantUse: Boolean,
+  inShop: Boolean,
   purchaseMsg: String,
 });
 
@@ -28,8 +29,8 @@ itemSchema.statics.createItem = async function(
   roles,
   usable,
   instantUse,
-  purchaseMsg,
-  useMsg
+  inShop,
+  purchaseMsg
 ) {
   const item = await this.findOne({ name: itemName }).exec();
 
@@ -43,8 +44,8 @@ itemSchema.statics.createItem = async function(
     roles: roles.split(',').map(role => role.trim()),
     usable,
     instantUse,
+    inShop,
     purchaseMsg,
-    useMsg,
   }).save();
 ***REMOVED***
 

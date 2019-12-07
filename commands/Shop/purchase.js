@@ -29,7 +29,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle("Can't purchase item")
           .setDescription("Animu Staff can't purchase items")
-          .setColor('#f44336'),
+          .setColor('#f44336')
       );
 
     const profile = await Profile.findOne({ memberID: msg.author.id }).exec();
@@ -39,7 +39,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Profile not found')
           .setDescription('Use `-register` to register your profile')
-          .setColor('#f44336'),
+          .setColor('#f44336')
       );
 
     const itemArr = await Item.find({}).exec();
@@ -56,7 +56,17 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Invalid Item Name')
           .setDescription('The item with given name was not found')
-          .setColor('#f44336'),
+          .setColor('#f44336')
+      );
+
+    if (!item.inShop)
+      return msg.sendEmbed(
+        new MessageEmbed({
+          title: 'Item not purchasable',
+          description:
+            "The Item you're trying to purchase can't be purchased from shop",
+          color: 0x2196f3,
+        })
       );
 
     const res = await item.purchase(msg, msg.author.id);
@@ -65,7 +75,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(res.title)
         .setDescription(res.desc)
-        .setColor(res.res === 'err' ? '#f44336' : '#2196f3'),
+        .setColor(res.res === 'err' ? '#f44336' : '#2196f3')
     );
   }
 ***REMOVED***
