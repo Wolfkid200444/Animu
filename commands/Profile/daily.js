@@ -52,7 +52,7 @@ module.exports = class extends Command {
     return msg.send(
       new MessageEmbed({
         title: 'Checked In',
-        description: 'Got 50 Coins :)',
+        description: 'Got 30 Coins :)',
         color: '#2196f3',
       }),
     );
