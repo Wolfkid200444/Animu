@@ -50,7 +50,7 @@ inventorySchema.methods.takeItem = async function(itemName) {
 ***REMOVED***
 
 inventorySchema.methods.checkIn = async function() {
-  this.coins += 50;
+  this.coins += 30;
   this.checkedIn = true;
 
   this.save();
