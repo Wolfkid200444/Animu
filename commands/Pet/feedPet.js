@@ -12,7 +12,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 120,
-      description: 'Feed your pet (20 Coins)',
+      description: 'Feed your pet (10 Coins)',
       extendedHelp:
         "Feed your pet, if you don't feed your pet for 24 hours, they'll end up dead",
     });
@@ -29,18 +29,18 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle(`Oooops!`)
           .setDescription("You don't own a pet")
-          .setColor('#f44336'),
+          .setColor('#f44336')
       );
 
-    if (inventory.coins < 20)
+    if (inventory.coins < 10)
       return msg.sendEmbed(
         new MessageEmbed()
           .setTitle(`Oooops!`)
-          .setDescription("You don't have 20 coins to feed your pet")
-          .setColor('#f44336'),
+          .setDescription("You don't have 10 coins to feed your pet")
+          .setColor('#f44336')
       );
 
-    await inventory.deductCoins(20);
+    await inventory.deductCoins(10);
 
     pet.lastFedHoursAgo = 0;
 
@@ -50,7 +50,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`Fed Pet`)
         .setDescription(`You've fed your pet successfully`)
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***
