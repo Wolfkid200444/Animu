@@ -13,21 +13,21 @@ const inventorySchema = new Schema({
 inventorySchema.methods.addCoins = async function(amount) {
   this.coins += amount;
 
-  this.save();
+  await this.save();
   return true;
 ***REMOVED***
 
 inventorySchema.methods.giveItem = async function(itemName) {
   this.inventory.push(itemName);
 
-  this.save();
+  await this.save();
   return true;
 ***REMOVED***
 
 inventorySchema.methods.deductCoins = async function(amount) {
   this.coins -= amount;
 
-  this.save();
+  await this.save();
   return true;
 ***REMOVED***
 
@@ -38,7 +38,7 @@ inventorySchema.methods.takeItem = async function(itemName) {
 
   this.inventory.splice(index, 1);
 
-  this.save();
+  await this.save();
   return true;
 ***REMOVED***
 
@@ -46,7 +46,7 @@ inventorySchema.methods.checkIn = async function() {
   this.coins += 30;
   this.checkedIn = true;
 
-  this.save();
+  await this.save();
   return true;
 ***REMOVED***
 
