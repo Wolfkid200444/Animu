@@ -1,5 +1,5 @@
 const { Command } = require('klasa');
-const { verify } = require('../../util/util');
+const prompt = require('discordjs-prompter');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
@@ -25,27 +25,32 @@ module.exports = class extends Command {
       return msg.reply('You may not play against yourself.');
     const current = await redisClient.hexistsAsync(
       'active_games',
-      msg.channel.id,
+      msg.channel.id
     );
 
     if (current) {
       const currentGame = await redisClient.hgetAsync(
         'active_games',
-        msg.channel.id,
+        msg.channel.id
       );
       return msg.reply(
-        `Please wait until the current game of \`${currentGame}\` is finished.`,
+        `Please wait until the current game of \`${currentGame}\` is finished.`
       );
     }
 
     await redisClient.hsetAsync('active_games', msg.channel.id, this.name);
     try {
-      await msg.send(`${opponent}, do you accept this challenge?`);
-      const verification = await verify(msg.channel, opponent);
-      if (!verification) {
+      const verification = await prompt.reaction(msg.channel, {
+        question: `${opponent}, do you accept this challenge?`,
+        userId: opponent.id,
+        timeout: 30000,
+      });
+
+      if (!verification || verification === 'no') {
         await redisClient.hdelAsync('active_games', msg.channel.id);
         return msg.send('Looks like they declined...');
       }
+
       let turn = 0;
       let aPts = 0;
       let oPts = 0;
@@ -55,7 +60,7 @@ module.exports = class extends Command {
           Math.floor(Math.random() * this.emojis.length)
         ];
         await msg.send(emoji);
-        const filter = (res) =>
+        const filter = res =>
           [msg.author.id, opponent.id].includes(res.author.id) &&
           res.content === emoji;
         const win = await msg.channel.awaitMessages(filter, {
@@ -81,7 +86,7 @@ module.exports = class extends Command {
       return msg.send(
         `You win ${userWin ? msg.author : opponent} with ${
           userWin ? aPts : oPts
-        } points!`,
+        } points!`
       );
     } catch (err) {
       await redisClient.hdelAsync('active_games', msg.channel.id);

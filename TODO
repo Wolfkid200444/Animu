@@ -1,3 +1,11 @@
+# Games
+TODO: Update Games to use Embeds & Reactions
+TODO: Update Games redis to auto-delete after certain time
+
+# Pets
 TODO: Add reminder to feed pet 1 hour before pet dies
+TODO: Add command to play with your pet (if you don't play, pet will become unhappy and leave you)
+
+# Misc
 TODO: Add ability for server owners to sell: Roles, badges and rep
 TODO: Add marketplace where users can put items for sale

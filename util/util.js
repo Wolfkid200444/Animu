@@ -11,7 +11,7 @@
     return text.length > maxLen ? `${text.substr(0, maxLen - 3)}...` : text;
   },
   delay: function(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
   },
   formatNumber: function(number) {
     return Number.parseFloat(number).toLocaleString(undefined, {
@@ -42,25 +42,5 @@
     if (mode === 'decode')
       return Buffer.from(text, 'base64').toString('utf8') || null;
     throw new TypeError(`${mode} is not a supported base64 mode.`);
-  },
-  verify: async function(channel, user, time = 30000) {
-    const filter = (res) => {
-      const value = res.content.toLowerCase();
-      return (
-        res.author.id === user.id &&
-        (['yes', 'y', 'ye', 'yeah', 'yup', 'yea', 'ya'].includes(value) ||
-          ['no', 'n', 'nah', 'nope', 'nop'].includes(value))
-      );
-    ***REMOVED***
-    const verify = await channel.awaitMessages(filter, {
-      max: 1,
-      time,
-    });
-    if (!verify.size) return 0;
-    const choice = verify.first().content.toLowerCase();
-    if (['yes', 'y', 'ye', 'yeah', 'yup', 'yea', 'ya'].includes(choice))
-      return true;
-    if (['no', 'n', 'nah', 'nope', 'nop'].includes(choice)) return false;
-    return false;
   },
 ***REMOVED***

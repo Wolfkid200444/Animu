@@ -1,5 +1,6 @@
 const { Command } = require('klasa');
-const { delay, randomRange, verify } = require('../../util/util');
+const prompt = require('discordjs-prompter');
+const { delay, randomRange } = require('../../util/util');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
@@ -25,32 +26,37 @@ module.exports = class extends Command {
 
     const current = await redisClient.hexistsAsync(
       'active_games',
-      msg.channel.id,
+      msg.channel.id
     );
     if (current) {
       const currentGame = await redisClient.hgetAsync(
         'active_games',
-        msg.channel.id,
+        msg.channel.id
       );
       return msg.reply(
-        `Please wait until the current game of \`${currentGame}\` is finished.`,
+        `Please wait until the current game of \`${currentGame}\` is finished.`
       );
     }
 
     await redisClient.hsetAsync('active_games', msg.channel.id, this.name);
 
     try {
-      await msg.send(`${opponent}, do you accept this challenge?`);
-      const verification = await verify(msg.channel, opponent);
-      if (!verification) {
+      const verification = await prompt.reaction(msg.channel, {
+        question: `${opponent}, do you accept this challenge?`,
+        userId: opponent.id,
+        timeout: 30000,
+      });
+
+      if (!verification || verification === 'no') {
         await redisClient.hdelAsync('active_games', msg.channel.id);
         return msg.send('Looks like they declined...');
       }
+
       await msg.send('Get Ready...');
       await delay(randomRange(1000, 30000));
       const word = this.words[Math.floor(Math.random() * this.words.length)];
       await msg.send(`TYPE \`${word.toUpperCase()}\` NOW!`);
-      const filter = (res) =>
+      const filter = res =>
         [opponent.id, msg.author.id].includes(res.author.id) &&
         res.content.toLowerCase() === word;
       const winner = await msg.channel.awaitMessages(filter, {

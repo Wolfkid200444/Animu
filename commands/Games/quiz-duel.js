@@ -1,5 +1,6 @@
 const { Command } = require('klasa');
-const { shuffle, verify } = require('../../util/util');
+const prompt = require('discordjs-prompter');
+const { shuffle } = require('../../util/util');
 const { stripIndents, oneLine } = require('common-tags');
 const axios = require('axios');
 const redis = require('redis');
@@ -28,27 +29,32 @@ module.exports = class extends Command {
 
     const current = await redisClient.hexistsAsync(
       'active_games',
-      msg.channel.id,
+      msg.channel.id
     );
     if (current) {
       const currentGame = await redisClient.hgetAsync(
         'active_games',
-        msg.channel.id,
+        msg.channel.id
       );
       return msg.reply(
-        `Please wait until the current game of \`${currentGame}\` is finished.`,
+        `Please wait until the current game of \`${currentGame}\` is finished.`
       );
     }
 
     await redisClient.hsetAsync('active_games', msg.channel.id, this.name);
 
     try {
-      await msg.send(`${opponent}, do you accept this challenge?`);
-      const verification = await verify(msg.channel, opponent);
-      if (!verification) {
+      const verification = await prompt.reaction(msg.channel, {
+        question: `${opponent}, do you accept this challenge?`,
+        userId: opponent.id,
+        timeout: 30000,
+      });
+
+      if (!verification || verification === 'no') {
         await redisClient.hdelAsync('active_games', msg.channel.id);
         return msg.send('Looks like they declined...');
       }
+
       let winner = null;
       let userPoints = 0;
       let oppoPoints = 0;
@@ -62,7 +68,7 @@ module.exports = class extends Command {
             .join('\n')}
 				`);
         const answered = [];
-        const filter = (res) => {
+        const filter = res => {
           const choice = res.content.toUpperCase();
           if (
             !this.choices.includes(choice) ||
@@ -101,7 +107,7 @@ module.exports = class extends Command {
 					${userWin ? '' : '**'}${oppoPoints}${userWin ? '' : '**'}
 				`;
         await msg.send(
-          `Nice one, ${result.author}! The score is now ${score}!`,
+          `Nice one, ${result.author}! The score is now ${score}!`
         );
       }
       await redisClient.hdelAsync('active_games', msg.channel.id);
@@ -110,7 +116,7 @@ module.exports = class extends Command {
     } catch (err) {
       await redisClient.hdelAsync('active_games', msg.channel.id);
       return msg.reply(
-        `Oh no, an error occurred: \`${err.message}\`. Try again later!`,
+        `Oh no, an error occurred: \`${err.message}\`. Try again later!`
       );
     }
   }
@@ -125,8 +131,8 @@ module.exports = class extends Command {
     });
     if (!body.results) return this.fetchQuestion();
     const question = body.results[0];
-    const answers = question.incorrect_answers.map((answer) =>
-      decodeURIComponent(answer.toLowerCase()),
+    const answers = question.incorrect_answers.map(answer =>
+      decodeURIComponent(answer.toLowerCase())
     );
     const correct = decodeURIComponent(question.correct_answer.toLowerCase());
     answers.push(correct);

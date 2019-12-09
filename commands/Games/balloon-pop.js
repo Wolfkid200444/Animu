@@ -1,5 +1,6 @@
 const { Command } = require('klasa');
-const { randomRange, verify } = require('../../util/util');
+const prompt = require('discordjs-prompter');
+const { randomRange } = require('../../util/util');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
@@ -11,7 +12,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text'],
       cooldown: 10,
-      description: 'The last to pump the balloon before if pops is the loser',
+      description: 'The last to pump the balloon before it pops is the loser',
       usage: '<opponent:user>',
     });
   }
@@ -22,27 +23,32 @@ module.exports = class extends Command {
       return msg.reply('You may not play against yourself.');
     const current = await redisClient.hexistsAsync(
       'active_games',
-      msg.channel.id,
+      msg.channel.id
     );
     if (current) {
       const currentGame = await redisClient.hgetAsync(
         'active_games',
-        msg.channel.id,
+        msg.channel.id
       );
       return msg.reply(
-        `Please wait until the current game of \`${currentGame}\` is finished.`,
+        `Please wait until the current game of \`${currentGame}\` is finished.`
       );
     }
 
     await redisClient.hsetAsync('active_games', msg.channel.id, this.name);
 
     try {
-      await msg.send(`${opponent}, do you accept this challenge?`);
-      const verification = await verify(msg.channel, opponent);
-      if (!verification) {
+      const verification = await prompt.reaction(msg.channel, {
+        question: `${opponent}, do you accept this challenge?`,
+        userId: opponent.id,
+        timeout: 30000,
+      });
+
+      if (!verification || verification === 'no') {
         await redisClient.hdelAsync('active_games', msg.channel.id);
         return msg.send('Looks like they declined...');
       }
+
       let userTurn = false;
       let winner = null;
       let remains = 500;
@@ -55,8 +61,14 @@ module.exports = class extends Command {
           await msg.send(`${user} pumps the balloon!`);
           pump = true;
         } else {
-          await msg.send(`${user}, do you pump the balloon again?`);
-          pump = await verify(msg.channel, user);
+          pump =
+            (await prompt.reaction(msg.channel, {
+              question: `${user}, do you pump the balloon again?`,
+              userId: user.id,
+              timeout: 30000,
+            })) === 'yes'
+              ? true
+              : false;
         }
         if (pump) {
           remains -= randomRange(25, 75);

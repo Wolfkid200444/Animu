@@ -1,6 +1,7 @@
 const { Command } = require('klasa');
 const { stripIndents } = require('common-tags');
-const { shuffle, verify } = require('../../util/util');
+const prompt = require('discordjs-prompter');
+const { shuffle } = require('../../util/util');
 const events = require('../../json/hunger-games');
 const _ = require('lodash');
 const redis = require('redis');
@@ -22,7 +23,7 @@ module.exports = class extends Command {
   }
 
   async run(msg, [tributes]) {
-    tributes = tributes.split(',').map((trib) => _.capitalize(trib.trim()));
+    tributes = tributes.split(',').map(trib => _.capitalize(trib.trim()));
 
     if (tributes.length < 2)
       return msg.send(`...${tributes[0]} wins, as they were the only tribute.`);
@@ -33,15 +34,15 @@ module.exports = class extends Command {
 
     const current = await redisClient.hexistsAsync(
       'active_games',
-      msg.channel.id,
+      msg.channel.id
     );
     if (current) {
       const currentGame = await redisClient.hgetAsync(
         'active_games',
-        msg.channel.id,
+        msg.channel.id
       );
       return msg.reply(
-        `Please wait until the current game of \`${currentGame}\` is finished.`,
+        `Please wait until the current game of \`${currentGame}\` is finished.`
       );
     }
 
@@ -75,9 +76,15 @@ module.exports = class extends Command {
 						${deaths.join('\n')}
 					`;
         }
-        text += `\n\n_Proceed?_`;
         await msg.send(text);
-        const verification = await verify(msg.channel, msg.author, 120000);
+        const verification =
+          (await prompt.reaction(msg.channel, {
+            question: `${msg.author}, Proceed?`,
+            userId: msg.author.id,
+            timeout: 30000,
+          })) === 'yes'
+            ? true
+            : false;
         if (!verification) {
           await redisClient.hdelAsync('active_games', msg.channel.id);
           return msg.send('See you next time!');
@@ -109,7 +116,7 @@ module.exports = class extends Command {
     for (const tribute of tributes) {
       if (!turn.has(tribute)) continue;
       const valid = eventsArr.filter(
-        (event) => event.tributes <= turn.size && event.deaths < turn.size,
+        event => event.tributes <= turn.size && event.deaths < turn.size
       );
       const event = valid[Math.floor(Math.random() * valid.length)];
       turn.delete(tribute);

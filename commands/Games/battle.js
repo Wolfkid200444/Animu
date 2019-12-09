@@ -1,5 +1,6 @@
 const { Command } = require('klasa');
-const { randomRange, verify } = require('../../util/util');
+const prompt = require('discordjs-prompter');
+const { randomRange } = require('../../util/util');
 const Battle = require('../../util/Battle');
 const redis = require('redis');
 const bluebird = require('bluebird');
@@ -23,15 +24,15 @@ module.exports = class extends Command {
       return msg.reply('You may not battle yourself.');
     const current = await redisClient.hexistsAsync(
       'active_games',
-      msg.channel.id,
+      msg.channel.id
     );
     if (current) {
       const currentGame = await redisClient.hgetAsync(
         'active_games',
-        msg.channel.id,
+        msg.channel.id
       );
       return msg.reply(
-        `Please wait until the current game of \`${currentGame}\` is finished.`,
+        `Please wait until the current game of \`${currentGame}\` is finished.`
       );
     }
 
@@ -39,9 +40,13 @@ module.exports = class extends Command {
     const battle = new Battle(msg.author, opponent);
     try {
       if (!opponent.bot) {
-        await msg.send(`${opponent}, do you accept this challenge?`);
-        const verification = await verify(msg.channel, opponent);
-        if (!verification) {
+        const verification = await prompt.reaction(msg.channel, {
+          question: `${opponent}, do you accept this challenge?`,
+          userId: opponent.id,
+          timeout: 30000,
+        });
+
+        if (!verification || verification === 'no') {
           await redisClient.hdelAsync('active_games', msg.channel.id);
           return msg.send('Looks like they declined...');
         }
@@ -51,7 +56,7 @@ module.exports = class extends Command {
         if (choice === 'attack') {
           const damage = randomRange(
             battle.defender.guard ? 5 : 20,
-            battle.defender.guard ? 20 : 50,
+            battle.defender.guard ? 20 : 50
           );
           await msg.send(`${battle.attacker} deals **${damage}** damage!`);
           battle.defender.dealDamage(damage);
@@ -67,7 +72,7 @@ module.exports = class extends Command {
           } else {
             const damage = randomRange(
               battle.defender.guard ? 50 : 100,
-              battle.defender.guard ? 100 : 150,
+              battle.defender.guard ? 100 : 150
             );
             await msg.send(`${battle.attacker} deals **${damage}** damage!`);
             battle.defender.dealDamage(damage);
@@ -82,7 +87,7 @@ module.exports = class extends Command {
           battle.reset();
         } else if (choice === 'final') {
           await msg.send(
-            `${battle.attacker} uses their final move, dealing **150** damage!`,
+            `${battle.attacker} uses their final move, dealing **150** damage!`
           );
           battle.defender.dealDamage(150);
           battle.attacker.useMP(100);

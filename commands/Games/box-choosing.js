@@ -1,5 +1,5 @@
 const { Command } = require('klasa');
-const { verify } = require('../../util/util');
+const prompt = require('discordjs-prompter');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
@@ -22,15 +22,15 @@ module.exports = class extends Command {
   async run(msg) {
     const current = await redisClient.hexistsAsync(
       'active_games',
-      msg.channel.id,
+      msg.channel.id
     );
     if (current) {
       const currentGame = await redisClient.hgetAsync(
         'active_games',
-        msg.channel.id,
+        msg.channel.id
       );
       return msg.reply(
-        `Please wait until the current game of \`${currentGame}\` is finished.`,
+        `Please wait until the current game of \`${currentGame}\` is finished.`
       );
     }
     await redisClient.hsetAsync('active_games', msg.channel.id, this.name);
@@ -51,11 +51,11 @@ module.exports = class extends Command {
               : `
 						${line}
 						_Proceed?_
-					`,
+					`
           );
         }
         if (line.options) {
-          const filter = (res) =>
+          const filter = res =>
             res.author.id === msg.author.id &&
             line.options.includes(res.content.toLowerCase());
           const choose = await msg.channel.awaitMessages(filter, {
@@ -85,7 +85,14 @@ module.exports = class extends Command {
           path += pick;
           i = 0;
         } else {
-          const verification = await verify(msg.channel, msg.author, 120000);
+          const verification =
+            (await prompt.reaction(msg.channel, {
+              question: `${msg.author}, Proceed?`,
+              userId: msg.author.id,
+              timeout: 30000,
+            })) === 'yes'
+              ? true
+              : false;
           if (!verification) break;
           i++;
         }

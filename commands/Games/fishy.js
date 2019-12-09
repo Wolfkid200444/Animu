@@ -21,7 +21,7 @@ module.exports = class extends Command {
     const fish = fishes[rarity];
     const worth = randomRange(fish.min, fish.max);
     return msg.reply(
-      `You caught a ${fish.symbol}. I bet it'd sell for around $${worth}.`,
+      `You caught a ${fish.symbol}. I bet it'd sell for around $${worth}.`
     );
   }
 ***REMOVED***

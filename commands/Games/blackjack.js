@@ -1,5 +1,6 @@
 const { Command } = require('klasa');
-const { shuffle, verify } = require('../../util/util');
+const prompt = require('discordjs-prompter');
+const { shuffle } = require('../../util/util');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
@@ -22,15 +23,15 @@ module.exports = class extends Command {
   async run(msg, [deckCount = 1]) {
     const current = await redisClient.hexistsAsync(
       'active_games',
-      msg.channel.id,
+      msg.channel.id
     );
     if (current) {
       const currentGame = await redisClient.hgetAsync(
         'active_games',
-        msg.channel.id,
+        msg.channel.id
       );
       return msg.reply(
-        `Please wait until the current game of \`${currentGame}\` is finished.`,
+        `Please wait until the current game of \`${currentGame}\` is finished.`
       );
     }
 
@@ -48,12 +49,12 @@ module.exports = class extends Command {
       if (dealerInitialTotal === 21 && playerInitialTotal === 21) {
         await redisClient.hdelAsync('active_games', msg.channel.id);
         return msg.send(
-          'Well, both of you just hit blackjack. Right away. Rigged.',
+          'Well, both of you just hit blackjack. Right away. Rigged.'
         );
       } else if (dealerInitialTotal === 21) {
         await redisClient.hdelAsync('active_games', msg.channel.id);
         return msg.send(
-          'Ouch, the dealer hit blackjack right away! Try again!',
+          'Ouch, the dealer hit blackjack right away! Try again!'
         );
       } else if (playerInitialTotal === 21) {
         await redisClient.hdelAsync('active_games', msg.channel.id);
@@ -68,10 +69,17 @@ module.exports = class extends Command {
             `**First Dealer Card:** ${
               dealerHand[0].display
             }\n**You (${this.calculate(playerHand)}):** ${playerHand
-              .map((card) => card.display)
-              .join('\n')}\n_Hit?_`,
+              .map(card => card.display)
+              .join('\n')}\n_Hit?_`
           );
-          const hit = await verify(msg.channel, msg.author);
+          const hit =
+            (await prompt.reaction(msg.channel, {
+              question: `${msg.author}, Do you wish to pick another card?`,
+              userId: msg.author.id,
+              timeout: 30000,
+            })) === 'yes'
+              ? true
+              : false;
           if (hit) {
             const card = this.draw(msg.channel, playerHand);
             const total = this.calculate(playerHand);
@@ -85,7 +93,7 @@ module.exports = class extends Command {
           } else {
             const dealerTotal = this.calculate(dealerHand);
             await msg.send(
-              `Second dealer card is ${dealerHand[1].display}, total of ${dealerTotal}.`,
+              `Second dealer card is ${dealerHand[1].display}, total of ${dealerTotal}.`
             );
             playerTurn = false;
           }

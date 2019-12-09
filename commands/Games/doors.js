@@ -1,5 +1,5 @@
 const { Command } = require('klasa');
-const { verify } = require('../../util/util');
+const prompt = require('discordjs-prompter');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
@@ -22,16 +22,16 @@ module.exports = class extends Command {
   async run(msg, [door]) {
     const current = await redisClient.hexistsAsync(
       'active_games',
-      msg.channel.id,
+      msg.channel.id
     );
 
     if (current) {
       const currentGame = await redisClient.hgetAsync(
         'active_games',
-        msg.channel.id,
+        msg.channel.id
       );
       return msg.reply(
-        `Please wait until the current game of \`${currentGame}\` is finished.`,
+        `Please wait until the current game of \`${currentGame}\` is finished.`
       );
     }
 
@@ -39,17 +39,25 @@ module.exports = class extends Command {
     try {
       const win = this.doors[Math.floor(Math.random() * this.doors.length)];
       const noWin = this.doors.filter(
-        (thisDoor) => thisDoor !== win && door !== thisDoor,
+        thisDoor => thisDoor !== win && door !== thisDoor
       )[0];
-      await msg.reply(`
-				Well, there's nothing behind door number **${noWin}**. Do you want to stick with door ${door}?
+      const stick =
+        (await prompt.reaction(msg.channel, {
+          question: `
+        ${
+          msg.author
+        } Well, there's nothing behind door number **${noWin}**. Do you want to stick with door ${door}?
 				${this.emoji(1, noWin)} ${this.emoji(2, noWin)} ${this.emoji(3, noWin)}
-			`);
-      const stick = await verify(msg.channel, msg.author);
+        `,
+          userId: msg.author.id,
+          timeout: 30000,
+        })) === 'yes'
+          ? true
+          : false;
       if (!stick)
         // eslint-disable-next-line require-atomic-updates
         door = this.doors.filter(
-          (thisDoor) => door !== thisDoor && thisDoor !== noWin,
+          thisDoor => door !== thisDoor && thisDoor !== noWin
         )[0];
       await redisClient.hdelAsync('active_games', msg.channel.id);
       return msg.reply(`
@@ -58,7 +66,7 @@ module.exports = class extends Command {
         2,
         noWin,
         win,
-        door,
+        door
       )} ${this.emoji(3, noWin, win, door)}
 			`);
     } catch (err) {
