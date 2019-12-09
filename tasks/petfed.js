@@ -11,8 +11,13 @@ module.exports = class extends Task {
 
     const pets = await Pet.find({}).exec();
 
-    pets.forEach(async (pet) => {
+    pets.forEach(async pet => {
       const lastFed = await pet.notFedInHour();
+
+      if (lastFed === 23)
+        this.client.users
+          .get(pet.memberID)
+          .send('You have 1 hour to feed your pet, or you pet **will** die');
 
       if (lastFed >= 24) {
         Pet.deleteOne({ memberID: pet.memberID }).exec();
