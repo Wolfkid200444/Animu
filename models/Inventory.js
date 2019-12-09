@@ -7,13 +7,6 @@ const inventorySchema = new Schema({
   },
   coins: Number,
   inventory: [String],
-  profileWallpapers: [
-    {
-      name: String,
-      url: String,
-      inUse: Boolean,
-    },
-  ],
   checkedIn: Boolean,
 });
 
