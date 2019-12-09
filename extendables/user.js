@@ -565,10 +565,15 @@ module.exports = class extends Extendable {
 
     // Custom items
     if (item.name === 'Profile Wallpapers Box') {
-      const wallpapers = await Item.find({ properties: 'profile_wallpaper' });
+      const wallpapers = await Item.find({
+        $and: [
+          { properties: 'profile_wallpaper' },
+          { properties: { $ne: 'legendary_wallpaper' } },
+        ],
+      });
       const wallpaper = _.sample(wallpapers);
 
-      inventory.giveItem(wallpaper.name);
+      await inventory.giveItem(wallpaper.name);
 
       embed = new MessageEmbed({
         title: 'Opened Profile Wallpapers Box!',
@@ -581,7 +586,7 @@ module.exports = class extends Extendable {
       });
       const wallpaper = _.sample(wallpapers);
 
-      inventory.giveItem(wallpaper.name);
+      await inventory.giveItem(wallpaper.name);
 
       embed = new MessageEmbed({
         title: 'Opened Golden Profile Wallpapers Box!',
