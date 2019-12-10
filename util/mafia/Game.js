@@ -57,6 +57,7 @@ module.exports = class Game {
   async end() {
     if (this.voiceChannel) this.voiceChannel.leave();
     await redisClient.hdelAsync('active_games', this.channel.id);
+    await redisClient.sremAsync('mafia_games', this.channel.guild.id);
     return this;
   }
 

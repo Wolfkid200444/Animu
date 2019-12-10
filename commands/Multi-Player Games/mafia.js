@@ -1,11 +1,15 @@
+const { MessageEmbed } = require('discord.js');
 const { Command } = require('klasa');
 const prompt = require('discordjs-prompter');
+const { model } = require('mongoose');
 const Game = require('../../util/mafia/Game');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
+
+const MusicQueue = model('MusicQueue');
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -27,6 +31,7 @@ module.exports = class extends Command {
         'active_games',
         msg.channel.id
       );
+      await redisClient.saddAsync('mafia_games', msg.guild.id);
       return msg.reply(
         `Please wait until the current game of \`${currentGame}\` is finished.`
       );
@@ -35,6 +40,20 @@ module.exports = class extends Command {
     const voiceChannel = msg.member.voice.channel;
     if (!voiceChannel)
       return msg.reply('You must be in a voice channel to start a game.');
+
+    const musicQueue = await MusicQueue.findOne({
+      guildID: msg.guild.id,
+    }).exec();
+
+    if (musicQueue)
+      return msg.send(
+        new MessageEmbed({
+          title: 'Music being played',
+          description:
+            'It seems Music is being played currently, thus Mafia is unavailable',
+          color: 0x2196f3,
+        })
+      );
 
     for (const member of voiceChannel.members.values())
       await msg.guild.members.fetch(member.id);

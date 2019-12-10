@@ -38,13 +38,23 @@ module.exports = class extends Command {
           title: 'Must be in a VC',
           description: 'You must be in a vc to play music',
           color: '#f44336',
-        }),
+        })
+      );
+
+    if (await redisClient.sismemberAsync(`mafia_games`, msg.guild.id))
+      return msg.send(
+        new MessageEmbed({
+          title: 'Mafia being played',
+          description:
+            'It seems Mafia is being played currently, thus Music is unavailable',
+          color: 0x2196f3,
+        })
       );
 
     const perms = voiceChannel.permissionsFor(this.client.user);
     if (!perms.has('CONNECT') || !perms.has('SPEAK'))
       return msg.send(
-        "It seems I don't have perms in Voice Channel that you're currently in",
+        "It seems I don't have perms in Voice Channel that you're currently in"
       );
 
     if (
@@ -56,7 +66,7 @@ module.exports = class extends Command {
 
       const cached = await redisClient.hgetAsync(
         'yt_searches',
-        music.toLowerCase().trim(),
+        music.toLowerCase().trim()
       );
 
       if (!cached) {
@@ -69,7 +79,7 @@ module.exports = class extends Command {
             await redisClient.hsetAsync(
               'yt_searches',
               music.toLowerCase().trim(),
-              video.url,
+              video.url
             );
           } catch (error) {
             return msg.send(
@@ -78,7 +88,7 @@ module.exports = class extends Command {
                 description:
                   "The music you're trying to play wasn't found on YouTube",
                 color: '#f44336',
-              }),
+              })
             );
           }
         }
@@ -97,7 +107,7 @@ module.exports = class extends Command {
             title: 'Empty Playlist',
             description: "The playlist you're trying to play is empty",
             color: '#f44336',
-          }),
+          })
         );
 
       for (const video of videos) {
@@ -108,7 +118,7 @@ module.exports = class extends Command {
 
   handleMusic(voiceChannel, video, msg) {
     // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve) => {
+    return new Promise(async resolve => {
       const musicQueue = await MusicQueue.findOne({
         guildID: msg.guild.id,
       }).exec();
@@ -120,7 +130,7 @@ module.exports = class extends Command {
             description:
               "The music you're trying to play wasn't found on YouTube",
             color: '#f44336',
-          }),
+          })
         );
 
       if (!musicQueue) {
@@ -144,7 +154,7 @@ module.exports = class extends Command {
             msg,
             connection,
             queue.songs[0],
-            queue.volume,
+            queue.volume
           );
         } catch (err) {
           await MusicQueue.deleteOne({ guildID: msg.guild.id }).exec();
@@ -153,7 +163,7 @@ module.exports = class extends Command {
               title: "Can't Join",
               description: 'There was an error while trying to join VC',
               color: '#f44336',
-            }),
+            })
           );
         }
       } else {
@@ -168,10 +178,10 @@ module.exports = class extends Command {
           new MessageEmbed({
             title: `Added to Queue`,
             description: `**${Util.escapeMarkdown(
-              video.title,
+              video.title
             )}** is added to queue`,
             color: '#2196f3',
-          }),
+          })
         );
       }
 
@@ -198,7 +208,7 @@ module.exports = class extends Command {
         title: 'Playing',
         description: `[${song.title}](${song.url})`,
         color: '#2196f3',
-      }).setFooter('Animu Music Beta'),
+      }).setFooter('Animu Music Beta')
     );
 
     connection
@@ -213,7 +223,7 @@ module.exports = class extends Command {
           // type: 'opus',
           highWaterMark: 1,
           bitrate: tier === 'lite' ? 92000 : 192000,
-        },
+        }
       )
       .on('end', async () => {
         const musicQueue = await MusicQueue.findOne({ guildID }).exec();
@@ -229,7 +239,7 @@ module.exports = class extends Command {
           msg,
           connection,
           musicQueue.songs[0],
-          musicQueue.volume,
+          musicQueue.volume
         );
       });
   }
