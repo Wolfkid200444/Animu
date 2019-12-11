@@ -8,14 +8,13 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw a tint over a user's avatar",
-      usage: '<user:member> <color:string>',
+      description: "Draw a tint over an image or a user's avatar",
+      usage: '<image:image> <color:string>',
       usageDelim: ' ',
     });
   }
 
-  async run(msg, [user, color]) {
-    const image = user.user.displayAvatarURL({ format: 'png', size: 512 });
+  async run(msg, [image, color]) {
     try {
       const data = await loadImage(image);
       const canvas = createCanvas(data.width, data.height);

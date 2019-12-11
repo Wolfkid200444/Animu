@@ -8,13 +8,12 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Get glitched avatar',
-      usage: '<user:member>',
+      description: 'Get glitched image or avatar',
+      usage: '<image:image>',
     });
   }
 
-  async run(msg, [user]) {
-    const image = user.user.displayAvatarURL({ format: 'png', size: 512 });
+  async run(msg, [image]) {
     try {
       const data = await loadImage(image);
       const canvas = createCanvas(data.width, data.height);

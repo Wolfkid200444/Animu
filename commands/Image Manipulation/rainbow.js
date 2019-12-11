@@ -9,13 +9,12 @@ module.exports = class extends Command {
       aliases: ['gay', 'homo', 'lgbt'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw a rainbow over a user's Avatar",
-      usage: '<user:member>',
+      description: "Draw a rainbow over an image or a user's Avatar",
+      usage: '<image:image>',
     });
   }
 
-  async run(msg, [user]) {
-    const image = user.user.displayAvatarURL({ format: 'png', size: 512 });
+  async run(msg, [image]) {
     try {
       const base = await loadImage(
         path.join(__dirname, '..', '..', 'images', 'rainbow.png')

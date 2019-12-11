@@ -9,13 +9,13 @@ module.exports = class extends Command {
       aliases: ['reject'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Draws an "Rejected" stamp over a user\'s avatar',
-      usage: '<user:member>',
+      description:
+        'Draws an "Rejected" stamp over an image or a user\'s avatar',
+      usage: '<image:image>',
     });
   }
 
-  async run(msg, [user]) {
-    const image = user.user.displayAvatarURL({ format: 'png', size: 512 });
+  async run(msg, [image]) {
     try {
       const base = await loadImage(
         path.join(__dirname, '..', '..', 'images', 'rejected.png')

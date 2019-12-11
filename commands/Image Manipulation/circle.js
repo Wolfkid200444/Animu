@@ -8,12 +8,11 @@ module.exports = class extends Command {
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Crop an image in circle shape',
-      usage: '<user:user>',
+      usage: '<image:image>',
     });
   }
 
-  async run(msg, [user]) {
-    const image = user.displayAvatarURL({ format: 'png', size: 512 });
+  async run(msg, [image]) {
     try {
       const data = await loadImage(image);
       const dimensions = data.width <= data.height ? data.width : data.height;

@@ -9,12 +9,11 @@ module.exports = class extends Command {
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Draws an image with the Brazzers logo in the corner',
-      usage: '<user:user>',
+      usage: '<image:image>',
     });
   }
 
-  async run(msg, [user]) {
-    const image = user.displayAvatarURL({ format: 'png', size: 512 });
+  async run(msg, [image]) {
     try {
       const base = await loadImage(
         path.join(__dirname, '..', '..', 'images', 'brazzers.png')

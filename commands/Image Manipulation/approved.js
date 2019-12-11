@@ -11,12 +11,11 @@ module.exports = class extends Command {
       cooldown: 10,
       description:
         'Draws an "approved" stamp over an image or a user\'s avatar',
-      usage: '<user:member>',
+      usage: '<image:image>',
     });
   }
 
-  async run(msg, [user]) {
-    const image = user.user.displayAvatarURL({ format: 'png', size: 512 });
+  async run(msg, [image]) {
     try {
       const base = await loadImage(
         path.join(__dirname, '..', '..', 'images', 'approved.png')
