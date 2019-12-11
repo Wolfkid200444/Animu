@@ -9,8 +9,7 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description:
-        "Draw a user's avatar over Simba from The Lion King's reflection",
+      description: 'Remember Lion King?',
       usage: '<user:member>',
     });
   }

@@ -9,7 +9,7 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw hearts around a user's avatars",
+      description: 'Show your love',
       usage: '<user:member>',
     });
   }

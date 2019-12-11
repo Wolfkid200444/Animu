@@ -7,7 +7,7 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Overlay one avatar on top of another',
+      description: 'Create a monstrosity',
       usage: '<overlay:user> <base:user>',
       usageDelim: ' ',
     });

@@ -10,7 +10,7 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw a user's avatar over Triggered meme",
+      description: 'Triggered?',
       usage: '<user:member>',
     });
     this.coord1 = [-25, -33, -42, -14];

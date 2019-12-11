@@ -9,8 +9,7 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description:
-        'Draw a user\'s avatar over Super Smash Bros.\'s "Challenger Approaching" screen',
+      description: 'A challenger Aproaches',
       usage: '<user:member> [silhoutted:bool]',
       usageDelim: ' ',
     });

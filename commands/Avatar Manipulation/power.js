@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw a user's avatar over Karen's piece of paper.",
+      description: 'I HAVE THE POWER!!!',
       usage: '<user:member>',
     });
   }
@@ -17,20 +17,18 @@ module.exports = class extends Command {
     const image = user.user.displayAvatarURL({ format: 'png', size: 512 });
     try {
       const base = await loadImage(
-        path.join(__dirname, '..', '..', 'images', 'look-what-karen-have.png')
+        path.join(__dirname, '..', '..', 'images', 'i-have-the-power.png')
       );
       const avatar = await loadImage(image);
       const canvas = createCanvas(base.width, base.height);
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, base.width, base.height);
-      ctx.rotate(-6.5 * (Math.PI / 180));
-      ctx.drawImage(avatar, 514, 50, 512, 512);
-      ctx.rotate(6.5 * (Math.PI / 180));
       ctx.drawImage(base, 0, 0);
+      ctx.rotate(18.3 * (Math.PI / 180));
+      ctx.drawImage(avatar, 332, -125, 175, 175);
+      ctx.rotate(-18.3 * (Math.PI / 180));
       return msg.send({
         files: [
-          { attachment: canvas.toBuffer(), name: 'look-what-karen-have.png' },
+          { attachment: canvas.toBuffer(), name: 'i-have-the-power.png' },
         ],
       });
     } catch (err) {

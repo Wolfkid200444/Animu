@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw a user's avatar's over He man's face",
+      description: 'Look at this photograph, DAMNIT!',
       usage: '<user:member>',
     });
   }
@@ -17,18 +17,27 @@ module.exports = class extends Command {
     const image = user.user.displayAvatarURL({ format: 'png', size: 512 });
     try {
       const base = await loadImage(
-        path.join(__dirname, '..', '..', 'images', 'i-have-the-power.png')
+        path.join(
+          __dirname,
+          '..',
+          '..',
+          'images',
+          'look-at-this-photograph.png'
+        )
       );
       const avatar = await loadImage(image);
       const canvas = createCanvas(base.width, base.height);
       const ctx = canvas.getContext('2d');
       ctx.drawImage(base, 0, 0);
-      ctx.rotate(18.3 * (Math.PI / 180));
-      ctx.drawImage(avatar, 332, -125, 175, 175);
-      ctx.rotate(-18.3 * (Math.PI / 180));
+      ctx.rotate(-13.5 * (Math.PI / 180));
+      ctx.drawImage(avatar, 280, 218, 175, 125);
+      ctx.rotate(13.5 * (Math.PI / 180));
       return msg.send({
         files: [
-          { attachment: canvas.toBuffer(), name: 'i-have-the-power.png' },
+          {
+            attachment: canvas.toBuffer(),
+            name: 'look-at-this-photograph.png',
+          },
         ],
       });
     } catch (err) {

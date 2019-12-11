@@ -18,7 +18,7 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw a user's avatar over a steam Now Playing Card",
+      description: 'Playing Loli Simulator',
       usage: '<user:user> <game:...string>',
       usageDelim: ' ',
       quotedStringSupport: true,

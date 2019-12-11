@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw a user's avatar on Bobb Ross's Canvas",
+      description: 'There are no mistakes, just happy little accidents',
       usage: '<user:member>',
     });
   }
