@@ -21,6 +21,19 @@ module.exports = class CanvasUtil {
     return shorten ? `${text}...` : text;
   }
 
+  static sepia(ctx, x, y, width, height) {
+    const data = ctx.getImageData(x, y, width, height);
+    for (let i = 0; i < data.data.length; i += 4) {
+      const brightness =
+        0.34 * data.data[i] + 0.5 * data.data[i + 1] + 0.16 * data.data[i + 2];
+      data.data[i] = brightness + 100;
+      data.data[i + 1] = brightness + 50;
+      data.data[i + 2] = brightness;
+    }
+    ctx.putImageData(data, x, y);
+    return ctx;
+  }
+
   static silhouette(ctx, x, y, width, height) {
     const data = ctx.getImageData(x, y, width, height);
     for (let i = 0; i < data.data.length; i += 4) {
