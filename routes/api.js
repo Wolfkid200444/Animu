@@ -235,6 +235,64 @@ module.exports = (app, client) => {
     });
   });
 
+  app.get('/api/leaderboards/rep', async (req, res) => {
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.status(401).json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = client.guilds.get(guildID);
+
+    const membersRaw = await Profile.find({
+      reputation: { $elemMatch: { guildID: guild.id } },
+    });
+
+    membersRaw.sort((a, b) => {
+      const indexA = a.reputation.findIndex(r => r.guildID === guild.id);
+      const indexB = b.reputation.findIndex(r => r.guildID === guild.id);
+      return a.reputation[indexA].rep > b.reputation[indexB].rep ? -1 : 1;
+    });
+
+    const membersRaw2 = membersRaw.slice(0, 30);
+
+    const members = [];
+
+    membersRaw2.forEach(m => {
+      const index = m.reputation.findIndex(r => r.guildID === guild.id);
+
+      if (client.users.get(m.memberID))
+        members.push({
+          id: m.memberID,
+          reputation: m.reputation[index].rep,
+          username: client.users.get(m.memberID).username,
+          avatarURL: client.users.get(m.memberID).displayAvatarURL(),
+        });
+    });
+
+    return res.json({
+      members,
+    });
+  });
+
+  app.get('/api/levelperks', async (req, res) => {
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.status(401).json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = await Guild.findOne({ guildID: guildID }).exec();
+
+    return res.json({
+      levelPerks: guild.levelPerks,
+    });
+  });
+
   app.post('/api/levelperks', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
