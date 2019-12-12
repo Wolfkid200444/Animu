@@ -7,7 +7,7 @@ module.exports = class extends Command {
       aliases: ['why-not'],
       requiredPermissions: ['ATTACH_FILES'],
       cooldown: 10,
-      description: 'Why not?',
+      description: 'Wynaut? (Seriously? Why not?)',
     });
   }
 

@@ -8,7 +8,7 @@ module.exports = class extends Command {
       aliases: ['dark-light'],
       requiredPermissions: ['ATTACH_FILES'],
       cooldown: 10,
-      description: "Whether you're using light theme or dark theme?",
+      description: 'If you use light theme, you have smol pp',
     });
   }
 

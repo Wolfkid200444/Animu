@@ -7,7 +7,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       aliases: ['cool'],
       cooldown: 10,
-      description: 'Determine the coolness of a user',
+      description: 'Are you cool?',
       usage: '[user:user]',
     });
   }
@@ -20,9 +20,7 @@ module.exports = class extends Command {
     const random = MersenneTwister19937.seed(user.id);
     const coolness = integer(0, qualities.length - 1)(random);
     return msg.reply(
-      `${authorUser ? 'You are' : `${user.username} is`} ${
-        qualities[coolness]
-      }`,
+      `${authorUser ? 'You are' : `${user.username} is`} ${qualities[coolness]}`
     );
   }
 ***REMOVED***

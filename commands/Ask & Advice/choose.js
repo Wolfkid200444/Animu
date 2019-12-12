@@ -9,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['choice', 'choices'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Helps you choose',
+      description: 'Use this when you have last 2 braincells left',
       usage: '<choices:string>',
       quotedStringSupport: true,
     });
@@ -21,7 +21,7 @@ module.exports = class extends Command {
         title: 'You should choose',
         description: _.capitalize(_.sample(choices.split(',')).trim()),
         color: 0x2196f3,
-      }),
+      })
     );
   }
 ***REMOVED***

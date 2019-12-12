@@ -9,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['drawcards'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Draw a hand of playing cards',
+      description: 'Draw cards?...',
       usage: '<cardsAmount:int{1,10}> [includeJokers:boolean]',
       usageDelim: ' ',
     });
@@ -21,7 +21,7 @@ module.exports = class extends Command {
   async run(msg, [cardsAmount, includeJokers = false]) {
     if (!this.deck) this.deck = this.generateDeck();
     let cards = this.deck;
-    if (!includeJokers) cards = cards.filter((card) => !card.includes('Joker'));
+    if (!includeJokers) cards = cards.filter(card => !card.includes('Joker'));
     return msg.send(
       new MessageEmbed({
         title: 'Cards Drawn',
@@ -29,7 +29,7 @@ module.exports = class extends Command {
           .slice(0, cardsAmount)
           .join('\n'),
         color: 0x2196f3,
-      }),
+      })
     );
   }
 

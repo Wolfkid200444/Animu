@@ -12,7 +12,6 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       aliases: ['minecraft-achievement'],
-      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Sends a minecraft achievement with your text',
       usage: '<text:...string>',

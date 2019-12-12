@@ -6,12 +6,10 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
-      aliases: ['8', 'eightball', 'ball', 'magicball'],
+      aliases: ['magicball', 'eight-ball'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Ask 8ball',
-      extendedHelp:
-        'Ask any question you want and the magic 8ball will answer all your questions',
+      description: 'This 8ball shall answer all your retarded questions',
       usage: '<question:string>',
       quotedStringSupport: true,
     });
@@ -24,7 +22,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`${msg.member.displayName} asks "${question}"`)
         .setDescription(answer.string)
-        .setColor(answer.color),
+        .setColor(answer.color)
     );
   }
 ***REMOVED***

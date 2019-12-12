@@ -7,7 +7,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       aliases: ['characters', 'chars', 'length'],
       cooldown: 10,
-      description: 'Count characters of a text',
+      description: "Can't count number of characters? Use this command",
       usage: '<text:string>',
       quotedStringSupport: true,
     });

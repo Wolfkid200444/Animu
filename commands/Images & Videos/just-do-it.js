@@ -6,7 +6,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       aliases: ['motivate'],
       cooldown: 10,
-      description: 'Get link to Just Do It!',
+      description: 'Just Do It!',
     });
   }
 

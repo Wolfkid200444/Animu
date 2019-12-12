@@ -5,7 +5,6 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'group'],
-      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: "View a user's Minecraft Skin",
       usage: '<user:string> <face|front|frontfull|head|bust|full|skin>',

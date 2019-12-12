@@ -6,13 +6,13 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       aliases: ['is-zero-twosday'],
       cooldown: 10,
-      description: 'Is today Zero Twosday?',
+      description: 'True weebs know about Zero Twosday',
     });
   }
 
   async run(msg) {
     return msg.send(
-      `Today **is${new Date().getDay() === 2 ? '' : ' not'}** Zero Twosday.`,
+      `Today **is${new Date().getDay() === 2 ? '' : ' not'}** Zero Twosday.`
     );
   }
 ***REMOVED***

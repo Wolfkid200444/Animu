@@ -12,11 +12,9 @@ const redisClient = redis.createClient();
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Read a manga',
+      description: 'Read a manga (or doujin)',
       cooldown: 60,
       requiredPermissions: ['EMBED_LINKS'],
-      extendedHelp:
-        'Read a manga directly on discord, first argument is manga name and second argument is chapter number',
       usage: '<mangaName:string> <chapter:number>',
       usageDelim: ' ',
       quotedStringSupport: true,
@@ -59,7 +57,7 @@ module.exports = class extends Command {
                     .join('\n')
                 : 'No Manga Found',
             color: searchResults.length > 0 ? '#2196f3' : '#f44336',
-          }),
+          })
         );
 
         let validReactions = [];
@@ -96,7 +94,7 @@ module.exports = class extends Command {
 
         let mangaUrl;
 
-        reactionsSearch.on('collect', (r) => {
+        reactionsSearch.on('collect', r => {
           const emojiName = r._emoji.name;
           if (emojiName === '1⃣') mangaUrl = searchResults[0].url;
           if (emojiName === '2⃣') mangaUrl = searchResults[1].url;
@@ -107,7 +105,7 @@ module.exports = class extends Command {
 
           const url = `${mangaUrl.replace(
             '/manga/',
-            '/chapter/',
+            '/chapter/'
           )}/chapter_${chapter}`;
 
           request(
@@ -126,7 +124,7 @@ module.exports = class extends Command {
                     title: 'Invalid Chapter',
                     description: "The chapter you wish to read doesn't exist",
                     color: '#f44336',
-                  }),
+                  })
                 );
 
               $('#vungdoc img').each((i, elem) => {
@@ -135,7 +133,7 @@ module.exports = class extends Command {
 
               const readStatus = await redisClient.hgetAsync(
                 'manga_status',
-                `${msg.author.id}:${title}:${chapter}`,
+                `${msg.author.id}:${title}:${chapter}`
               );
 
               if (readStatus) pageNumber = readStatus;
@@ -145,7 +143,7 @@ module.exports = class extends Command {
                 .setImage(imagesArr[pageNumber - 1])
                 .setColor('#2196f3');
 
-              msg.send(embed).then((sentMsg) => {
+              msg.send(embed).then(sentMsg => {
                 sentMsg.react('⬅');
                 sentMsg.react('➡');
 
@@ -157,7 +155,7 @@ module.exports = class extends Command {
                   time: 600000,
                 });
 
-                reactions.on('collect', async (r) => {
+                reactions.on('collect', async r => {
                   const emojiName = r._emoji.name;
                   if (emojiName === '➡' && pageNumber < imagesArr.length + 1)
                     pageNumber++;
@@ -167,24 +165,24 @@ module.exports = class extends Command {
                     new MessageEmbed()
                       .setTitle(title.text())
                       .setImage(imagesArr[pageNumber - 1])
-                      .setColor('#2196f3'),
+                      .setColor('#2196f3')
                   );
 
                   sentMsg.reactions
-                    .find((r) => r.emoji.name === emojiName)
+                    .find(r => r.emoji.name === emojiName)
                     .users.remove(msg.author.id);
 
                   await redisClient.hsetAsync(
                     'manga_status',
                     `${msg.author.id}:${title}:${chapter}`,
-                    pageNumber,
+                    pageNumber
                   );
                 });
               });
-            },
+            }
           );
         });
-      },
+      }
     );
   }
 ***REMOVED***

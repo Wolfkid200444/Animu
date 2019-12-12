@@ -5,9 +5,8 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
-      aliases: ['guess-my-looks'],
       cooldown: 10,
-      description: 'Guess how a user looks',
+      description: 'You look ... gay?',
       usage: '[user:user]',
     });
     this.genders = ['male', 'female'];
@@ -35,7 +34,7 @@ module.exports = class extends Command {
         authorUser ? 'You are' : `${gender === 'male' ? 'He' : 'She'} is`
       } ${feet}'${inches}" and weigh${
         authorUser ? '' : 's'
-      } ${weight} pounds. Don't forget the ${extra}!`,
+      } ${weight} pounds. Don't forget the ${extra}!`
     );
   }
 ***REMOVED***

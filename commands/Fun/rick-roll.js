@@ -7,7 +7,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Rick Roll ;)',
+      description: 'Never gonna give you up!',
     });
   }
 
@@ -16,9 +16,9 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle('Wanna Rick Roll Someone?')
         .setDescription(
-          "Send this text to anyone you wanna rick roll (Don't forget <>):\n`<http://bit.do/fgtBc>`",
+          "Send this text to anyone you wanna rick roll (Don't forget <>):\n`<http://bit.do/fgtBc>`"
         )
-        .setColor(0x2196f3),
+        .setColor(0x2196f3)
     );
   }
 ***REMOVED***

@@ -9,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['coinflip', 'flipcoin'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Flip a coin',
+      description: 'Is it heads or tails?',
     });
   }
 
@@ -20,7 +20,7 @@ module.exports = class extends Command {
         title: `${msg.author.username} flipped a coin`,
         description: `Coin landed on ... **${side}**`,
         color: 0x2196f3,
-      }),
+      })
     );
   }
 ***REMOVED***

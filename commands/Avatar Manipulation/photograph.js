@@ -6,7 +6,6 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'group'],
-      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Look at this photograph, DAMNIT!',
       usage: '<user:member>',

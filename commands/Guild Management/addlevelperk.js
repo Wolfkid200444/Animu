@@ -12,7 +12,7 @@ module.exports = class extends Command {
       aliases: ['updatelevelperk', 'updatelevelperks', 'addlevelperks'],
       runIn: ['text'],
       requiredPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
-      description: 'Add perks for leveling up',
+      description: 'Give members a reason to level up',
       usage: '<level:number> <badge|rep|role> <perkValue:...string>',
       usageDelim: ' ',
       quotedStringSupport: true,
@@ -29,7 +29,7 @@ module.exports = class extends Command {
         title: 'Perk Added/Updated',
         description: 'Perk successfully added/updated',
         color: '#2196f3',
-      }),
+      })
     );
   }
 ***REMOVED***

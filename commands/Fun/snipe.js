@@ -12,7 +12,7 @@ module.exports = class extends Command {
       aliases: ['snipe', 'undelete'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 60,
-      description: 'Show last deleted message in a channel',
+      description: 'Embarass your friends (or strangers)',
     });
   }
 
@@ -31,7 +31,7 @@ module.exports = class extends Command {
           title: 'Oops!',
           description: 'No message was recently deleted in this channel',
           color: '#f44336',
-        }),
+        })
       );
 
     msg.sendEmbed(
@@ -44,7 +44,7 @@ module.exports = class extends Command {
             .displayAvatarURL({ size: 64 }),
         },
         color: '#2196f3',
-      }),
+      })
     );
   }
 ***REMOVED***

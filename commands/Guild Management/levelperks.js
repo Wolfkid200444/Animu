@@ -12,7 +12,7 @@ module.exports = class extends Command {
       aliases: ['viewlevelperks', 'getlevelperks'],
       runIn: ['text'],
       requiredPermissions: ['EMBED_LINKS'],
-      description: 'View perks for leveling up',
+      description: 'View all the weird perks that you created for levelling up',
     });
   }
 
@@ -23,7 +23,7 @@ module.exports = class extends Command {
 
     if (guild.levelPerks.length < 1) str = 'No Level Perks Set';
     else
-      guild.levelPerks.forEach((levelPerk) => {
+      guild.levelPerks.forEach(levelPerk => {
         str += `Level **${levelPerk.level}** - ${
           levelPerk.badge ? levelPerk.badge + ' (Badge) ' : ''
         }${levelPerk.role ? levelPerk.role + ' (Role) ' : ''}${
@@ -36,7 +36,7 @@ module.exports = class extends Command {
         title: 'Level up Perks',
         description: str,
         color: '#2196f3',
-      }),
+      })
     );
   }
 ***REMOVED***

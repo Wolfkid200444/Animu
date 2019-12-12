@@ -6,7 +6,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['ATTACH_FILES'],
       cooldown: 10,
-      description: 'Spam',
+      description: 'Spam? Spam!',
     });
   }
 

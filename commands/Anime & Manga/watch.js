@@ -7,11 +7,9 @@ const request = require('request');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Watch an Anime',
+      description: 'Watch an Anime (or hentai)',
       cooldown: 60,
       requiredPermissions: ['EMBED_LINKS'],
-      extendedHelp:
-        'Watch an anime, first argument is manga name and second argument is episode number',
       usage: '<animeName:string> <episode:number>',
       usageDelim: ' ',
       quotedStringSupport: true,
@@ -19,14 +17,14 @@ module.exports = class extends Command {
   }
 
   async run(msg, [animeName, episode]) {
-    const loadingEmoji = this.client.emojis.find((e) => e.name === 'loading');
-    const loadingMsg = await msg.send(`Searching ${loadingEmoji}`);
+    const loadingEmoji = this.client.emojis.find(e => e.name === 'loading');
+    await msg.send(`Searching ${loadingEmoji}`);
 
     let searchResults = [];
 
     const baseURL = 'https://gogoanimes.ai';
     const searchURL = `https://gogoanimes.ai//search.html?keyword=${encodeURI(
-      animeName,
+      animeName
     )}`;
 
     request(
@@ -60,7 +58,7 @@ module.exports = class extends Command {
                     .join('\n')
                 : 'No Anime Found',
             color: searchResults.length > 0 ? '#2196f3' : '#f44336',
-          }),
+          })
         );
 
         let validReactions = [];
@@ -97,7 +95,7 @@ module.exports = class extends Command {
 
         let animeUrl;
 
-        reactionsSearch.on('collect', (r) => {
+        reactionsSearch.on('collect', r => {
           const emojiName = r._emoji.name;
           if (emojiName === '1⃣') animeUrl = searchResults[0].url;
           if (emojiName === '2⃣') animeUrl = searchResults[1].url;
@@ -112,7 +110,7 @@ module.exports = class extends Command {
               url: `${baseURL}${_.replace(
                 animeUrl,
                 '/category/',
-                '/',
+                '/'
               )}-episode-${episode}`,
             },
             async (err, res, body2) => {
@@ -125,16 +123,16 @@ module.exports = class extends Command {
                     title: 'Episode Not Found',
                     description: "The episode you're looking for doesn't exist",
                     color: '#f44336',
-                  }),
+                  })
                 );
 
               const videoUrl = $('iframe').attr('src');
 
               msg.send(`Here you go:\n\n http:${videoUrl}`);
-            },
+            }
           );
         });
-      },
+      }
     );
   }
 ***REMOVED***

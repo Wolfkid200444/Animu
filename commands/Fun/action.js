@@ -11,11 +11,10 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
-      aliases: ['a', 'act'],
+      aliases: ['a'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 5,
-      description: 'Perform an action',
-      extendedHelp: 'Perform an action on/with someone',
+      description: 'Wanna punch someone?',
       usage: '<actionName:string> <member:member>',
       usageDelim: ' ',
     });

@@ -5,7 +5,7 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
       cooldown: 10,
-      description: 'Calculate age',
+      description: 'Calculate Age of zoomers (or boomers)',
       usage: '<year:int>',
     });
   }
@@ -13,7 +13,7 @@ module.exports = class extends Command {
   async run(msg, [year]) {
     const currentYear = new Date().getFullYear();
     return msg.send(
-      `Someone born in ${year} would be ${currentYear - year} years old.`,
+      `Someone born in ${year} would be ${currentYear - year} years old.`
     );
   }
 ***REMOVED***

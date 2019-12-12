@@ -9,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['advice-slip', 'adviceslip'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Get some useful advice',
+      description: 'Get useful advice (for real)',
     });
   }
 
@@ -21,7 +21,7 @@ module.exports = class extends Command {
         title: 'Advice Slip',
         description: data.slip.advice,
         color: 0x2196f3,
-      }).setFooter(`Slip ID: ${data.slip.slip_id}`),
+      }).setFooter(`Slip ID: ${data.slip.slip_id}`)
     );
   }
 ***REMOVED***

@@ -6,7 +6,7 @@ const { trimArray } = require('../../util/util');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Show details about an anime character',
+      description: 'View details about your waifus (or other characters)',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
       usage: '<characterName:...string>',
@@ -33,22 +33,24 @@ module.exports = class extends Command {
         .addField(
           '❯ Anime',
           character.anime.length > 0
-            ? trimArray(character.anime.map((anime) => anime.name), 10).join(
-                ', ',
-              )
+            ? trimArray(
+                character.anime.map(anime => anime.name),
+                10
+              ).join(', ')
             : '[None Found]',
-          true,
+          true
         )
         .addField(
           '❯ Manga',
           character.manga.length > 0
-            ? trimArray(character.manga.map((manga) => manga.name), 10).join(
-                ', ',
-              )
+            ? trimArray(
+                character.manga.map(manga => manga.name),
+                10
+              ).join(', ')
             : '[None Found]',
-          true,
+          true
         )
-        .addField('❯ MAL ID', character.mal_id, true),
+        .addField('❯ MAL ID', character.mal_id, true)
     );
   }
 ***REMOVED***

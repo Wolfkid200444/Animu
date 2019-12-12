@@ -5,14 +5,14 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       cooldown: 10,
-      description: 'Roasts a user',
+      description: 'Roast your friends (or yourself?)',
       usage: '[member:user]',
     });
   }
 
   run(msg, [member = msg.author]) {
     return msg.sendMessage(
-      `${msg.guild.members.get(member.id)}: ${_.sample(roasts)}`,
+      `${msg.guild.members.get(member.id)}: ${_.sample(roasts)}`
     );
   }
 ***REMOVED***

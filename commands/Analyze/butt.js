@@ -7,7 +7,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       aliases: ['ass', 'booty'],
       cooldown: 10,
-      description: 'Determine quality of a users butt',
+      description: "That's one heck of a wretched butt",
       usage: '[user:user]',
     });
   }
@@ -20,7 +20,7 @@ module.exports = class extends Command {
     return msg.reply(
       `${user.id === msg.author.id ? 'ur' : `${user.username}'s`} butt is ${
         qualities[quality]
-      }`,
+      }`
     );
   }
 ***REMOVED***

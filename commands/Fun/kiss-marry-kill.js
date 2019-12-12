@@ -15,7 +15,7 @@ module.exports = class extends Command {
       ],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Who to kiss, who to marry and who to kill?',
+      description: 'Try using this command on your crush',
       usage: '<person1:member> <person1:member> <person1:member>',
       usageDelim: ' ',
     });
@@ -36,7 +36,7 @@ module.exports = class extends Command {
           shuffled[2] === 0 ? person1 : shuffled[2] === 1 ? person2 : person3
         }`,
         color: 0x2196f3,
-      }),
+      })
     );
   }
 ***REMOVED***

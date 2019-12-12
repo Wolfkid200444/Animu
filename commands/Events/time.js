@@ -10,7 +10,7 @@ module.exports = class extends Command {
       aliases: ['timezone', 'time-zone'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Get current time in a particular Time Zone',
+      description: 'Mr. Worldwide',
       usage: '<timeZone:string>',
       quotedStringSupport: true,
     });
@@ -20,7 +20,7 @@ module.exports = class extends Command {
     timeZone = timeZone.replace(/ /g, '_').toLowerCase();
     if (!moment.tz.zone(timeZone)) {
       return msg.reply(
-        'Invalid time zone. Refer to <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>.',
+        'Invalid time zone. Refer to <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>.'
       );
     }
     const time = moment()
@@ -39,7 +39,7 @@ module.exports = class extends Command {
           sub ||
           main}${parens} is ${time}`,
         color: 0x2196f3,
-      }),
+      })
     );
   }
 ***REMOVED***

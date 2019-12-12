@@ -9,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['charlie-charlie', 'askcharlie'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Ask the wise Charlie',
+      description: 'Yes? No?',
       usage: '<question:string>',
       quotedStringSupport: true,
     });
@@ -29,7 +29,7 @@ module.exports = class extends Command {
       YES${answer === 'yes' ? '/' : ' '} | ${answer === 'no' ? '\\' : ' '}NO
         ${answer === 'yes' ? '/' : ' '}  |  ${answer === 'no' ? '\\' : ' '}
     \`\`\``,
-      }),
+      })
     );
   }
 ***REMOVED***

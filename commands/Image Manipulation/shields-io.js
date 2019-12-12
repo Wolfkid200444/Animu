@@ -5,7 +5,6 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'group'],
       aliases: ['shields-io-badge'],
-      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Generate a Shields IO badge',
       usage: '<subject:string> <status:string> [color:string]',

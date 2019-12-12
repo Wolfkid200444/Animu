@@ -4,8 +4,8 @@ const axios = require('axios');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Determine Gender of a name',
-      aliases: ['guess-gender', 'gender-guess'],
+      description: 'Is Karen a woman or a man?',
+      aliases: ['guess-gender'],
       cooldown: 10,
       usage: '<name:string>',
       quotedStringSupport: true,
@@ -22,7 +22,7 @@ module.exports = class extends Command {
     return msg.send(
       `I'm ${body.probability * 100}% sure ${body.name} is a ${
         body.gender
-      } name.`,
+      } name.`
     );
   }
 ***REMOVED***

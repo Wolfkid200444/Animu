@@ -6,9 +6,8 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'group'],
-      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw a hat over a user's avatar",
+      description: 'Try out some hats',
       usage:
         '<user:member> <birthday|christmas|leprechaun|megumin|pilgrim|pirate|tophat|witch>',
       usageDelim: ' ',

@@ -11,7 +11,7 @@ module.exports = class extends Command {
       aliases: ['astronomy-picture-of-the-day'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Get astronomy picture of the day',
+      description: 'Astronomy Picture Of The Day (Just try it!)',
     });
   }
 
@@ -29,14 +29,14 @@ module.exports = class extends Command {
       .setAuthor(
         'Astronomy Picture of the Day',
         'https://i.imgur.com/Wh8jY9c.png',
-        'https://apod.nasa.gov/apod/astropix.html',
+        'https://apod.nasa.gov/apod/astropix.html'
       )
       .setImage(data.media_type === 'image' ? data.url : null)
       .setURL(data.url)
       .setFooter(
         `Image Credits: ${
           data.copyright ? data.copyright.replace(/\n/g, '/') : 'Public Domain'
-        }`,
+        }`
       )
       .setTimestamp();
     return msg.send(embed);

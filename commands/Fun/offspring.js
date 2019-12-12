@@ -9,7 +9,8 @@ module.exports = class extends Command {
       aliases: ['child'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "What'll be the gender of your offspring",
+      description:
+        "Get gender of your upcoming child (tho we all know you'll die a virgin)",
     });
   }
 
@@ -20,7 +21,7 @@ module.exports = class extends Command {
         title: `${msg.author.username}'s offspring will be`,
         description: `**${gender}**`,
         color: 0x2196f3,
-      }),
+      })
     );
   }
 ***REMOVED***

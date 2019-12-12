@@ -9,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['quantumcoin', 'q-coin'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Flip a quantum coin that lands on nothing',
+      description: 'Actually, quantum mechanics forbids this',
     });
   }
 
@@ -20,7 +20,7 @@ module.exports = class extends Command {
         title: `${msg.author.username} flipped a quantum coin`,
         description: `Quantum Coin landed on ... ${side}`,
         color: 0x2196f3,
-      }),
+      })
     );
   }
 ***REMOVED***

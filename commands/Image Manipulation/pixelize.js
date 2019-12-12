@@ -5,9 +5,8 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'group'],
-      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Pixelize an image or a user's avatar",
+      description: 'Create your very own Japanese p*rn',
       usage: '<image:image>',
     });
   }

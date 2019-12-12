@@ -7,7 +7,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       aliases: ['fliptable'],
       cooldown: 30,
-      description: 'Flip a table',
+      description: 'Flip the darn table (in style)',
     });
     this.frames = [
       '(-°□°)-  ┬─┬',

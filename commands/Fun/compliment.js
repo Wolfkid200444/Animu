@@ -5,9 +5,8 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       cooldown: 10,
-      description: 'Compliments a user',
-      extendedHelp: 'Compliment someone using this command',
-      usage: '[member:user]'
+      description: "Use this if you can't compliment someone yourself",
+      usage: '[member:user]',
     });
   }
 
@@ -122,6 +121,6 @@ const compliments = [
   "You're a gift to those around you.",
   'You deserve better.',
   "You're better than Unicorns because you are real.",
-  "You make the Sun seem dull.",
-  "You are more awesome than the Naruto runner at Area 51."
+  'You make the Sun seem dull.',
+  'You are more awesome than the Naruto runner at Area 51.',
 ];

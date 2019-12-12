@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Get a fact about a number',
+      description: 'I bet you had no idea numbers could be this interesting',
       usage: '<number:int>',
     });
   }
@@ -20,7 +20,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`A fact about number **${number}**`)
         .setDescription(!data ? 'No fact found' : data)
-        .setColor(!data ? '#f44336' : '#2196f3'),
+        .setColor(!data ? '#f44336' : '#2196f3')
     );
   }
 ***REMOVED***

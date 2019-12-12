@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Get opinion on something',
+      description: "Your opinions don't matter",
       usage: '<question:string>',
       quotedStringSupport: true,
     });
@@ -21,7 +21,7 @@ module.exports = class extends Command {
         title: `${msg.author.username} asks **${question}**`,
         description: opinion,
         color: 0x2196f3,
-      }),
+      })
     );
   }
 ***REMOVED***

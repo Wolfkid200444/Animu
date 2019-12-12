@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Rate something',
+      description: 'Rate stuff (or people)',
       usage: '<thing:string>',
       quotedStringSupport: true,
     });
@@ -20,7 +20,7 @@ module.exports = class extends Command {
         title: `I'd rate **${thing}**...`,
         description: `${_.round(_.random(9) + 1, 1)}/10`,
         color: 0x2196f3,
-      }),
+      })
     );
   }
 ***REMOVED***

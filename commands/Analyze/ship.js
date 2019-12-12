@@ -11,7 +11,7 @@ module.exports = class extends Command {
       runIn: ['text'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 5,
-      description: 'Ship 2 people',
+      description: 'Forcefully ship people against their will',
       usage: '<member1:user> <member2:user>',
       usageDelim: ' ',
     });
@@ -44,7 +44,7 @@ module.exports = class extends Command {
       .setTitle(
         `${msg.guild.members.get(member1.id).displayName} ❤️ ${
           msg.guild.members.get(member2.id).displayName
-        }`,
+        }`
       )
       .addField('Chances of sailing', `${randNum}%`)
       .setColor('#2196f3');

@@ -5,11 +5,9 @@ const axios = require('axios');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Show details about a manga',
+      description: 'Discover new manga (or doujins)',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
-      extendedHelp:
-        'Show details about a manga. The argument provided is manga name',
       usage: '<mangaName:...string>',
       quotedStringSupport: true,
     });
@@ -34,7 +32,7 @@ module.exports = class extends Command {
         .addField('❯ Type', manga.type, true)
         .addField('❯ Description', manga.synopsis)
         .addField('❯ chapters', manga.chapters, true)
-        .addField('❯ Score', manga.score, true),
+        .addField('❯ Score', manga.score, true)
     );
   }
 ***REMOVED***

@@ -7,9 +7,8 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'group'],
       aliases: ['gay', 'homo', 'lgbt'],
-      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Draw a rainbow over an image or a user's Avatar",
+      description: 'I diagnose you as gay',
       usage: '<image:image>',
     });
   }

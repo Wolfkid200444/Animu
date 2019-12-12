@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'View random fact',
+      description: 'Wanna see a fact stolen from wikipedia?',
     });
   }
 
@@ -40,7 +40,7 @@ module.exports = class extends Command {
         title: 'Fact',
         description: fact,
         color: 0x2196f3,
-      }),
+      })
     );
   }
 

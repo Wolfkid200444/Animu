@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Get a random super mario level name',
+      description: 'Ever wanted a weird Super Mario level name?',
     });
   }
 
@@ -20,7 +20,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle('Super Mario Level')
         .setDescription(`${start} ${end}`)
-        .setColor(0x2196f3),
+        .setColor(0x2196f3)
     );
   }
 ***REMOVED***

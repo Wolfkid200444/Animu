@@ -8,7 +8,7 @@ module.exports = class extends Command {
       aliases: ['owo', 'owofy'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Owoify your text',
+      description: 'OwO',
       usage: '<text:string>',
       quotedStringSupport: true,
     });
@@ -19,7 +19,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`${msg.member.displayName} says`)
         .setDescription(text.replace(/r|l/g, 'w').replace(/R|L/g, 'W'))
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

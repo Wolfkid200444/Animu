@@ -6,7 +6,6 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'group'],
-      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: "Draw a frame over an image or a user's avatar",
       usage: '<image:image>',

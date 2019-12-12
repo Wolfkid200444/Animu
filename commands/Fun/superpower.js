@@ -9,7 +9,8 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "What's your superpower gonna be?",
+      description:
+        "Your superpower is gonna be 'Super fat' (nvm, Americans already have that superpower)",
     });
   }
 
@@ -22,11 +23,11 @@ module.exports = class extends Command {
         .setTitle(`Your superpower is... **${article.title}**!`)
         .setDescription(
           shorten(
-            article.content.map((section) => section.text).join('\n\n'),
-            1950,
-          ),
+            article.content.map(section => section.text).join('\n\n'),
+            1950
+          )
         )
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 
@@ -45,9 +46,11 @@ module.exports = class extends Command {
   }
 
   async fetchSuperpower(id) {
-    const { data } = await axios.get(
+    const {
+      data,
+    } = await axios.get(
       'http://powerlisting.wikia.com/api/v1/Articles/AsSimpleJson/',
-      { params: { id } },
+      { params: { id } }
     );
     return data.sections[0];
   }

@@ -9,9 +9,7 @@ module.exports = class extends Command {
       aliases: ['cf', 'catfact'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'View random cat facts',
-      extendedHelp:
-        'Use this command to fulfill your curiosity and get to know some fun cat facts!',
+      description: '"Meow Meow Meow" - Cat',
     });
   }
 
@@ -24,7 +22,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`🐱 Cat Fact 🐱`)
         .setDescription(fact)
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

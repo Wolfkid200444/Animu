@@ -9,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['fortune-cookie', 'fortunecookie'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: "Read what's inside a fortune Cookie",
+      description: 'As useless as horoscopes',
     });
   }
 
@@ -20,7 +20,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle('Fortune Cookie Says')
         .setDescription(answer)
-        .setColor(0x2196f3),
+        .setColor(0x2196f3)
     );
   }
 ***REMOVED***

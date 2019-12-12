@@ -7,7 +7,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       aliases: ['crime-coefficient'],
       cooldown: 10,
-      description: 'Determine Crime Coefficient of a user',
+      description: 'Ever watched Psycho Pass?',
       usage: '[user:user]',
     });
   }
@@ -30,7 +30,7 @@ module.exports = class extends Command {
     return msg.reply(
       `${
         msg.author.id === user.id ? 'Your' : `Suspect ${user.username}'s`
-      } Crime Coefficient is ${coefficient}. ${res}`,
+      } Crime Coefficient is ${coefficient}. ${res}`
     );
   }
 ***REMOVED***

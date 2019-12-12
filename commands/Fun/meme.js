@@ -10,20 +10,18 @@ module.exports = class extends Command {
       aliases: ['m'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'View memes from Reddit',
-      extendedHelp:
-        'View memes from different subreddits. Valid subreddits are: dankmemes, animemes, pewdiepiesubmissions',
+      description: 'Stealing memes from reddit since 2019',
       usage: '[dankmemes|animemes|pewdiepiesubmissions]',
     });
   }
 
   async run(msg, [subreddit = 'animemes']) {
     const res = await axios.get(
-      `https://www.reddit.com/r/${subreddit}.json?sort=hot&limit=100`,
+      `https://www.reddit.com/r/${subreddit}.json?sort=hot&limit=100`
     );
 
     const posts = res.data.data.children.filter(
-      (post) => post.data.thumbnail !== null,
+      post => post.data.thumbnail !== null
     );
 
     const randomPost = _.sample(posts).data;
@@ -32,7 +30,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(randomPost.title)
         .setImage(randomPost.url)
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

@@ -8,7 +8,7 @@ module.exports = class extends Command {
       aliases: ['unenchantify'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Translate minecraft enchantement table text to English',
+      description: 'Try using this command on description of "enchant" command',
       usage: '<text:string>',
     });
   }
@@ -44,9 +44,9 @@ module.exports = class extends Command {
             .replace(/∴/gi, 'w')
             .replace(/·\//gi, 'x')
             .replace(/\|\|/gi, 'y')
-            .replace(/⨅/gi, 'z'),
+            .replace(/⨅/gi, 'z')
         )
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

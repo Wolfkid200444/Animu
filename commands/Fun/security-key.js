@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Generate a security Key',
+      description: "Get a password that's 100x better than your password",
     });
   }
 
@@ -17,7 +17,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`Securiy Key`)
         .setDescription(crypto.randomBytes(15).toString('hex'))
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

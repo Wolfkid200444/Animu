@@ -5,10 +5,10 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text', 'dm', 'group'],
-      aliases: ['random-command'],
+      aliases: ['random-command', 'i-am-bored'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Suggest a random command for you to try',
+      description: 'Bored?',
     });
   }
 
@@ -17,9 +17,9 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle(`Try this Command`)
         .setDescription(
-          `${msg.guild.settings.prefix}${this.client.commands.random().name}`,
+          `${msg.guild.settings.prefix}${this.client.commands.random().name}`
         )
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

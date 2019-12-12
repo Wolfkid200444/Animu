@@ -7,7 +7,8 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       aliases: ['scrabble'],
       cooldown: 10,
-      description: 'Determine scrable score of a word',
+      description:
+        'This command will help you calculate Scrabble score (for smol brains)',
       usage: '<word:string>',
     });
   }

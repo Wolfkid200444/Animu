@@ -7,7 +7,6 @@ module.exports = class extends Command {
     super(...args, {
       runIn: ['text', 'group'],
       aliases: ['reject'],
-      requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description:
         'Draws an "Rejected" stamp over an image or a user\'s avatar',

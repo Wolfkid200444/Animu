@@ -11,7 +11,7 @@ module.exports = class extends Command {
       permissionLevel: 7,
       runIn: ['text'],
       requiredPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
-      description: 'Add a new self role',
+      description: 'Create some weird af self roles',
       usage: '<emoji:string> <roleName:...string>',
       usageDelim: ' ',
       quotedStringSupport: true,
@@ -19,9 +19,9 @@ module.exports = class extends Command {
   }
 
   async run(msg, [emoji, roleName]) {
-    const role = msg.guild.roles.find((r) => r.name === roleName);
-    if (this.client.emojis.find((e) => e.name === emoji.split(':')[1]))
-      emoji = this.client.emojis.find((e) => e.name === emoji.split(':')[1]);
+    const role = msg.guild.roles.find(r => r.name === roleName);
+    if (this.client.emojis.find(e => e.name === emoji.split(':')[1]))
+      emoji = this.client.emojis.find(e => e.name === emoji.split(':')[1]);
 
     if (
       !msg.guild.settings.selfRolesChannel ||
@@ -33,7 +33,7 @@ module.exports = class extends Command {
           description:
             'The self role channel/msg is not configured, please configure it using `conf` command',
           color: '#f44336',
-        }),
+        })
       );
 
     if (!role)
@@ -42,7 +42,7 @@ module.exports = class extends Command {
           title: 'No Emoji/role found',
           description: 'The emoji/role name that you provided is/are invalid',
           color: '#f44336',
-        }),
+        })
       );
 
     const rCh = msg.guild.channels.get(msg.guild.settings.selfRolesChannel);
@@ -56,7 +56,7 @@ module.exports = class extends Command {
           description:
             'The self role channel/msg that you provided is/are invalid',
           color: '#f44336',
-        }),
+        })
       );
 
     rMsg.react(emoji);
@@ -73,7 +73,7 @@ module.exports = class extends Command {
         title: 'Self Role Added',
         description: 'Self role is successfully added',
         color: '#2196f3',
-      }),
+      })
     );
   }
 ***REMOVED***

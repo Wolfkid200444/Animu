@@ -9,7 +9,7 @@ module.exports = class extends Command {
       aliases: ['gh-zen'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'View a random Github Design Philosophy',
+      description: 'View a random Github Design Philosophy (yeah, those exist)',
     });
   }
 
@@ -20,7 +20,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle('Github Zen')
         .setDescription(data)
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

@@ -8,7 +8,8 @@ module.exports = class extends Command {
       aliases: ['enchantify'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Translate your text to minecraft enchantment table',
+      description:
+        'ᒷリᓵ⍑ᔑリℸ ̣ ℸ ̣ᒷ·/ℸ ̣ ╎リℸ ̣𝙹 ᒲ╎リᒷᓵ∷ᔑ⎓ℸ ̣ ᒷリᓵ⍑ᔑリℸ ̣ᒲᒷリℸ ̣ ℸ ̣ᔑʖꖎᒷ ꖎᔑリ⊣⚍ᔑ⊣ᒷ',
       usage: '<text:string>',
       quotedStringSupport: true,
     });
@@ -45,9 +46,9 @@ module.exports = class extends Command {
             .replace(/w/gi, '∴')
             .replace(/x/gi, '·/')
             .replace(/y/gi, '||')
-            .replace(/z/gi, '⨅'),
+            .replace(/z/gi, '⨅')
         )
-        .setColor('#2196f3'),
+        .setColor('#2196f3')
     );
   }
 ***REMOVED***

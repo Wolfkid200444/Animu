@@ -5,11 +5,9 @@ const axios = require('axios');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Show details about an anime',
+      description: 'Discover new anime (or hentai)',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
-      extendedHelp:
-        'Show details about an anime. The argument provided is anime name',
       usage: '<animeName:...string>',
       quotedStringSupport: true,
     });
@@ -34,7 +32,7 @@ module.exports = class extends Command {
         .addField('❯ Type', anime.type, true)
         .addField('❯ Description', anime.synopsis)
         .addField('❯ Episodes', anime.episodes, true)
-        .addField('❯ Score', anime.score, true),
+        .addField('❯ Score', anime.score, true)
     );
   }
 ***REMOVED***

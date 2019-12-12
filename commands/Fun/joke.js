@@ -8,7 +8,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm', 'group'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Makes you laugh',
+      description: 'Get a random unfunny joke',
     });
   }
 
@@ -19,7 +19,7 @@ module.exports = class extends Command {
       new MessageEmbed()
         .setTitle("Here's a Joke")
         .setDescription(joke)
-        .setColor(0x2196f3),
+        .setColor(0x2196f3)
     );
   }
 ***REMOVED***
