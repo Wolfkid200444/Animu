@@ -51,6 +51,8 @@ module.exports = (app, client) => {
             m.presence.status === 'idle' ||
             m.presence.status === 'dnd'
         ).size,
+        nitroBoostersCount: guild.premiumSubscriptionCount,
+        nitroLevel: guild.premumTier,
         tier: await redisClient.hgetAsync('guild_tiers', guild.id),
       },
     });
