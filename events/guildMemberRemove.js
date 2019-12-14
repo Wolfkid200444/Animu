@@ -23,12 +23,17 @@ module.exports = class extends Event {
     const profile = await Profile.findOne({ memberID: member.id }).exec();
 
     // Deleting Messages
-    if (await redisClient.sismemberAsync('valid_guilds', member.guild.id)) {
+    if (
+      _.includes(
+        ['lite', 'plus', 'pro'],
+        await redisClient.hgetAsync('guild_tiers', member.guild.id)
+      )
+    ) {
       if (member.guild.settings.deleteMessagesChannels.length > 0)
-        member.guild.settings.deleteMessagesChannels.forEach(async (ch) => {
+        member.guild.settings.deleteMessagesChannels.forEach(async ch => {
           const channel = member.guild.channels.get(ch);
           let messages = await channel.messages.fetch({ limit: 100 });
-          messages = messages.filter((msg) => msg.author.id === member.id);
+          messages = messages.filter(msg => msg.author.id === member.id);
           channel.bulkDelete(messages);
         });
     }
@@ -36,7 +41,7 @@ module.exports = class extends Event {
     if (
       profile &&
       member.guild.settings.mutedRole &&
-      member.roles.find((r) => r.id === member.guild.settings.mutedRole)
+      member.roles.find(r => r.id === member.guild.settings.mutedRole)
     ) {
       profile.mutedIn.push(member.guild.id);
       await profile.save();

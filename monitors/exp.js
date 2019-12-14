@@ -1,4 +1,5 @@
 const { Monitor } = require('klasa');
+const _ = require('lodash');
 const redis = require('redis');
 const bluebird = require('bluebird');
 const { model } = require('mongoose');
@@ -19,7 +20,12 @@ module.exports = class extends Monitor {
 
     if (message.attachments.size > 0) return;
 
-    if (!(await redisClient.sismemberAsync('valid_guilds', message.guild.id)))
+    if (
+      !_.includes(
+        ['lite', 'plus', 'pro'],
+        await redisClient.hgetAsync('guild_tiers', message.guild.id)
+      )
+    )
       return;
 
     let proceedExp = true;
@@ -37,7 +43,7 @@ module.exports = class extends Monitor {
     if (
       await redisClient.sismemberAsync(
         `recent_messages:${message.guild.id}`,
-        message.author.id,
+        message.author.id
       )
     )
       proceedExp = false;
@@ -45,18 +51,18 @@ module.exports = class extends Monitor {
     if (proceedExp) {
       const levelUps = await message.author.addExp(
         1 * message.guild.settings.expRate,
-        message.guild.id,
+        message.guild.id
       );
 
       //If member actually levelled up
       if (levelUps.length) {
         const guild = await Guild.findOne({ guildID: message.guild.id });
-        levelUps.forEach((level) => {
+        levelUps.forEach(level => {
           message.author.send(
-            `Congrats, you just levelled up and reached Level ${level} in ${message.guild.name} 🎉`,
+            `Congrats, you just levelled up and reached Level ${level} in ${message.guild.name} 🎉`
           );
 
-          const index = guild.levelPerks.findIndex((l) => l.level === level);
+          const index = guild.levelPerks.findIndex(l => l.level === level);
           if (!index) return true;
 
           //Assign reward(s)
@@ -64,12 +70,12 @@ module.exports = class extends Monitor {
             if (guild.levelPerks[index].badge)
               message.author.giveBadge(
                 guild.levelPerks[index].badge,
-                message.guild.id,
+                message.guild.id
               );
 
             if (guild.levelPerks[index].role) {
               const role = message.guild.roles.get(
-                (r) => r.name === guild.levelPerks[index].role,
+                r => r.name === guild.levelPerks[index].role
               );
 
               message.member.roles.add(role);
@@ -79,7 +85,7 @@ module.exports = class extends Monitor {
               message.author.editReputation(
                 '+',
                 guild.levelPerks[index].rep,
-                message.guild.id,
+                message.guild.id
               );
           }
         });
@@ -88,13 +94,13 @@ module.exports = class extends Monitor {
       //Adding to cache
       await redisClient.saddAsync(
         `recent_messages:${message.guild.id}`,
-        message.author.id,
+        message.author.id
       );
       setTimeout(async () => {
         //Remove from cache
         await redisClient.sremAsync(
           `recent_messages:${message.guild.id}`,
-          message.author.id,
+          message.author.id
         );
       }, message.guild.settings.expTime * 1000);
     }

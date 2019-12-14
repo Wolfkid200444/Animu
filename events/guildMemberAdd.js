@@ -3,20 +3,12 @@ const { Event } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
 const _ = require('lodash');
-const redis = require('redis');
-const bluebird = require('bluebird');
 
 //Init
 const Profile = mongoose.model('Profile');
-bluebird.promisifyAll(redis.RedisClient.prototype);
-const redisClient = redis.createClient();
 
 module.exports = class extends Event {
   async run(member) {
-    //If guild isn't valid
-    if (!(await redisClient.sismemberAsync('valid_guilds', member.guild.id)))
-      return;
-
     //Register Profile
     const profile = await Profile.register(member.id);
 
@@ -24,7 +16,7 @@ module.exports = class extends Event {
 
     if (
       !profileFind.reputation.find(
-        (guildRep) => guildRep.guildID === member.guild.id,
+        guildRep => guildRep.guildID === member.guild.id
       )
     ) {
       profileFind.reputation.push({
@@ -37,7 +29,7 @@ module.exports = class extends Event {
 
     if (
       !profileFind.level.find(
-        (guildLevel) => guildLevel.guildID === member.guild.id,
+        guildLevel => guildLevel.guildID === member.guild.id
       )
     ) {
       profileFind.level.push({

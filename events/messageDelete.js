@@ -1,5 +1,6 @@
 const { Event } = require('klasa');
 const { model } = require('mongoose');
+const _ = require('lodash');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
@@ -14,7 +15,12 @@ module.exports = class extends Event {
 
     if (message.author.id === this.client.user.id) return;
 
-    if (!(await redisClient.sismemberAsync('valid_guilds', message.guild.id)))
+    if (
+      !_.includes(
+        ['lite', 'plus', 'pro'],
+        await redisClient.hgetAsync('guild_tiers', message.guild.id)
+      )
+    )
       return;
 
     await new Log({
@@ -39,7 +45,7 @@ module.exports = class extends Event {
             this.client.users.get(message.member.id).username
           }** was deleted at \`${new Date().toUTCString()}\` in **${
             message.channel.name
-          }**:\n\`\`\`${message.content}\`\`\``,
+          }**:\n\`\`\`${message.content}\`\`\``
         );
   }
 ***REMOVED***

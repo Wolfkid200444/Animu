@@ -6,7 +6,6 @@ const guildSchema = new Schema({
     type: String,
     enum: ['lite', 'plus', 'pro'],
   },
-  daysLeft: Number, // Days left till this guild's registration expires
   levelPerks: [
     {
       level: Number,
@@ -19,7 +18,7 @@ const guildSchema = new Schema({
 
 guildSchema.methods.addLevelPerk = async function(level, perkName, perkValue) {
   const levelPerkIndex = this.levelPerks.findIndex(
-    (levelPerk) => levelPerk.level === level,
+    levelPerk => levelPerk.level === level
   );
 
   if (levelPerkIndex < 0) {
