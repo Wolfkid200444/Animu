@@ -43,6 +43,8 @@
     "mongodb": "^3.2.7",
     "mongoose": "^5.7.5",
     "node-opus": "^0.3.2",
+    "pixiv-api-client": "^0.22.0",
+    "pixiv-img": "^1.0.0",
     "rand-token": "^0.4.0",
     "random-js": "^2.1.0",
     "randomstring": "^1.1.5",
