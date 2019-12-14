@@ -690,6 +690,8 @@ module.exports = class extends Extendable {
 
     if (!senderInv || !receiverInv) return this._noProfile();
 
+    if(senderInv.memberID === receiverInv.memberID) return "You can't give anything to yourself";
+
     if (type === 'coins') {
       value = parseInt(value);
 
