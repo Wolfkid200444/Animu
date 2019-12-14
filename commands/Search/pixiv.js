@@ -31,7 +31,7 @@ module.exports = class extends Command {
 
     const imgPath = await pixivImg(
       topSorted[0].image_urls.large,
-      `temp/${path.basename(topSorted[0].image_urls.large)}`
+      `../temp/${path.basename(topSorted[0].image_urls.large)}`
     );
     await msg.channel.send(
       `${topSorted[0].title} • ♥ ${topSorted[0].total_bookmarks}`,
