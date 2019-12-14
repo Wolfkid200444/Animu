@@ -693,7 +693,7 @@ module.exports = class extends Extendable {
     if (senderInv.memberID === receiverInv.memberID)
       return new MessageEmbed({
         title: 'Oops!',
-        description: "You can't give coins to yourself",
+        description: "You can't give coins/items to yourself",
         color: 0xf44336,
       });
 
