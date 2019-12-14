@@ -10,6 +10,8 @@
   deviantartClientSecret: process.env.DEVIANTART_CLIENT_SECRET,
   githubUsername: process.env.GITHUB_USERNAME,
   githubPassword: process.env.GITHUB_PASSWORD,
+  pixivUsername: process.env.PIXIV_USERNAME,
+  pixivPassword: process.env.PIXIV_PASSWORD,
   TMBDAPIKey: process.env.TMBD_API_KEY,
   OSUAPIKey: process.env.OSU_API_KEY,
   stackoverflowKey: process.env.STACKOVERFLOW_KEY,
