@@ -4,7 +4,7 @@ const guildSchema = new Schema({
   guildID: String,
   tier: {
     type: String,
-    enum: ['lite', 'plus', 'pro'],
+    enum: ['free', 'lite', 'plus', 'pro'],
   },
   levelPerks: [
     {
