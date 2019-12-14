@@ -2,7 +2,7 @@ const { Collection } = require('discord.js');
 const path = require('path');
 const { stripIndents } = require('common-tags');
 const Player = require('./Player');
-const { shuffle } = require('../../util/Util');
+const { shuffle } = require('../util');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
