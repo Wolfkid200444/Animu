@@ -23,7 +23,7 @@ module.exports = class extends Inhibitor {
     const plusCategories = ['Verified'];
 
     // Lite+ Commands
-    const liteCommands = ['read', 'watch'];
+    const liteCommands = ['read', 'watch', 'addlevelperk', 'levelperks'];
 
     // Lite+ Commands
     const plusCommands = ['pixiv'];
