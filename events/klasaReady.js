@@ -11,8 +11,8 @@ module.exports = class extends Event {
     this.client.settings.patreonCurrent = 0;
 
     if (botEnv === 'production') {
-      this.client.guilds.get('556442896719544320').members.forEach((member) => {
-        if (member.roles.find((r) => r.name === '🛡 Senior Moderator'))
+      this.client.guilds.get('556442896719544320').members.forEach(member => {
+        if (member.roles.find(r => r.name === '🛡 Senior Moderator'))
           this.client.settings.aldoviaSeniorMods.push(member.id);
       });
     } else {
@@ -20,31 +20,20 @@ module.exports = class extends Event {
     }
 
     //-> Scheduling Tasks
-    if (!this.client.schedule.tasks.find((task) => task.taskName === 'petfed'))
+    if (!this.client.schedule.tasks.find(task => task.taskName === 'petfed'))
       this.client.schedule.create('petfed', '0 * * * *');
 
     if (
       !this.client.schedule.tasks.find(
-        (task) => task.taskName === 'changedbanner',
+        task => task.taskName === 'changedbanner'
       )
     )
       this.client.schedule.create('changedbanner', '0 0 * * *');
 
-    if (
-      !this.client.schedule.tasks.find(
-        (task) => task.taskName === 'keysdaysleft',
-      )
-    )
-      this.client.schedule.create('keysdaysleft', '0 0 * * *');
-
-    if (
-      !this.client.schedule.tasks.find((task) => task.taskName === 'checkedIn')
-    )
+    if (!this.client.schedule.tasks.find(task => task.taskName === 'checkedIn'))
       this.client.schedule.create('checkedIn', '0 0 * * *');
 
-    if (
-      !this.client.schedule.tasks.find((task) => task.taskName === 'deposit')
-    )
+    if (!this.client.schedule.tasks.find(task => task.taskName === 'deposit'))
       this.client.schedule.create('deposit', '0 0 * * *');
   }
 ***REMOVED***
