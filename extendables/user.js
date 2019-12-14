@@ -690,7 +690,12 @@ module.exports = class extends Extendable {
 
     if (!senderInv || !receiverInv) return this._noProfile();
 
-    if(senderInv.memberID === receiverInv.memberID) return "You can't give anything to yourself";
+    if (senderInv.memberID === receiverInv.memberID)
+      return new MessageEmbed({
+        title: 'Oops!',
+        description: "You can't give coins to yourself",
+        color: 0xf44336,
+      });
 
     if (type === 'coins') {
       value = parseInt(value);
