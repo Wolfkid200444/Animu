@@ -700,7 +700,7 @@ module.exports = class extends Extendable {
     if (type === 'coins') {
       value = parseInt(value);
 
-      if (senderInv.coins < value)
+      if (senderInv.coins < value || value < 0)
         return new MessageEmbed({
           title: 'Not enough Coins',
           description: "You don't have enough coins",
