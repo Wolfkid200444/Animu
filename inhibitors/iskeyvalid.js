@@ -25,7 +25,7 @@ module.exports = class extends Inhibitor {
     // Lite+ Commands
     const liteCommands = ['read', 'watch', 'addlevelperk', 'levelperks'];
 
-    // Lite+ Commands
+    // Plus+ Commands
     const plusCommands = ['pixiv'];
 
     const guildTier = await redisClient.hgetAsync(

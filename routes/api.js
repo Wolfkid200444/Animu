@@ -187,6 +187,12 @@ module.exports = (app, client) => {
       return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildTier = await redisClient.hgetAsync('guild_tiers', guildID);
+
+    if (guildTier === 'free')
+      return res
+        .status(403)
+        .json({ err: 'This API route is not available for free users' });
 
     const guild = client.guilds.get(guildID);
 
@@ -218,22 +224,6 @@ module.exports = (app, client) => {
 
     return res.json({
       members,
-    });
-  });
-
-  app.get('/api/levelperks', async (req, res) => {
-    if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
-
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
-
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
-
-    const guild = await Guild.findOne({ guildID: guildID }).exec();
-
-    return res.json({
-      levelPerks: guild.levelPerks,
     });
   });
 
@@ -287,6 +277,12 @@ module.exports = (app, client) => {
       return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildTier = await redisClient.hgetAsync('guild_tiers', guildID);
+
+    if (guildTier === 'free')
+      return res
+        .status(403)
+        .json({ err: 'This API route is not available for free users' });
 
     const guild = await Guild.findOne({ guildID: guildID }).exec();
 
@@ -303,6 +299,12 @@ module.exports = (app, client) => {
       return res.status(401).json({ err: 'Invalid token' });
 
     const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildTier = await redisClient.hgetAsync('guild_tiers', guildID);
+
+    if (guildTier === 'free')
+      return res
+        .status(403)
+        .json({ err: 'This API route is not available for free users' });
 
     const guild = await Guild.findOne({ guildID: guildID }).exec();
 
