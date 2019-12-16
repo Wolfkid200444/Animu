@@ -38,25 +38,25 @@ module.exports = class extends Inhibitor {
       _.includes(liteCategories, command.fullCategory[0]) &&
       guildTier === 'free'
     )
-      return 'This command is for Lite and Above tiers';
+      return 'This command is for Lite and Above tiers (Upgrade Now: https://patreon.com/Aldovia)';
 
     if (
       _.includes(plusCategories, command.fullCategory[0]) &&
       _.includes(['free', 'lite'], guildTier)
     )
-      return 'This command is for Plus and Above tiers';
+      return 'This command is for Plus and Above tiers (Upgrade Now: https://patreon.com/Aldovia)';
 
     if (
       _.includes(liteCommands, command.name) &&
       _.includes(['free'], guildTier)
     )
-      return 'This command is for Lite and Above tiers';
+      return 'This command is for Lite and Above tiers (Upgrade Now: https://patreon.com/Aldovia)';
 
     if (
       _.includes(plusCommands, command.name) &&
       _.includes(['free', 'lite'], guildTier)
     )
-      return 'This command is for Plus and Above tiers';
+      return 'This command is for Plus and Above tiers (Upgrade Now: https://patreon.com/Aldovia)';
 
     return false;
   }
@@ -68,6 +68,6 @@ module.exports = class extends Inhibitor {
       await redisClient.hsetAsync('guild_tiers', guild.guildID, guild.tier);
     });
 
-    await redisClient.hsetAsync('guild_tiers', '628931282851856394', 'free'); //Setting Dev Server's Tier to 'pro'
+    await redisClient.hsetAsync('guild_tiers', '628931282851856394', 'pro'); //Setting Dev Server's Tier to 'pro'
   }
 ***REMOVED***
