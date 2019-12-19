@@ -26,9 +26,11 @@ module.exports = class extends Command {
     msg.send(
       new MessageEmbed({
         title: 'Animu Token',
-        description: `Here's your unique Animu token\n\`\`\`${token}\`\`\``,
+        description: `You can use this token or scan the QR Code to authenticate Animu Companion App\n\`\`\`${token}\`\`\``,
         color: 0x2196f3,
-      }).setFooter('DO NOT SHARE THIS TOKEN WITH ANYONE!')
+      })
+        .setImage(`http://api.qrserver.com/v1/create-qr-code/?data=${token}`)
+        .setFooter('DO NOT SHARE THIS TOKEN WITH ANYONE!')
     );
   }
 ***REMOVED***
