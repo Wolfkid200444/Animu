@@ -8,7 +8,7 @@ const Inventory = mongoose.model('Inventory');
 
 module.exports = class extends Task {
   async run() {
-    if (!botEnv === 'production') return;
+    if (botEnv !== 'production') return;
 
     const bankaccounts = await BankAccount.find({}).exec();
 
@@ -19,7 +19,7 @@ module.exports = class extends Task {
           const inv = await Inventory.findOne({ memberID: account.memberID });
           console.log(inv);
           await inv.addCoins(deposit.coins);
-                    console.log(inv);
+          console.log(inv);
 
           // eslint-disable-next-line require-atomic-updates
           deposit = undefined;

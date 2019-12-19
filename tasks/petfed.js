@@ -7,7 +7,7 @@ const Pet = mongoose.model('Pet');
 
 module.exports = class extends Task {
   async run() {
-    if (!botEnv === 'production') return;
+    if (botEnv !== 'production') return;
 
     const pets = await Pet.find({}).exec();
 

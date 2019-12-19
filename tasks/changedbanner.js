@@ -7,22 +7,22 @@ const Profile = mongoose.model('Profile');
 
 module.exports = class extends Task {
   async run() {
-    if (!botEnv === 'production') return;
+    if (botEnv !== 'production') return;
 
     const profiles = await Profile.find({}).exec();
 
-    profiles.forEach(async (profile) => {
+    profiles.forEach(async profile => {
       if (!profile.lastBannerChange) return;
 
-      profile.lastBannerChange.forEach((guild) => {
+      profile.lastBannerChange.forEach(guild => {
         guild.daysAgo++;
         if (guild.daysAgo === 30) {
           this.client.users
             .get(profile.memberID)
             .send(
               `You can change ${this.client.guilds.get(
-                guild.guildID,
-              )}'s Server Banner again!`,
+                guild.guildID
+              )}'s Server Banner again!`
             );
         }
       });
