@@ -51,9 +51,20 @@ Client.defaultGuildSchema.add('deleteMessagesChannels', 'textchannel', {
   array: true,
 });
 Client.defaultGuildSchema.add('ignoreExpChannels', 'channel', { array: true });
-Client.defaultGuildSchema.add('logChannels', folder =>
-  folder.add('deletedMessages', 'textchannel')
-);
+Client.defaultGuildSchema.add('toxicityFilters', folder => {
+  folder.add('toxicity', 'bool');
+  folder.add('severeToxicity', 'bool');
+  folder.add('insult', 'bool');
+  folder.add('profanity', 'bool');
+  folder.add('identityAttack', 'bool');
+  folder.add('sexuallyExplicit', 'bool');
+  folder.add('flirtation', 'bool');
+  folder.add('threat', 'bool');
+});
+Client.defaultGuildSchema.add('logChannels', folder => {
+  folder.add('deletedMessages', 'textchannel');
+  folder.add('reports', 'textchannel');
+});
 Client.defaultGuildSchema.add('verifiedMemberPerks', folder =>
   folder.add('changeBanner', 'boolean')
 );
