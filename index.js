@@ -51,6 +51,7 @@ Client.defaultGuildSchema.add('deleteMessagesChannels', 'textchannel', {
   array: true,
 });
 Client.defaultGuildSchema.add('ignoreExpChannels', 'channel', { array: true });
+Client.defaultGuildSchema.add('deleteToxicMessages', 'bool');
 Client.defaultGuildSchema.add('toxicityFilters', folder => {
   folder.add('toxicity', 'bool');
   folder.add('severeToxicity', 'bool');

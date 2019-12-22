@@ -354,7 +354,10 @@ module.exports = (app, client) => {
 
     const guild = client.guilds.get(guildID);
 
-    guild.settings[req.body.key] = req.body.value;
+    if (req.body.key.includes('.')) {
+      const keys = req.body.key.split('.');
+      guild.settings[keys[0]][keys[1]] = req.body.value;
+    } else guild.settings[req.body.key] = req.body.value;
 
     return res.json({
       settings: guild.settings,
