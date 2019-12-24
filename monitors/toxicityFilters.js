@@ -49,8 +49,6 @@ module.exports = class extends Monitor {
       attributes: filters,
     });
 
-    console.log(res);
-
     const filtersFailed = [];
 
     filters.forEach(filter => {
