@@ -34,13 +34,13 @@ module.exports = class extends Command {
       async (err, res, body) => {
         let $s = cheerio.load(body);
 
-        $s('.panel_story_list .story_item').each((i, elem) => {
+        $s('.panel-search-story .search-story-item').each((i, elem) => {
           searchResults.push({
             title: $s(elem)
-              .find('.story_name a')
+              .find('.item-title')
               .text(),
             url: $s(elem)
-              .find('.story_name a')
+              .find('.item-title')
               .attr('href'),
           });
         });
@@ -59,6 +59,8 @@ module.exports = class extends Command {
             color: searchResults.length > 0 ? '#2196f3' : '#f44336',
           })
         );
+
+        console.log(searchResults);
 
         let validReactions = [];
 
@@ -116,7 +118,7 @@ module.exports = class extends Command {
             async (err, res, body2) => {
               let $ = cheerio.load(body2);
 
-              let title = $('.info-top-chapter h2');
+              let title = $('.panel-chapter-info-top h1');
 
               if (!title.text())
                 return msg.send(
@@ -127,7 +129,7 @@ module.exports = class extends Command {
                   })
                 );
 
-              $('#vungdoc img').each((i, elem) => {
+              $('.container-chapter-reader img').each((i, elem) => {
                 imagesArr.push(elem.attribs.src);
               });
 
