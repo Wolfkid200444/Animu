@@ -8,30 +8,11 @@ module.exports = class extends Command {
       runIn: ['text'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Pause the Music',
+      description: 'View currently playing music',
     });
   }
 
   async run(msg) {
-    if (!msg.member.voice.channel)
-      return msg.send(
-        new MessageEmbed({
-          title: 'Not in VC',
-          description: 'You must be in a voice channel to pause the music',
-          color: '#f44336',
-        })
-      );
-
-    if (msg.member.voice.channel.id !== msg.guild.me.voice.channel.id)
-      return msg.send(
-        new MessageEmbed({
-          title: 'Not in Correct VC',
-          description:
-            'You must be in the same voice channel as Animu to pause the music',
-          color: '#f44336',
-        })
-      );
-
     const queue = this.client.lVoice.queues.get(msg.guild.id);
 
     if (
