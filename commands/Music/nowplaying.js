@@ -27,7 +27,7 @@ module.exports = class extends Command {
           title: 'No song playing',
           description: 'No song is playing currently',
           color: '#f44336',
-        }),
+        })
       );
 
     msg.send(
@@ -35,7 +35,7 @@ module.exports = class extends Command {
         title: 'Now Playing',
         description: `Now playing: **${musicQueue.songs[0].title}**`,
         color: '#2196f3',
-      }),
+      })
     );
   }
 ***REMOVED***

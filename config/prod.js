@@ -18,5 +18,6 @@
   alphaVantageAPIKey: process.env.ALPHA_VANTAGE_API_KEY,
   openWeatherAPIKey: process.env.OPEN_WEATHER_API_KEY,
   perspectiveAPIKey: process.env.PERSPECTIVE_API_KEY,
+  lavalinkPassword: process.env.LAVALINK_PASSWORD,
   botEnv: process.env.BOT_ENV,
 ***REMOVED***

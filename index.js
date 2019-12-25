@@ -2,6 +2,7 @@
 //DEPENDENCIES
 //=====================
 const { Client } = require('klasa');
+const { Client: Lavaqueue } = require('lavaqueue');
 const keys = require('./config/keys');
 const mongoose = require('mongoose');
 const express = require('express');
@@ -9,50 +10,70 @@ const bodyParser = require('body-parser');
 //=====================
 
 //=====================
+//Animu AnimuClient
+//=====================
+class AnimuClient extends Client {
+  constructor(...args) {
+    super(...args);
+
+    this.lVoice = null;
+  }
+}
+//=====================
+
+//=====================
 //SCHEMAS
 //=====================
-//-> Client Schema
-Client.defaultClientSchema.add('aldoviaSeniorMods', 'User', { array: true });
-Client.defaultClientSchema.add('aldoviaInviteLink', 'String');
-Client.defaultClientSchema.add('aldoviaDescription', 'String');
+//-> AnimuClient Schema
+AnimuClient.defaultClientSchema.add('aldoviaSeniorMods', 'User', {
+  array: true,
+});
+AnimuClient.defaultClientSchema.add('aldoviaInviteLink', 'String');
+AnimuClient.defaultClientSchema.add('aldoviaDescription', 'String');
 
 //-> Guild Schema
-Client.defaultGuildSchema.add('defaultVolume', 'number', {
+AnimuClient.defaultGuildSchema.add('defaultVolume', 'number', {
   default: 50,
   min: 1,
   max: 100,
 });
-Client.defaultGuildSchema.add('expRate', 'number', {
+AnimuClient.defaultGuildSchema.add('expRate', 'number', {
   default: 1,
   min: 0.1,
   max: 10,
 });
-Client.defaultGuildSchema.add('expTime', 'number', {
+AnimuClient.defaultGuildSchema.add('expTime', 'number', {
   default: 3,
   min: 1,
   max: 60,
 });
-Client.defaultGuildSchema.add('enableLevels', 'boolean', { default: true });
-Client.defaultGuildSchema.add('djRole', 'role');
-Client.defaultGuildSchema.add('joinRole', 'role');
-Client.defaultGuildSchema.add('verifiedRole', 'role');
-Client.defaultGuildSchema.add('mutedRole', 'role');
-Client.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
-Client.defaultGuildSchema.add('selfRolesMessage', 'string');
-Client.defaultGuildSchema.add('startingRep', 'number', { default: 50 });
-Client.defaultGuildSchema.add('banOnLowRep', 'boolean');
-Client.defaultGuildSchema.add('ignoreRepRoles', 'role', { array: true });
-Client.defaultGuildSchema.add('ignoreLevelRoles', 'role', { array: true });
-Client.defaultGuildSchema.add('allowExpBottles', 'boolean', { default: true });
-Client.defaultGuildSchema.add('welcomeChannel', 'channel');
-Client.defaultGuildSchema.add('welcomeMessage', 'string');
-Client.defaultGuildSchema.add('welcomeImageURL', 'string');
-Client.defaultGuildSchema.add('deleteMessagesChannels', 'textchannel', {
+AnimuClient.defaultGuildSchema.add('enableLevels', 'boolean', {
+  default: true,
+});
+AnimuClient.defaultGuildSchema.add('djRole', 'role');
+AnimuClient.defaultGuildSchema.add('joinRole', 'role');
+AnimuClient.defaultGuildSchema.add('verifiedRole', 'role');
+AnimuClient.defaultGuildSchema.add('mutedRole', 'role');
+AnimuClient.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
+AnimuClient.defaultGuildSchema.add('selfRolesMessage', 'string');
+AnimuClient.defaultGuildSchema.add('startingRep', 'number', { default: 50 });
+AnimuClient.defaultGuildSchema.add('banOnLowRep', 'boolean');
+AnimuClient.defaultGuildSchema.add('ignoreRepRoles', 'role', { array: true });
+AnimuClient.defaultGuildSchema.add('ignoreLevelRoles', 'role', { array: true });
+AnimuClient.defaultGuildSchema.add('allowExpBottles', 'boolean', {
+  default: true,
+});
+AnimuClient.defaultGuildSchema.add('welcomeChannel', 'channel');
+AnimuClient.defaultGuildSchema.add('welcomeMessage', 'string');
+AnimuClient.defaultGuildSchema.add('welcomeImageURL', 'string');
+AnimuClient.defaultGuildSchema.add('deleteMessagesChannels', 'textchannel', {
   array: true,
 });
-Client.defaultGuildSchema.add('ignoreExpChannels', 'channel', { array: true });
-Client.defaultGuildSchema.add('deleteToxicMessages', 'bool');
-Client.defaultGuildSchema.add('toxicityFilters', folder => {
+AnimuClient.defaultGuildSchema.add('ignoreExpChannels', 'channel', {
+  array: true,
+});
+AnimuClient.defaultGuildSchema.add('deleteToxicMessages', 'bool');
+AnimuClient.defaultGuildSchema.add('toxicityFilters', folder => {
   folder.add('toxicity', 'bool');
   folder.add('severeToxicity', 'bool');
   folder.add('insult', 'bool');
@@ -62,16 +83,16 @@ Client.defaultGuildSchema.add('toxicityFilters', folder => {
   folder.add('flirtation', 'bool');
   folder.add('threat', 'bool');
 });
-Client.defaultGuildSchema.add('logChannels', folder => {
+AnimuClient.defaultGuildSchema.add('logChannels', folder => {
   folder.add('deletedMessages', 'textchannel');
   folder.add('reports', 'textchannel');
 });
-Client.defaultGuildSchema.add('verifiedMemberPerks', folder =>
+AnimuClient.defaultGuildSchema.add('verifiedMemberPerks', folder =>
   folder.add('changeBanner', 'boolean')
 );
 
 //-> User Schema
-Client.defaultUserSchema.add('TODOs', 'any', { array: true });
+AnimuClient.defaultUserSchema.add('TODOs', 'any', { array: true });
 //=====================
 
 //=====================
@@ -82,8 +103,8 @@ const app = express();
 app.use(bodyParser.json());
 require('./routes/root')(app);
 
-//-> Klasa Client
-Client.defaultPermissionLevels
+//-> Klasa AnimuClient
+AnimuClient.defaultPermissionLevels
   .add(
     5,
     ({ guild, member }) => guild && member.permissions.has('MANAGE_ROLES'),
@@ -114,8 +135,8 @@ mongoose
     require('./models/BankAccount');
     require('./models/Config');
 
-    //-> Klasa Client
-    const client = await new Client({
+    //-> Klasa AnimuClient
+    const client = new AnimuClient({
       fetchAllMembers: false,
       prefix: '-',
       commandEditing: true,
@@ -140,6 +161,26 @@ mongoose
     //-> Adding client-dependent routes
     require('./routes/webhooks')(app, client);
     require('./routes/api')(app, client);
+
+    client.lVoice = new Lavaqueue({
+      password: keys.lavalinkPassword,
+      userID: client.user.id,
+      hosts: {
+        rest: 'http://localhost:2333',
+        ws: 'http://localhost:2333',
+        redis: 'localhost:6379',
+      },
+      send(guildID, packet) {
+        if (client.guilds.has(guildID))
+          return client.guilds.get(guildID).shard.send(packet);
+        throw new Error('attempted to send a packet on the wrong shard');
+      },
+    });
+
+    client.on('raw', pk => {
+      if (pk.t === 'VOICE_STATE_UPDATE') client.lVoice.voiceStateUpdate(pk.d);
+      if (pk.t === 'VOICE_SERVER_UPDATE') client.lVoice.voiceServerUpdate(pk.d);
+    });
   });
 //=====================
 

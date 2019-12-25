@@ -1,15 +1,12 @@
 const { MessageEmbed } = require('discord.js');
 const { Command } = require('klasa');
 const prompt = require('discordjs-prompter');
-const { model } = require('mongoose');
 const Game = require('../../util/mafia/Game');
 const redis = require('redis');
 const bluebird = require('bluebird');
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
-
-const MusicQueue = model('MusicQueue');
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -41,11 +38,9 @@ module.exports = class extends Command {
     if (!voiceChannel)
       return msg.reply('You must be in a voice channel to start a game.');
 
-    const musicQueue = await MusicQueue.findOne({
-      guildID: msg.guild.id,
-    }).exec();
+    const player = this.client.lVoice.queues.get(msg.guild.id).player;
 
-    if (musicQueue)
+    if (player.status)
       return msg.send(
         new MessageEmbed({
           title: 'Music being played',
