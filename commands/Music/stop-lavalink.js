@@ -61,6 +61,7 @@ module.exports = class extends Command {
         })
       );
 
+    await queue.clear();
     await queue.stop();
 
     msg.send(

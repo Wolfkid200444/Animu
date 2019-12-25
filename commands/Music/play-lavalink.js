@@ -54,9 +54,15 @@ module.exports = class extends Command {
     const queue = this.client.lVoice.queues.get(msg.guild.id);
     const track = res.tracks[0];
 
-    await queue.player.join(msg.member.voice.channel.id);
+    await queue.player.join(msg.member.voice.channel.id, { deaf: true });
     await queue.add([track.track]);
-    await queue.start();
+
+    if (queue.player.status === 0 || queue.player.status === 3)
+      // Not playing anything or Ended
+      await queue.start();
+    else if (queue.player.status === 2)
+      // Paused
+      await queue.pause(false);
 
     msg.send(
       new MessageEmbed({

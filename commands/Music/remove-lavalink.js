@@ -7,16 +7,17 @@ module.exports = class extends Command {
       runIn: ['text'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Skip a song',
+      description: 'Remove a song from queue',
+      usage: '<index:number{1}>',
     });
   }
 
-  async run(msg) {
+  async run(msg, index) {
     if (!msg.member.voice.channel)
       return msg.send(
         new MessageEmbed({
           title: 'Not in VC',
-          description: 'You must be in a voice channel to skip songs',
+          description: 'You must be in a voice channel to remove a song',
           color: '#f44336',
         })
       );
@@ -26,7 +27,7 @@ module.exports = class extends Command {
         new MessageEmbed({
           title: 'Not in Correct VC',
           description:
-            'You must be in the same voice channel as Animu to skip songs',
+            'You must be in the same voice channel as Animu to remove a song',
           color: '#f44336',
         })
       );
@@ -39,8 +40,8 @@ module.exports = class extends Command {
     )
       return msg.send(
         new MessageEmbed({
-          title: 'No song playing',
-          description: 'No song is playing currently',
+          title: 'Nothing Playing',
+          description: 'Nothing is currently playing',
           color: '#f44336',
         })
       );
@@ -59,18 +60,26 @@ module.exports = class extends Command {
         })
       );
 
-    const tracks = await queue.tracks(0, -1);
+    const tracks = await queue.tracks(index - 1, index - 1);
 
-    if (tracks.length > 0) await queue.next();
-    else {
-      await queue.clear();
-      await queue.stop();
-    }
+    if (tracks.length < 1)
+      return msg.send(
+        new MessageEmbed({
+          title: 'Invalid Number',
+          description:
+            "The song you are trying to remove does'nt seem to be in the queue",
+          color: 0x2196f3,
+        })
+      );
+
+    const trackInfo = await this.client.lVoice.decode(tracks[0]);
+
+    await queue.remove(tracks[0]);
 
     msg.send(
       new MessageEmbed({
-        title: 'Skipped',
-        description: 'Skipped song',
+        title: 'Removed Song',
+        description: `Removed **${trackInfo.title}** by **${trackInfo.author}**`,
         color: '#2196f3',
       })
     );
