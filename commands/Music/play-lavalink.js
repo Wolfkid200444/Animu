@@ -57,10 +57,11 @@ module.exports = class extends Command {
     await queue.player.join(msg.member.voice.channel.id, { deaf: true });
     await queue.add([track.track]);
 
-    if (queue.player.status === 0 || queue.player.status === 3)
+    if (queue.player.status === 0 || queue.player.status === 3) {
       // Not playing anything or Ended
       await queue.start();
-    else if (queue.player.status === 2)
+      await queue.player.setVolume(msg.guild.settings.defaultVolume);
+    } else if (queue.player.status === 2)
       // Paused
       await queue.pause(false);
 
