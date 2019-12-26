@@ -140,7 +140,6 @@ mongoose
     require('./models/SelfRole');
     require('./models/Log');
     require('./models/Guild');
-    require('./models/MusicQueue');
     require('./models/BankAccount');
     require('./models/Config');
 
