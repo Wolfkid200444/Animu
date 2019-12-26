@@ -7,10 +7,19 @@ const keys = require('./config/keys');
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
+const redis = require('redis');
+const bluebird = require('bluebird');
 //=====================
 
 //=====================
-//Animu AnimuClient
+//Initialization
+//=====================
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
+//=====================
+
+//=====================
+//Animu Client
 //=====================
 class AnimuClient extends Client {
   constructor(...args) {
@@ -180,6 +189,12 @@ mongoose
     client.on('raw', pk => {
       if (pk.t === 'VOICE_STATE_UPDATE') client.lVoice.voiceStateUpdate(pk.d);
       if (pk.t === 'VOICE_SERVER_UPDATE') client.lVoice.voiceServerUpdate(pk.d);
+    });
+
+    client.lVoice.on('event', d => {
+      if (d.type === 'TrackEndEvent') {
+        redisClient.delAsync(`skip_votes:${d.guildID}`);
+      }
     });
   });
 //=====================

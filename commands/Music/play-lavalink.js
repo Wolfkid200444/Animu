@@ -51,6 +51,16 @@ module.exports = class extends Command {
       );
 
     const res = await this.client.lVoice.load(`ytsearch:${music}`);
+
+    if (res.tracks.length < 1)
+      return msg.send(
+        new MessageEmbed({
+          title: 'Nothing Found',
+          description: 'Nothing was found matching your search terms',
+          color: 0xf44336,
+        })
+      );
+
     const queue = this.client.lVoice.queues.get(msg.guild.id);
     const track = res.tracks[0];
 

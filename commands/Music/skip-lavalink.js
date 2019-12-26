@@ -1,5 +1,11 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
+const redis = require('redis');
+const bluebird = require('bluebird');
+
+// Init
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -46,33 +52,83 @@ module.exports = class extends Command {
       );
 
     if (
-      !(await msg.hasAtLeastPermissionLevel(6)) &&
-      !msg.member.roles.find(
+      (await msg.hasAtLeastPermissionLevel(6)) ||
+      msg.member.roles.find(
         r => r.id === msg.guild.settings.djRole || r.name.toLowerCase() === 'dj'
       )
-    )
-      return msg.send(
+    ) {
+      const tracks = await queue.tracks(0, -1);
+
+      if (tracks.length > 0) await queue.next();
+      else {
+        await queue.clear();
+        await queue.stop();
+      }
+
+      msg.send(
         new MessageEmbed({
-          title: 'DJ Only Command',
-          description: 'Only members with DJ role can use this command',
-          color: '#f44336',
+          title: 'Skipped',
+          description: 'Skipped song',
+          color: '#2196f3',
         })
       );
+    } else {
+      const hasVoted = await redisClient.sismemberAsync(
+        `skip_votes:${msg.guild.id}`,
+        msg.member.id
+      );
 
-    const tracks = await queue.tracks(0, -1);
+      if (hasVoted)
+        return msg.send(
+          new MessageEmbed({
+            title: 'Already Voted',
+            description: 'You have already voted to skip this song',
+            color: '#2196f3',
+          })
+        );
 
-    if (tracks.length > 0) await queue.next();
-    else {
-      await queue.clear();
-      await queue.stop();
+      await redisClient.saddAsync(`skip_votes:${msg.guild.id}`, msg.member.id);
+
+      const voters = await redisClient.smembersAsync(
+        `skip_votes:${msg.guild.id}`
+      );
+
+      console.log(
+        'Total members in VC:',
+        msg.guild.me.voice.channel.members.size
+      );
+
+      if (
+        voters.length >=
+        Math.round((msg.guild.me.voice.channel.members.size - 1) / 2)
+      ) {
+        const tracks = await queue.tracks(0, -1);
+
+        if (tracks.length > 0) await queue.next();
+        else {
+          await queue.clear();
+          await queue.stop();
+        }
+
+        msg.send(
+          new MessageEmbed({
+            title: 'Skipped',
+            description: 'Skipped song',
+            color: '#2196f3',
+          })
+        );
+      } else {
+        msg.send(
+          new MessageEmbed({
+            title: 'Voted',
+            description: `${voters.length}/${(msg.guild.me.voice.channel.members
+              .size -
+              1) /
+              2} votes to skip the current song`,
+            color: '#2196f3',
+          })
+        );
+      }
     }
-
-    msg.send(
-      new MessageEmbed({
-        title: 'Skipped',
-        description: 'Skipped song',
-        color: '#2196f3',
-      })
-    );
   }
 ***REMOVED***
