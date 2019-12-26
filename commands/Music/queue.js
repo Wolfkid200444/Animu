@@ -7,6 +7,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
+      aliases: ['q'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'View music Queue',

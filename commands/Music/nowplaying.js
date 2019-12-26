@@ -6,6 +6,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
+      aliases: ['np'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'View currently playing music',

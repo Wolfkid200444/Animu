@@ -5,6 +5,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
+      aliases: ['rem'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Remove a song from queue',

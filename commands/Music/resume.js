@@ -5,6 +5,7 @@ module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
       runIn: ['text'],
+      aliases: ['unpause'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Resume/Unpause the Music',
