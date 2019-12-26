@@ -93,11 +93,6 @@ module.exports = class extends Command {
         `skip_votes:${msg.guild.id}`
       );
 
-      console.log(
-        'Total members in VC:',
-        msg.guild.me.voice.channel.members.size
-      );
-
       if (
         voters.length >=
         Math.round((msg.guild.me.voice.channel.members.size - 1) / 2)
@@ -121,10 +116,9 @@ module.exports = class extends Command {
         msg.send(
           new MessageEmbed({
             title: 'Voted',
-            description: `${voters.length}/${(msg.guild.me.voice.channel.members
-              .size -
-              1) /
-              2} votes to skip the current song`,
+            description: `${voters.length}/${Math.round(
+              (msg.guild.me.voice.channel.members.size - 1) / 2
+            )} votes to skip the current song`,
             color: '#2196f3',
           })
         );
