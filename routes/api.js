@@ -6,6 +6,7 @@ const { model } = require('mongoose');
 const Profile = model('Profile');
 const Log = model('Log');
 const Guild = model('Guild');
+const SelfRole = model('SelfRole');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
 
@@ -266,6 +267,22 @@ module.exports = (app, client) => {
 
     return res.json({
       members,
+    });
+  });
+
+  app.get('/api/selfroles', async (req, res) => {
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.status(401).json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const selfRoles = await SelfRole.find({ guildID: guildID }).exec();
+
+    return res.json({
+      selfRoles: selfRoles,
     });
   });
 
