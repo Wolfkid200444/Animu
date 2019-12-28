@@ -286,6 +286,52 @@ module.exports = (app, client) => {
     });
   });
 
+  app.post('/api/selfroles', async (req, res) => {
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.status(401).json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guildC = client.guilds.get(guildID);
+
+    if (!req.body.roleName) return res.json({ err: 'No role provided' });
+    if (!req.body.emojiName) return res.json({ err: 'No emji provided' });
+
+    const role = guildC.roles.find(r => r.name === req.body.roleName);
+    let emoji = req.body.emojiName;
+    if (client.emojis.find(e => e.name === req.body.emojiName.split(':')[1]))
+      emoji = client.emojis.find(
+        e => e.name === req.body.emojiName.split(':')[1]
+      );
+
+    if (!guildC.settings.selfRolesChannel || !guildC.settings.selfRolesMessage)
+      return res.json({ err: 'No self roles channel/msg set' });
+
+    if (!role) return res.json({ err: 'No emoji/role found' });
+
+    const rCh = guildC.channels.get(guildC.settings.selfRolesChannel);
+
+    const rMsg = await rCh.messages.fetch(guildC.settings.selfRolesMessage);
+
+    if (!rMsg || !rCh) return res.json({ err: 'Invalid message ID/Channel' });
+
+    rMsg.react(emoji);
+
+    await new SelfRole({
+      guildID: guildID,
+      messageID: guildC.settings.selfRolesMessage,
+      emojiName: emoji,
+      roleName: req.body.roleName,
+    }).save();
+
+    return res.json({
+      selfRoles: await SelfRole.find({ guildID: guildID }).exec(),
+    });
+  });
+
   app.get('/api/levelperks', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
