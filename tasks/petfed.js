@@ -17,7 +17,7 @@ module.exports = class extends Task {
       if (lastFed === 23)
         this.client.users
           .get(pet.memberID)
-          .send('You have 1 hour to feed your pet, or you pet **will** die');
+          .send('You have 1 hour to feed your pet, or your pet **will** die');
 
       if (lastFed >= 24) {
         Pet.deleteOne({ memberID: pet.memberID }).exec();
