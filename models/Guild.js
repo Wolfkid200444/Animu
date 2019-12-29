@@ -48,4 +48,18 @@ guildSchema.methods.addLevelPerk = async function(level, perkName, perkValue) {
   return true;
 ***REMOVED***
 
+guildSchema.methods.removeLevelPerk = async function(level) {
+  const levelPerkIndex = this.levelPerks.findIndex(
+    levelPerk => levelPerk.level === level
+  );
+
+  if (levelPerkIndex < 0) return false;
+
+  this.levelPerks.splice(levelPerkIndex, 1);
+
+  await this.save();
+
+  return true;
+***REMOVED***
+
 model('Guild', guildSchema);
