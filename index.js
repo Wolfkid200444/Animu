@@ -194,7 +194,16 @@ mongoose
       if (d.type === 'TrackEndEvent') {
         redisClient.delAsync(`skip_votes:${d.guildID}`);
 
-        if (d.reason === 'FINISHED')
+        const looping = await redisClient.sismemberAsync(
+          'loop_guilds',
+          d.guildId
+        );
+
+        if (looping) {
+          await client.lVoice.queues.get(d.guildId).add([d.track]);
+        }
+
+        if (d.reason === 'FINISHED' && !looping)
           await client.lVoice.queues.get(d.guildId).player.leave();
       }
     });

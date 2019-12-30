@@ -13,7 +13,7 @@ module.exports = class extends Command {
       runIn: ['text'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
-      description: 'Stop Music',
+      description: 'Loop a queue',
     });
   }
 
@@ -22,7 +22,7 @@ module.exports = class extends Command {
       return msg.send(
         new MessageEmbed({
           title: 'Not in VC',
-          description: 'You must be in a voice channel to stop the music',
+          description: 'You must be in a voice channel to loop',
           color: '#f44336',
         })
       );
@@ -31,8 +31,7 @@ module.exports = class extends Command {
       return msg.send(
         new MessageEmbed({
           title: 'Not in Correct VC',
-          description:
-            'You must be in the same voice channel as Animu to stop music',
+          description: 'You must be in the same voice channel as Animu to loop',
           color: '#f44336',
         })
       );
@@ -41,9 +40,7 @@ module.exports = class extends Command {
 
     if (
       queue.player.status !== 1 && // Playing
-      queue.player.status !== 2 && // Paused
-      queue.player.status !== 4 && // Errored
-      queue.player.status !== 5 // Stuck
+      queue.player.status !== 2 // Paused
     )
       return msg.send(
         new MessageEmbed({
@@ -67,15 +64,23 @@ module.exports = class extends Command {
         })
       );
 
-    await queue.clear();
-    await queue.stop();
-    await queue.player.leave();
-    await redisClient.sremAsync('loop_guilds', msg.guild.id);
+    if (await redisClient.sismemberAsync('loop_guilds', msg.guild.id)) {
+      await redisClient.sremAsync('loop_guilds', msg.guild.id);
+      return msg.send(
+        new MessageEmbed({
+          title: 'Not looping',
+          description: 'Not Looping the queue',
+          color: '#2196f3',
+        })
+      );
+    }
+
+    await redisClient.saddAsync('loop_guilds', msg.guild.id);
 
     msg.send(
       new MessageEmbed({
-        title: 'Stopped',
-        description: 'Music stopped',
+        title: 'Looping',
+        description: 'Looping the queue',
         color: '#2196f3',
       })
     );
