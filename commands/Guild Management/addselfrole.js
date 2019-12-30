@@ -15,6 +15,21 @@ module.exports = class extends Command {
       usage: '<emoji:string> <roleName:...string>',
       usageDelim: ' ',
       quotedStringSupport: true,
+      extendedHelp:
+        "\
+Create a new Self Role\n\
+Before you create a new self role, make sure 'selfRolesChannel' & 'selfRolesMessage' is set, to modify those 2 settings, use 'conf set selfRolesChannel #channel'\
+or 'conf set selfRolesMessage messageID'\n\
+Once you've set up both configs, you can create a new self role using this command\n\
+\n\
+Examples:\n\
+- addselfrole 😂 Retard\n\
+- addselfrole 🚹 Female\n\
+- addselfrole 🎉 Event Ping\n\
+\n\
+You can also use custom emotes\n\
+For more help, visit this URL: https://aldovia.moe/how-to-set-up-self-roles/\
+",
     });
   }
 
