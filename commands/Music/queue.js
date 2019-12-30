@@ -2,6 +2,12 @@ const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment');
 const paginationEmbed = require('discord.js-pagination');
+const redis = require('redis');
+const bluebird = require('bluebird');
+
+// Init
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -35,6 +41,11 @@ module.exports = class extends Command {
     const resNP = await queue.current();
     const trackNP = await this.client.lVoice.decode(resNP.track);
 
+    const looping = await redisClient.sismemberAsync(
+      'loop_guilds',
+      msg.guild.id
+    );
+
     const embedsArr = [];
     let songList = '';
 
@@ -52,20 +63,26 @@ module.exports = class extends Command {
 
         if ((i + 1) % 10 === 0 || i === tracks.length - 1) {
           embedsArr.push(
-            this.createQueueEmbed(resNP, trackNP, queue, songList)
+            this.createQueueEmbed(resNP, trackNP, queue, songList, looping)
           );
           songList = '';
         }
       });
     else
       embedsArr.push(
-        this.createQueueEmbed(resNP, trackNP, queue, '[No Songs in Queue]')
+        this.createQueueEmbed(
+          resNP,
+          trackNP,
+          queue,
+          '[No Songs in Queue]',
+          looping
+        )
       );
 
     paginationEmbed(msg, embedsArr);
   }
 
-  createQueueEmbed(resNP, trackNP, queue, songList) {
+  createQueueEmbed(resNP, trackNP, queue, songList, looping) {
     const durationCurrent = moment.duration(resNP.position);
     const hoursCurrent = durationCurrent.hours();
     const minutesCurrent = durationCurrent.minutes();
@@ -92,7 +109,7 @@ module.exports = class extends Command {
           } ${timeCurrent}/${timeTotal}`,
         },
         {
-          name: 'Queued Songs',
+          name: `Queued Songs ${looping ? '🔁' : ''}`,
           value: songList,
         },
       ],
