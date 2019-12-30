@@ -21,6 +21,15 @@ module.exports = class extends Command {
 
   async run(msg) {
     const token = randtoken.generate(16);
+    const tokens = await redisClient.hgetallAsync('auth_tokens');
+    const tokensToDelete = [];
+    for (const t in tokens) {
+      if (Object.prototype.hasOwnProperty.call(tokens, t)) {
+        if (tokens[t] === msg.guild.id) tokensToDelete.push(t);
+      }
+    }
+
+    await redisClient.hdelAsync('auth_tokens', tokensToDelete);
     await redisClient.hsetAsync('auth_tokens', token, msg.guild.id);
 
     msg.send(
