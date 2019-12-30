@@ -190,9 +190,12 @@ mongoose
       if (pk.t === 'VOICE_SERVER_UPDATE') client.lVoice.voiceServerUpdate(pk.d);
     });
 
-    client.lVoice.on('event', d => {
+    client.lVoice.on('event', async d => {
       if (d.type === 'TrackEndEvent') {
         redisClient.delAsync(`skip_votes:${d.guildID}`);
+
+        if (d.reason === 'FINISHED')
+          await client.lVoice.queues.get(d.guildId).player.leave();
       }
     });
   });

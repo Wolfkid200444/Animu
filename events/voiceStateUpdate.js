@@ -9,6 +9,7 @@ const redisClient = redis.createClient();
 
 module.exports = class extends Event {
   async run(oldMember) {
+    if(oldMember.channel)
     if (
       oldMember.channel.members.size < 2 &&
       !_.includes(
