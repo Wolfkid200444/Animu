@@ -63,6 +63,7 @@ module.exports = class extends Command {
 
     await queue.clear();
     await queue.stop();
+    await queue.player.leave();
 
     msg.send(
       new MessageEmbed({
