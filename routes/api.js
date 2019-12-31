@@ -332,6 +332,32 @@ module.exports = (app, client) => {
     });
   });
 
+  app.delete('/api/selfroles/:roleName', async (req, res) => {
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.status(401).json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const selfRole = await SelfRole.findOne({
+      guildID: guildID,
+      roleName: req.params.roleName,
+    }).exec();
+
+    if (!selfRole)
+      return res
+        .status(404)
+        .json({ err: 'Self role with provided roleName not found' });
+
+    await SelfRole.remove({ guildID, roleName: req.params.roleName }).exec();
+
+    return res.json({
+      selfRoles: await SelfRole.find({ guildID: guildID }).exec(),
+    });
+  });
+
   app.get('/api/levelperks', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
@@ -380,6 +406,30 @@ module.exports = (app, client) => {
       req.body.perkName,
       req.body.perkValue
     );
+
+    return res.json({
+      levelPerks: guild.levelPerks,
+    });
+  });
+
+  app.delete('/api/levelperks/:level', async (req, res) => {
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.status(401).json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildTier = await redisClient.hgetAsync('guild_tiers', guildID);
+
+    if (guildTier === 'free')
+      return res
+        .status(403)
+        .json({ err: 'This API route is not available for free users' });
+
+    const guild = await Guild.findOne({ guildID: guildID }).exec();
+
+    await guild.removeLevelPerk(parseInt(req.params.level));
 
     return res.json({
       levelPerks: guild.levelPerks,
