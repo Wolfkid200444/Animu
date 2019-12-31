@@ -16,6 +16,18 @@ module.exports = class extends Command {
       usage: '<level:number> <badge|rep|role> <perkValue:...string>',
       usageDelim: ' ',
       quotedStringSupport: true,
+      extendedHelp:
+        "\
+Create Level Perk\n\
+Before you create any level perks, make sure 'enableLevels' is enabled (it's enabled by default)\n\
+\n\
+Examples:\n\
+- addlevelperk 10 role Weeb\n\
+- addlevelperk 5 badge Weebling\n\
+- addlevelperk 50 rep 100\n\
+\n\
+For more info about levels, visit this link: https://aldovia.moe/how-to-set-up-levels/\
+      ",
     });
   }
 
