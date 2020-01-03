@@ -1,7 +1,9 @@
+// Importing Dependencies
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const redis = require('redis');
 const bluebird = require('bluebird');
+const { validURL } = require('../../util/util');
 
 // Init
 bluebird.promisifyAll(redis.RedisClient.prototype);
@@ -34,6 +36,7 @@ module.exports = class extends Command {
         })
       );
 
+    // Is mafia being played currently?
     if (await redisClient.sismemberAsync(`mafia_games`, msg.guild.id))
       return msg.send(
         new MessageEmbed({
@@ -44,13 +47,16 @@ module.exports = class extends Command {
         })
       );
 
+    // Validating Permissions
     const perms = voiceChannel.permissionsFor(this.client.user);
     if (!perms.has('CONNECT') || !perms.has('SPEAK'))
       return msg.send(
         "It seems I don't have perms in Voice Channel that you're currently in"
       );
 
-    const res = await this.client.lVoice.load(`ytsearch:${music}`);
+    const str = `${!validURL(music) ? 'ytsearch:' : ''}${music}`; // Is it a URL or search term?
+
+    const res = await this.client.lVoice.load(str);
 
     if (res.tracks.length < 1)
       return msg.send(
@@ -62,10 +68,14 @@ module.exports = class extends Command {
       );
 
     const queue = this.client.lVoice.queues.get(msg.guild.id);
-    const track = res.tracks[0];
 
+    // Join the VC & add music to queue
     await queue.player.join(msg.member.voice.channel.id, { deaf: true });
-    await queue.add([track.track]);
+    await queue.add(
+      res.loadType === 'PLAYLIST_LOADED'
+        ? res.tracks.map(t => t.track)
+        : [res.tracks[0].track]
+    );
 
     if (queue.player.status === 0 || queue.player.status === 3) {
       // Not playing anything or Ended
@@ -75,12 +85,21 @@ module.exports = class extends Command {
       // Paused
       await queue.pause(false);
 
-    msg.send(
-      new MessageEmbed({
-        title: 'Added to queue',
-        description: `**${track.info.title}** by **${track.info.author}** is added to Queue`,
-        color: 0x2196f3,
-      })
-    );
+    if (res.loadType === 'PLAYLIST_LOADED')
+      msg.send(
+        new MessageEmbed({
+          title: 'Playlist Added to queue',
+          description: `**${res.playlistInfo.name}** containing **${res.tracks.length}** songs is added to queue`,
+          color: 0x2196f3,
+        })
+      );
+    else
+      msg.send(
+        new MessageEmbed({
+          title: 'Added to queue',
+          description: `**${res.tracks[0].info.title}** by **${res.tracks[0].info.author}** is added to Queue`,
+          color: 0x2196f3,
+        })
+      );
   }
 ***REMOVED***
