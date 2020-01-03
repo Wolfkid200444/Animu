@@ -12,7 +12,7 @@
   githubPassword: process.env.GITHUB_PASSWORD,
   pixivUsername: process.env.PIXIV_USERNAME,
   pixivPassword: process.env.PIXIV_PASSWORD,
-  TMBDAPIKey: process.env.TMBD_API_KEY,
+  TMBDAPIKey: process.env.TMDB_API_KEY,
   OSUAPIKey: process.env.OSU_API_KEY,
   stackoverflowKey: process.env.STACKOVERFLOW_KEY,
   alphaVantageAPIKey: process.env.ALPHA_VANTAGE_API_KEY,
