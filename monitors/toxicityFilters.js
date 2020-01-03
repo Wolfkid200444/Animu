@@ -1,6 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const { Monitor } = require('klasa');
 const Perspective = require('perspective-api-client');
+const { model } = require('mongoose');
 const { perspectiveAPIKey } = require('../config/keys');
 const _ = require('lodash');
 const redis = require('redis');
@@ -9,6 +10,7 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
 const perspective = new Perspective({ apiKey: perspectiveAPIKey });
+const Log = model('Log');
 
 module.exports = class extends Monitor {
   constructor(...args) {
@@ -58,6 +60,21 @@ module.exports = class extends Monitor {
     });
 
     if (filtersFailed.length === 0) return;
+
+    await new Log({
+      guildID: message.guild.id,
+      event: 'toxicMessage',
+      data: {
+        authorID: message.author.id,
+        channelID: message.channel.id,
+        content: message.content,
+        createdAt: message.createdAt,
+        edits: message.edits,
+        id: message.id,
+        type: message.type,
+        filtersFailed: filtersFailed,
+      },
+    }).save();
 
     if (message.guild.settings.logChannels.reports)
       message.guild.channels
