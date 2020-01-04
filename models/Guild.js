@@ -6,6 +6,7 @@ const guildSchema = new Schema({
     type: String,
     enum: ['free', 'lite', 'plus', 'pro'],
   },
+  premiumDaysLeft: Number,
   levelPerks: [
     {
       level: Number,
