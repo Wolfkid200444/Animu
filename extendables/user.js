@@ -3,6 +3,8 @@ const { Extendable } = require('klasa');
 const { User, MessageEmbed } = require('discord.js');
 const { model } = require('mongoose');
 const _ = require('lodash');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 //Init
 const Profile = model('Profile');
@@ -11,6 +13,8 @@ const Item = model('Item');
 const Pet = model('Pet');
 const Guild = model('Guild');
 const BankAccount = model('BankAccount');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Extendable {
   constructor(...args) {
@@ -670,6 +674,94 @@ module.exports = class extends Extendable {
         description: `You got ${expToAdd} Exp`,
         color: 0x2196f3,
       });
+    } else if (_.includes(item.properties, 'animu_subscription')) {
+      if (this.client.guilds.get(guildID).ownerID !== this.id)
+        return new MessageEmbed({
+          title: "Can't use it here!",
+          description: 'You can only use this item in servers you own',
+          color: 0xf44336,
+        });
+
+      const guild = await Guild.findOne({ guildID: guildID }).exec();
+
+      if (guild.premiumDaysLeft < 0)
+        return new MessageEmbed({
+          title: 'Ooops!',
+          description:
+            'You have Animu subscription for ∞ days, thus this item is of no use in this guild',
+          color: 0xf44336,
+        });
+
+      if (_.includes(item.properties, 'animu_lite')) {
+        if (guild.tier == 'plus' || guild.tier == 'pro')
+          return new MessageEmbed({
+            title: "Can't Use!",
+            description:
+              "Your current Animu subscription is incompatible with the item you're tyring to use, thus you can only use this item when your current subscription ends",
+            color: 0xf44336,
+          });
+
+        guild.tier = 'lite';
+        guild.premiumDaysLeft += _.includes(item.properties, '7_days')
+          ? 7
+          : _.includes(item.properties, '1_month')
+          ? 30
+          : _.includes(item.properties, '3_months')
+          ? 90
+          : _.includes(item.properties, '6_months')
+          ? 180
+          : 365;
+
+        await guild.save();
+
+        await redisClient.hsetAsync('guild_tiers', guild.guildID, 'lite');
+      } else if (_.includes(item.properties, 'animu_plus')) {
+        if (guild.tier == 'lite' || guild.tier == 'pro')
+          return new MessageEmbed({
+            title: "Can't Use!",
+            description:
+              "Your current Animu subscription is incompatible with the item you're tyring to use, thus you can only use this item when your current subscription ends",
+            color: 0xf44336,
+          });
+
+        guild.tier = 'plus';
+        guild.premiumDaysLeft += _.includes(item.properties, '7_days')
+          ? 7
+          : _.includes(item.properties, '1_month')
+          ? 30
+          : _.includes(item.properties, '3_months')
+          ? 90
+          : _.includes(item.properties, '6_months')
+          ? 180
+          : 365;
+
+        await guild.save();
+
+        await redisClient.hsetAsync('guild_tiers', guild.guildID, 'plus');
+      } else if (_.includes(item.properties, 'animu_pro')) {
+        if (guild.tier == 'lite' || guild.tier == 'plus')
+          return new MessageEmbed({
+            title: "Can't Use!",
+            description:
+              "Your current Animu subscription is incompatible with the item you're tyring to use, thus you can only use this item when your current subscription ends",
+            color: 0xf44336,
+          });
+
+        guild.tier = 'pro';
+        guild.premiumDaysLeft += _.includes(item.properties, '7_days')
+          ? 7
+          : _.includes(item.properties, '1_month')
+          ? 30
+          : _.includes(item.properties, '3_months')
+          ? 90
+          : _.includes(item.properties, '6_months')
+          ? 180
+          : 365;
+
+        await guild.save();
+
+        await redisClient.hsetAsync('guild_tiers', guild.guildID, 'pro');
+      }
     }
 
     await inventory.save();
