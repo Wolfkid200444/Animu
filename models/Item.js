@@ -69,15 +69,6 @@ itemSchema.methods.purchase = async function(msg, memberID) {
 
   //Use item instantly
   if (this.instantUse) {
-    this.roles.forEach(role => {
-      if (role !== 'none') {
-        //Assigning role
-        const role = msg.guild.roles.find(r => r.name === role);
-
-        msg.guild.members.get(memberID).addRole(role.id);
-      }
-    });
-
     if (this.name === 'Pet Cat' || this.name === 'Pet Dog') {
       const Pet = this.model('Pet');
 
