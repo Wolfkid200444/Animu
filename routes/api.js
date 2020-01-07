@@ -2,11 +2,13 @@ const redis = require('redis');
 const bluebird = require('bluebird');
 const moment = require('moment');
 const { model } = require('mongoose');
+const _ = require('lodash');
 
 const Profile = model('Profile');
 const Log = model('Log');
 const Guild = model('Guild');
 const SelfRole = model('SelfRole');
+const Item = model('Item');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
 
@@ -56,6 +58,58 @@ module.exports = (app, client) => {
         nitroBoostersCount: guild.premiumSubscriptionCount,
         nitroLevel: guild.premumTier,
         tier: await redisClient.hgetAsync('guild_tiers', guild.id),
+      },
+    });
+  });
+
+  app.get('/api/members/:id', async (req, res) => {
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.status(401).json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = client.guilds.get(guildID);
+    const member = guild.members.get(req.params.id);
+
+    const profile = await Profile.findOne({ memberID: member.id });
+    const wallpaper = await Item.findOne({ name: profile.profileWallpaper });
+
+    let isOwner = false;
+
+    for (const owner of client.owners)
+      if (owner.id === member.id) isOwner = true;
+
+    return res.json({
+      member: {
+        id: member.id,
+        username: member.user.username,
+        tag: member.user.tag,
+        displayName: member.displayName,
+        description: profile.description,
+        favoriteAnime: profile.favoriteAnime,
+        profileColor: profile.profileColor,
+        profileWallpaperURL: wallpaper.imageURL,
+        marriedTo: profile.marriedTo,
+        badges: {
+          activeBadge: isOwner
+            ? '👑 Bot Owner 👑'
+            : _.includes(client.settings.aldoviaSeniorMods, member.id)
+            ? '🛡 Bot Staff'
+            : profile.badges.find(
+                guildBadges => guildBadges.guildID === guildID
+              ).activeBadge,
+          badges: profile.badges.find(
+            guildBadges => guildBadges.guildID === guildID
+          ).badges,
+        },
+        level: {
+          level: profile.level.find(g => g.guildID === guildID).level,
+          exp: profile.level.find(g => g.guildID === guildID).exp,
+        },
+        reputation: profile.reputation.find(g => g.guildID === guildID).rep,
       },
     });
   });
