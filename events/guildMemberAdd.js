@@ -53,7 +53,7 @@ module.exports = class extends Event {
     if (member.guild.settings.welcomeChannel) {
       // Send Welcome message
       const welcomeEmbed = new MessageEmbed()
-        .setTitle(`${member}, Welcome to ${member.guild.name}`)
+        .setTitle(`${member.displayName}, Welcome to ${member.guild.name}`)
         .setColor('#2196f3');
 
       if (member.guild.settings.welcomeMessage)

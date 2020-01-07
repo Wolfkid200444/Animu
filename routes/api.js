@@ -44,6 +44,7 @@ module.exports = (app, client) => {
     return res.json({
       guild: {
         id: guild.id,
+        ownerID: guild.owner.id,
         name: guild.name,
         memberCount: guild.memberCount,
         onlineMemberCount: guild.members.filter(
