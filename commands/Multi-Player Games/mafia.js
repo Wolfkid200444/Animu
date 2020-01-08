@@ -28,7 +28,6 @@ module.exports = class extends Command {
         'active_games',
         msg.channel.id
       );
-      await redisClient.saddAsync('mafia_games', msg.guild.id);
       return msg.reply(
         `Please wait until the current game of \`${currentGame}\` is finished.`
       );
@@ -67,6 +66,7 @@ module.exports = class extends Command {
     const game = new Game(this.client, msg.channel, voiceChannel);
 
     await redisClient.hsetAsync('active_games', msg.channel.id, this.name);
+    await redisClient.saddAsync('mafia_games', msg.guild.id);
     try {
       await game.init();
       await game.generate(
