@@ -82,6 +82,13 @@ module.exports = (app, client) => {
     for (const owner of client.owners)
       if (owner.id === member.id) isOwner = true;
 
+    const badges = profile.badges.find(
+      guildBadges => guildBadges.guildID === guildID
+    );
+
+    const level = profile.level.find(g => g.guildID === guildID);
+    const rep = profile.reputation.find(g => g.guildID === guildID);
+
     return res.json({
       member: {
         id: member.id,
@@ -91,25 +98,23 @@ module.exports = (app, client) => {
         description: profile.description,
         favoriteAnime: profile.favoriteAnime,
         profileColor: profile.profileColor,
-        profileWallpaperURL: wallpaper.imageURL,
+        profileWallpaperURL: wallpaper !== null ? wallpaper.imageURL : '',
         marriedTo: profile.marriedTo,
         badges: {
           activeBadge: isOwner
             ? '👑 Bot Owner 👑'
             : _.includes(client.settings.aldoviaSeniorMods, member.id)
             ? '🛡 Bot Staff'
-            : profile.badges.find(
-                guildBadges => guildBadges.guildID === guildID
-              ).activeBadge,
-          badges: profile.badges.find(
-            guildBadges => guildBadges.guildID === guildID
-          ).badges,
+            : badges !== null && badges !== undefined
+            ? badges.activeBadge
+            : '',
+          badges: badges !== null && badges !== undefined ? badges.badges : '',
         },
         level: {
-          level: profile.level.find(g => g.guildID === guildID).level,
-          exp: profile.level.find(g => g.guildID === guildID).exp,
+          level: level !== null && level !== undefined ? level.level : 0,
+          exp: level !== null && level !== undefined ? level.exp : 0,
         },
-        reputation: profile.reputation.find(g => g.guildID === guildID).rep,
+        reputation: rep !== null && rep !== undefined ? rep.rep : 0,
       },
     });
   });
@@ -267,15 +272,7 @@ module.exports = (app, client) => {
     const members = [];
 
     membersRaw2.forEach(m => {
-      const index = m.level.findIndex(r => r.guildID === guild.id);
-
-      if (client.users.get(m.memberID))
-        members.push({
-          id: m.memberID,
-          level: m.level[index].level,
-          username: client.users.get(m.memberID).username,
-          avatarURL: client.users.get(m.memberID).displayAvatarURL(),
-        });
+      if (client.users.get(m.memberID)) members.push(m.memberID);
     });
 
     return res.json({
