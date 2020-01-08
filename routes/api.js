@@ -307,15 +307,7 @@ module.exports = (app, client) => {
     const members = [];
 
     membersRaw2.forEach(m => {
-      const index = m.reputation.findIndex(r => r.guildID === guild.id);
-
-      if (client.users.get(m.memberID))
-        members.push({
-          id: m.memberID,
-          reputation: m.reputation[index].rep,
-          username: client.users.get(m.memberID).username,
-          avatarURL: client.users.get(m.memberID).displayAvatarURL(),
-        });
+      if (client.users.get(m.memberID)) members.push(m.memberID);
     });
 
     return res.json({
