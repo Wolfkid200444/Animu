@@ -95,6 +95,7 @@ module.exports = (app, client) => {
         username: member.user.username,
         tag: member.user.tag,
         displayName: member.displayName,
+        avatarURL: member.user.displayAvatarURL({ size: 512 }),
         description: profile.description,
         favoriteAnime: profile.favoriteAnime,
         profileColor: profile.profileColor,
