@@ -40,7 +40,12 @@ module.exports = class extends Command {
 
     const player = this.client.lVoice.queues.get(msg.guild.id).player;
 
-    if (player.status)
+    if (
+      player.status !== 1 && // Playing
+      player.status !== 2 && // Paused
+      player.status !== 4 && // Errored
+      player.status !== 5 // Stuck
+    )
       return msg.send(
         new MessageEmbed({
           title: 'Music being played',
