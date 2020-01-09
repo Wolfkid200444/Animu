@@ -12,9 +12,20 @@ const Item = model('Item');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
 
+// Versions
+const minAndroidVersion = 0.6;
+const currentAndroidVersion = 0.6;
+
 module.exports = (app, client) => {
   app.get('/api', (req, res) => {
     res.json({ ApiStatus: 'online' });
+  });
+
+  app.get('/api/version', async (req, res) => {
+    return res.json({
+      minAndroidVersion,
+      currentAndroidVersion,
+    });
   });
 
   app.get('/api/auth', async (req, res) => {
