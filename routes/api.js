@@ -169,6 +169,25 @@ module.exports = (app, client) => {
     });
   });
 
+  app.post('/api/members/:id/badges', async (req, res) => {
+    if (!req.query.token)
+      return res.status(401).json({ err: 'Token not provided' });
+
+    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
+      return res.status(401).json({ err: 'Invalid token' });
+
+    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+
+    const guild = client.guilds.get(guildID);
+    const member = guild.members.get(req.params.id);
+
+    member.user.giveBadge(req.body.badgeName, guildID);
+
+    return res.json({
+      result: 'success',
+    });
+  });
+
   app.get('/api/channels', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
