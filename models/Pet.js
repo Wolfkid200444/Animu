@@ -1,6 +1,26 @@
 //Dependencies
 const { Schema, model } = require('mongoose');
 
+/**
+ * Pet Personality
+ * ================
+ * Pet personality affects how fast they get unhappy, and how longer they can stay unfed
+ *
+ * Types
+ * ------
+ * 0 - 40-50% less endurability
+ * 1 - 30-40% less endurability
+ * 2 - 20-30% less endurability
+ * 3 - 10-20% less endurability
+ * 4 - 5-10% less endurability
+ * 5 - Normal
+ * 6 - 5-10% more endurability
+ * 7 - 10-20% more endurability
+ * 8 - 20-30% more endurability
+ * 9 - 30-40% more endurability
+ * 10 - 40-50% more endurability
+ */
+
 //Schema
 const petSchema = new Schema({
   memberID: {
@@ -9,21 +29,27 @@ const petSchema = new Schema({
   },
   petType: String,
   petName: String,
+  personality: {
+    type: Number,
+    min: 0,
+    max: 10,
+  },
   happiness: {
     type: Number,
-    default: 100,
-  }, //1 - 100, If below 50 for 7 days, pet run aways
+    min: 0,
+    max: 100,
+  }, // 1 - 100, If below x (depends upon personality) for 7 days, pet run aways | If x (depends upon personality), pet runs away instantly
   lastFedHoursAgo: {
     type: Number,
     default: 0,
-  }, //If surpasses 24, your pet dies
+  }, // If surpasses x (depends upon personality), your pet dies
   petUnhappyForDays: {
     type: Number,
     default: 0,
-  }, //If 7, pet runs away
+  }, // If x (depends upon personality), pet runs away
 });
 
-//Schema Methods
+// Schema Methods
 petSchema.methods.notFedInHour = function() {
   this.lastFedHoursAgo += 1;
 
