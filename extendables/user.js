@@ -779,59 +779,67 @@ module.exports = class extends Extendable {
           description: `You've got Animu Pro subscription!`,
           color: 0x2196f3,
         });
-      } else if (item.name === 'Cat Food') {
-        const pet = await Pet.findOne({ memberID: this.id }).exec();
-
-        if (!pet || pet.petType !== 'cat')
-          return new MessageEmbed({
-            title: "You don't have a cat to feed...",
-            description: 'To purchase a cat, use `-purchase Pet Cat`',
-            color: 0x2196f3,
-          });
-
-        await pet.petFed();
-        await pet.petHappy(20);
-
-        embed = new MessageEmbed({
-          title: 'Fed Pet',
-          description: `Successfully fed pet`,
-          color: 0x2196f3,
-        });
-      } else if (item.name === 'Dog Food') {
-        const pet = await Pet.findOne({ memberID: this.id }).exec();
-
-        if (!pet || pet.petType !== 'dog')
-          return new MessageEmbed({
-            title: "You don't have a dog to feed...",
-            description: 'To purchase a dog, use `-purchase Pet Dog`',
-            color: 0x2196f3,
-          });
-
-        await pet.petFed();
-        await pet.petHappy(20);
-
-        embed = new MessageEmbed({
-          title: 'Fed Pet',
-          description: `Successfully fed pet`,
-          color: 0x2196f3,
-        });
-      } else if (_.includes(item.properties, 'pet_coupon')) {
-        const existingPet = await Pet.findOne({ memberID: this.id }).exec();
-
-        if (existingPet)
-          return new MessageEmbed({
-            title: 'Already Own a pet',
-            description:
-              'You already own a pet, use `kickPet` command to kick out your current pet before you can get a new pet',
-          });
-
-        await new Pet({
-          memberID: this.id,
-          petType: item.name === 'Pet Cat - Coupon' ? 'cat' : 'dog',
-          petName: item.name === 'Pet Cat - Coupon' ? 'Cat' : 'Dog',
-        }).save();
       }
+    } else if (item.name === 'Cat Food') {
+      const pet = await Pet.findOne({ memberID: this.id }).exec();
+
+      if (!pet || pet.petType !== 'cat')
+        return new MessageEmbed({
+          title: "You don't have a cat to feed...",
+          description: 'To purchase a cat, use `-purchase Pet Cat`',
+          color: 0x2196f3,
+        });
+
+      await pet.petFed();
+      await pet.petHappy(20);
+
+      embed = new MessageEmbed({
+        title: 'Fed Pet',
+        description: `Successfully fed pet`,
+        color: 0x2196f3,
+      });
+    } else if (item.name === 'Dog Food') {
+      const pet = await Pet.findOne({ memberID: this.id }).exec();
+
+      if (!pet || pet.petType !== 'dog')
+        return new MessageEmbed({
+          title: "You don't have a dog to feed...",
+          description: 'To purchase a dog, use `-purchase Pet Dog`',
+          color: 0x2196f3,
+        });
+
+      await pet.petFed();
+      await pet.petHappy(20);
+
+      embed = new MessageEmbed({
+        title: 'Fed Pet',
+        description: `Successfully fed pet`,
+        color: 0x2196f3,
+      });
+    } else if (_.includes(item.properties, 'pet_coupon')) {
+      const existingPet = await Pet.findOne({ memberID: this.id }).exec();
+
+      if (existingPet)
+        return new MessageEmbed({
+          title: 'Already Own a pet',
+          description:
+            'You already own a pet, use `kickPet` command to kick out your current pet before you can get a new pet',
+        });
+
+      await new Pet({
+        memberID: this.id,
+        petType: item.name === 'Pet Cat - Coupon' ? 'cat' : 'dog',
+        petName: item.name === 'Pet Cat - Coupon' ? 'Cat' : 'Dog',
+      }).save();
+
+      embed = new MessageEmbed({
+        title: item.name === 'Pet Cat - Coupon' ? 'Meow!' : 'Bork!',
+        description: 'Have fun with your new pet',
+        color: 0x2196f3,
+      });
     }
+
+    console.log('Item:', item);
 
     await inventory.save();
 
