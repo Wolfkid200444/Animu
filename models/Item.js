@@ -17,7 +17,7 @@ const itemSchema = new Schema({
   instantUse: Boolean,
   inShop: Boolean,
   purchaseMsg: String,
-  properties: [String],
+  properties: [Schema.Types.Mixed],
 });
 
 //Model Methods

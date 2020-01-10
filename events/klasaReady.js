@@ -40,5 +40,8 @@ module.exports = class extends Event {
       !this.client.schedule.tasks.find(task => task.taskName === 'premiumDays')
     )
       this.client.schedule.create('premiumDays', '0 0 * * *');
+
+    if (!this.client.schedule.tasks.find(task => task.taskName === 'petage'))
+      this.client.schedule.create('petage', '0 0 * * *');
   }
 ***REMOVED***

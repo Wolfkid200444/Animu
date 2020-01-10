@@ -3,8 +3,6 @@ TODO: Update Games redis to auto-delete after certain time
 TODO: Test and fix Mafia
 
 # Pets
-TODO: Add dynamic age (Pets can die)
-TODO: Add pet toys (Affects pets happiness)
 TODO: Add pet messages (Pet will dm their owner to let them know when pet is unfed/unhappy)
 
 # Music

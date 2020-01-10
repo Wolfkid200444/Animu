@@ -23,6 +23,10 @@ const petSchema = new Schema({
   },
   petType: String,
   petName: String,
+  age: {
+    type: Number,
+    default: Math.round(Math.random() * 100) + 10,
+  }, // Pets are highly likely to die as they approach 600 days
   personality: {
     type: Number,
     min: 0,
@@ -51,10 +55,17 @@ const petSchema = new Schema({
     type: Number,
     default: 0,
   }, // If x (depends upon personality), pet runs away
-  toys: [], // Toys will affect rate at which happiness drops/increases
+  toys: [String], // Toys will affect rate at which happiness drops/increases
 });
 
 // Schema Methods
+petSchema.methods.petAge = async function() {
+  this.age += 1;
+
+  await this.save();
+  return this.age;
+***REMOVED***
+
 petSchema.methods.notFedInHour = async function() {
   this.hunger +=
     this.personality === 1 || this.personality === 3
