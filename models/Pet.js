@@ -27,11 +27,13 @@ const petSchema = new Schema({
     type: Number,
     min: 0,
     max: 4,
+    default: Math.round(Math.random() * 4),
   },
   happiness: {
     type: Number,
     min: 0,
     max: 100,
+    default: 80,
   }, // 1 - 100, If below x (depends upon personality) for 7 days, pet run aways | If x (depends upon personality), pet runs away instantly
   happinessCap: {
     type: Number,
