@@ -72,6 +72,8 @@ petSchema.methods.notPlayedInHour = function() {
       ? 6
       : 5;
 
+  if (this.happiness <= this.happinessCap) this.happiness = this.happinessCap;
+
   this.save();
   return this.happiness;
 ***REMOVED***
@@ -84,8 +86,31 @@ petSchema.methods.petFed = function() {
       ? 20
       : 30;
 
+  const hungerEndurability =
+    this.personality === 1 || this.personality === 3
+      ? 70
+      : this.personality === 2 || this.personality === 4
+      ? 40
+      : 50;
+
+  if (this.hunger >= hungerEndurability) this.happinessCap = 100;
+
   this.save();
   return this.hunger;
+***REMOVED***
+
+petSchema.methods.petHappy = function(rate) {
+  this.happiness +=
+    this.personality === 2 || this.personality === 3
+      ? rate * 1.5
+      : this.personality === 1 || this.personality === 4
+      ? rate * 0.5
+      : rate;
+
+  if (this.happiness <= this.happinessCap) this.happiness = this.happinessCap;
+
+  this.save();
+  return this.happiness;
 ***REMOVED***
 
 //Model

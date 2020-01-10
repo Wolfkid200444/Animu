@@ -3,7 +3,6 @@ TODO: Update Games redis to auto-delete after certain time
 TODO: Test and fix Mafia
 
 # Pets
-TODO: Add happiness (Happiness will decrease if you don't play with your pet. Happiness will be capped if you don't feed your pet)
 TODO: Add dynamic age (Pets can die)
 TODO: Add pet toys (Affects pets happiness)
 TODO: Add pet command (Shows info such as happiness and last fed)

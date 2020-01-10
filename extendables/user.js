@@ -790,6 +790,7 @@ module.exports = class extends Extendable {
           });
 
         await pet.petFed();
+        await pet.petHappy(20);
 
         embed = new MessageEmbed({
           title: 'Fed Pet',
@@ -807,6 +808,7 @@ module.exports = class extends Extendable {
           });
 
         await pet.petFed();
+        await pet.petHappy(20);
 
         embed = new MessageEmbed({
           title: 'Fed Pet',
