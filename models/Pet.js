@@ -8,17 +8,11 @@ const { Schema, model } = require('mongoose');
  *
  * Types
  * ------
- * 0 - 40-50% less endurability
- * 1 - 30-40% less endurability
- * 2 - 20-30% less endurability
- * 3 - 10-20% less endurability
- * 4 - 5-10% less endurability
- * 5 - Normal
- * 6 - 5-10% more endurability
- * 7 - 10-20% more endurability
- * 8 - 20-30% more endurability
- * 9 - 30-40% more endurability
- * 10 - 40-50% more endurability
+ * 0 - Normal
+ * 1 - Can stay hungry for longer but gets unhappy faster
+ * 2 - Can stay happy for longer but gets hungry faster
+ * 3 - Can stay happy/hungry for longer
+ * 4 - Can't say happy/hungry for longer
  */
 
 //Schema
@@ -32,7 +26,7 @@ const petSchema = new Schema({
   personality: {
     type: Number,
     min: 0,
-    max: 10,
+    max: 4,
   },
   happiness: {
     type: Number,
