@@ -52,7 +52,7 @@ module.exports = class extends Task {
           { $inc: { petUnhappyforHours: 1 } }
         ).exec();
 
-      if (hunger >= hungerEndurability)
+      if (hunger >= hungerEndurability && pet.happinessCap > 30)
         await Pet.updateOne(
           { memberID: pet.memberID },
           { $inc: { happinessCap: -10 } }
