@@ -51,6 +51,7 @@ const petSchema = new Schema({
     type: Number,
     default: 0,
   }, // If x (depends upon personality), pet runs away
+  toys: [], // Toys will affect rate at which happiness drops/increases
 });
 
 // Schema Methods
