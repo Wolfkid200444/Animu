@@ -837,9 +837,31 @@ module.exports = class extends Extendable {
         description: 'Have fun with your new pet',
         color: 0x2196f3,
       });
-    }
+    } else if (_.includes(item.properties, 'pet_toy')) {
+      const pet = await Pet.findOne({ memberID: this.id }).exec();
 
-    console.log('Item:', item);
+      if (!pet || pet.petType !== item.properties[1])
+        return new MessageEmbed({
+          title: `You don't have a ${item.properties[1]}`,
+          description: `The item you're trying to use is intended for ${item.properties[1]}...`,
+          color: 0x2196f3,
+        });
+
+      const res = await pet.giveToy(item.name);
+
+      if (!res)
+        embed = new MessageEmbed({
+          title: 'Ooops',
+          description: `It seems your ${pet.petType} didn't like the toy, thus it destroyed the ${item.name}`,
+          color: 0xf44336,
+        });
+      else
+        embed = new MessageEmbed({
+          title: `Your ${pet.petType} seems happy with it's new toy`,
+          description: 'It seems your pet likes the new toy you gave it',
+          color: 0x2196f3,
+        });
+    }
 
     await inventory.save();
 

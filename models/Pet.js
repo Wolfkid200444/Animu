@@ -55,7 +55,7 @@ const petSchema = new Schema({
 });
 
 // Schema Methods
-petSchema.methods.notFedInHour = function() {
+petSchema.methods.notFedInHour = async function() {
   this.hunger +=
     this.personality === 1 || this.personality === 3
       ? 3
@@ -63,25 +63,37 @@ petSchema.methods.notFedInHour = function() {
       ? 5
       : 4;
 
-  this.save();
+  await this.save();
   return this.hunger;
 ***REMOVED***
 
-petSchema.methods.notPlayedInHour = function() {
-  this.happiness -=
+petSchema.methods.notPlayedInHour = async function() {
+  const Item = this.model('Item');
+  const toys = Item.find({ itemName: { $in: this.toys } });
+
+  console.log(toys);
+
+  let happinessToDeduct =
     this.personality === 2 || this.personality === 3
       ? 4
       : this.personality === 1 || this.personality === 4
       ? 6
       : 5;
 
+  toys.forEach(t => {
+    if (t.properties[2] === 'unhappiness_rate_decrease')
+      happinessToDeduct -= t.properties[3];
+  });
+
+  this.happiness -= happinessToDeduct >= 1 ? happinessToDeduct : 1;
+
   if (this.happiness <= this.happinessCap) this.happiness = this.happinessCap;
 
-  this.save();
+  await this.save();
   return this.happiness;
 ***REMOVED***
 
-petSchema.methods.petFed = function() {
+petSchema.methods.petFed = async function() {
   this.hunger -=
     this.personality === 1 || this.personality === 3
       ? 40
@@ -98,22 +110,41 @@ petSchema.methods.petFed = function() {
 
   if (this.hunger >= hungerEndurability) this.happinessCap = 100;
 
-  this.save();
+  await this.save();
   return this.hunger;
 ***REMOVED***
 
-petSchema.methods.petHappy = function(rate) {
-  this.happiness +=
+petSchema.methods.petHappy = async function(rate) {
+  const Item = this.model('Item');
+  const toys = Item.find({ itemName: { $in: this.toys } });
+
+  let happinessToAdd =
     this.personality === 2 || this.personality === 3
       ? rate * 1.5
       : this.personality === 1 || this.personality === 4
       ? rate * 0.5
       : rate;
 
+  toys.forEach(t => {
+    if (t.properties[2] === 'happiness_increase')
+      happinessToAdd += t.properties[3];
+  });
+
+  this.happiness += happinessToAdd;
+
   if (this.happiness <= this.happinessCap) this.happiness = this.happinessCap;
 
-  this.save();
+  await this.save();
   return this.happiness;
+***REMOVED***
+
+petSchema.methods.giveToy = async function(toyName) {
+  if (this.personality === 4 && Math.random() * 100 < 33) return false;
+
+  this.toys.push(toyName);
+
+  await this.save();
+  return this.toys;
 ***REMOVED***
 
 //Model
