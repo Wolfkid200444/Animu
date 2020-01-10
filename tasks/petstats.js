@@ -64,6 +64,24 @@ module.exports = class extends Task {
           .get(pet.memberID)
           .send(`Your pet has died from hunger.... F`);
       }
+
+      // Pet isn't dead yet
+      if (hunger > 90 || happiness < 10)
+        this.client.users
+          .get(pet.memberID)
+          .send(
+            pet.petType === 'cat'
+              ? 'Meow Meoooow Meooooowwwww!!'
+              : 'Bork Bork Bork Bork!!'
+          );
+      else if (hunger > 60 || happiness < 40)
+        this.client.users
+          .get(pet.memberID)
+          .send(pet.petType === 'cat' ? 'Meeeeowwww!' : 'Bork Bork!');
+      else if (hunger > 40 || happiness < 60)
+        this.client.users
+          .get(pet.memberID)
+          .send(pet.petType === 'cat' ? 'Meow!' : 'Bork!');
     });
   }
 ***REMOVED***
