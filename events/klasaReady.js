@@ -20,8 +20,8 @@ module.exports = class extends Event {
     }
 
     //-> Scheduling Tasks
-    if (!this.client.schedule.tasks.find(task => task.taskName === 'petfed'))
-      this.client.schedule.create('petfed', '0 * * * *');
+    if (!this.client.schedule.tasks.find(task => task.taskName === 'petsats'))
+      this.client.schedule.create('petstats', '0 * * * *');
 
     if (
       !this.client.schedule.tasks.find(

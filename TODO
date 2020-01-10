@@ -3,8 +3,6 @@ TODO: Update Games redis to auto-delete after certain time
 TODO: Test and fix Mafia
 
 # Pets
-TODO: Add personalities (Personalities affect how longer pet can stay unfed, and how fast pet gets unhappy)
-TODO: Add pet food as items (Cat food, Dog food)
 TODO: Add happiness (Happiness will decrease if you don't play with your pet. Happiness will be capped if you don't feed your pet)
 TODO: Add dynamic age (Pets can die)
 TODO: Add pet toys (Affects pets happiness)

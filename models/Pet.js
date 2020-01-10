@@ -45,7 +45,7 @@ const petSchema = new Schema({
     min: 0,
     max: 100,
   }, // If surpasses 100, your pet dies
-  petUnhappyForDays: {
+  petUnhappyForHours: {
     type: Number,
     default: 0,
   }, // If x (depends upon personality), pet runs away
@@ -62,6 +62,18 @@ petSchema.methods.notFedInHour = function() {
 
   this.save();
   return this.hunger;
+***REMOVED***
+
+petSchema.methods.notPlayedInHour = function() {
+  this.happiness -=
+    this.personality === 2 || this.personality === 3
+      ? 4
+      : this.personality === 1 || this.personality === 4
+      ? 6
+      : 5;
+
+  this.save();
+  return this.happiness;
 ***REMOVED***
 
 petSchema.methods.petFed = function() {
