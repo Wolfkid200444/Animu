@@ -39,6 +39,12 @@ const petSchema = new Schema({
     min: 0,
     max: 100,
   }, // 1 - 100, If below x (depends upon personality) for 7 days, pet run aways | If x (depends upon personality), pet runs away instantly
+  happinessCap: {
+    type: Number,
+    min: 30,
+    max: 100,
+    default: 100,
+  }, // Cap for happiness, will decrease when pet is unfed
   lastFedHoursAgo: {
     type: Number,
     default: 0,
