@@ -782,7 +782,7 @@ module.exports = class extends Extendable {
       } else if (item.name === 'Cat Food') {
         const pet = await Pet.findOne({ memberID: this.id }).exec();
 
-        if (!pet || pet.petName !== 'cat')
+        if (!pet || pet.petType !== 'cat')
           return new MessageEmbed({
             title: "You don't have a cat to feed...",
             description: 'To purchase a cat, use `-purchase Pet Cat`',
@@ -800,7 +800,7 @@ module.exports = class extends Extendable {
       } else if (item.name === 'Dog Food') {
         const pet = await Pet.findOne({ memberID: this.id }).exec();
 
-        if (!pet || pet.petName !== 'dog')
+        if (!pet || pet.petType !== 'dog')
           return new MessageEmbed({
             title: "You don't have a dog to feed...",
             description: 'To purchase a dog, use `-purchase Pet Dog`',
