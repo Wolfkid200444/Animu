@@ -5,14 +5,13 @@ TODO: Test and fix Mafia
 # Pets
 TODO: Add dynamic age (Pets can die)
 TODO: Add pet toys (Affects pets happiness)
-TODO: Add pet command (Shows info such as happiness and last fed)
 TODO: Add pet messages (Pet will dm their owner to let them know when pet is unfed/unhappy)
-TODO: Add pet adoption coupons (Used to get pets, useful when you wish to gift someone a pet)
 
 # Music
 TODO: Add Lyrics
 
 # Misc
+TODO: Format coins amount with commas as thousands seperator
 TODO: Add ability for server owners to sell: Roles, badges and rep
 TODO: Add marketplace where users can put items for sale
 TODO: Add a casino (slightly rigged)
