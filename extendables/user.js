@@ -715,6 +715,12 @@ module.exports = class extends Extendable {
         await guild.save();
 
         await redisClient.hsetAsync('guild_tiers', guild.guildID, 'lite');
+
+        embed = new MessageEmbed({
+          title: 'Animu Lite',
+          description: `You've got Animu Lite subscription!`,
+          color: 0x2196f3,
+        });
       } else if (_.includes(item.properties, 'animu_plus')) {
         if (guild.tier == 'lite' || guild.tier == 'pro')
           return new MessageEmbed({
@@ -738,6 +744,12 @@ module.exports = class extends Extendable {
         await guild.save();
 
         await redisClient.hsetAsync('guild_tiers', guild.guildID, 'plus');
+
+        embed = new MessageEmbed({
+          title: 'Animu Plus',
+          description: `You've got Animu Plus subscription!`,
+          color: 0x2196f3,
+        });
       } else if (_.includes(item.properties, 'animu_pro')) {
         if (guild.tier == 'lite' || guild.tier == 'plus')
           return new MessageEmbed({
@@ -761,6 +773,46 @@ module.exports = class extends Extendable {
         await guild.save();
 
         await redisClient.hsetAsync('guild_tiers', guild.guildID, 'pro');
+
+        embed = new MessageEmbed({
+          title: 'Animu Pro',
+          description: `You've got Animu Pro subscription!`,
+          color: 0x2196f3,
+        });
+      } else if (item.name === 'Cat Food') {
+        const pet = await Pet.findOne({ memberID: this.id }).exec();
+
+        if (!pet || pet.petName !== 'cat')
+          return new MessageEmbed({
+            title: "You don't have a cat to feed...",
+            description: 'To purchase a cat, use `-purchase Pet Cat`',
+            color: 0x2196f3,
+          });
+
+        await pet.petFed();
+
+        embed = new MessageEmbed({
+          title: 'Fed Pet',
+          description: `Successfully fed pet`,
+          color: 0x2196f3,
+        });
+      } else if (item.name === 'Dog Food') {
+        const pet = await Pet.findOne({ memberID: this.id }).exec();
+
+        if (!pet || pet.petName !== 'dog')
+          return new MessageEmbed({
+            title: "You don't have a dog to feed...",
+            description: 'To purchase a dog, use `-purchase Pet Dog`',
+            color: 0x2196f3,
+          });
+
+        await pet.petFed();
+
+        embed = new MessageEmbed({
+          title: 'Fed Pet',
+          description: `Successfully fed pet`,
+          color: 0x2196f3,
+        });
       }
     }
 

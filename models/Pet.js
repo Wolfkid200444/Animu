@@ -39,10 +39,12 @@ const petSchema = new Schema({
     max: 100,
     default: 100,
   }, // Cap for happiness, will decrease when pet is unfed
-  lastFedHoursAgo: {
+  hunger: {
     type: Number,
     default: 0,
-  }, // If surpasses x (depends upon personality), your pet dies
+    min: 0,
+    max: 100,
+  }, // If surpasses 100, your pet dies
   petUnhappyForDays: {
     type: Number,
     default: 0,
@@ -51,10 +53,27 @@ const petSchema = new Schema({
 
 // Schema Methods
 petSchema.methods.notFedInHour = function() {
-  this.lastFedHoursAgo += 1;
+  this.hunger +=
+    this.personality === 1 || this.personality === 3
+      ? 3
+      : this.personality === 2 || this.personality === 4
+      ? 5
+      : 4;
 
   this.save();
-  return this.lastFedHoursAgo;
+  return this.hunger;
+***REMOVED***
+
+petSchema.methods.petFed = function() {
+  this.hunger -=
+    this.personality === 1 || this.personality === 3
+      ? 40
+      : this.personality === 2 || this.personality === 4
+      ? 20
+      : 30;
+
+  this.save();
+  return this.hunger;
 ***REMOVED***
 
 //Model

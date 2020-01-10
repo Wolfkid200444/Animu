@@ -12,21 +12,13 @@ module.exports = class extends Task {
     const pets = await Pet.find({}).exec();
 
     pets.forEach(async pet => {
-      const lastFed = await pet.notFedInHour();
-      const petMaxLimit =
-        pet.personality === 1 || pet.personality === 3
-          ? 30
-          : pet.personality === 2 || pet.personality === 4
-          ? 18
-          : 24;
+      const hunger = await pet.notFedInHour();
 
-      if (lastFed >= petMaxLimit) {
+      if (hunger >= 100) {
         Pet.deleteOne({ memberID: pet.memberID }).exec();
         this.client.users
           .get(pet.memberID)
-          .send(
-            `Your pet has died as you didn't feed them for last ${lastFed} hours`
-          );
+          .send(`Your pet has died from hunger.... F`);
       }
     });
   }
