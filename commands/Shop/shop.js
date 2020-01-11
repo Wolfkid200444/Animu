@@ -1,6 +1,7 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
+const { numberWithCommas } = require('../../util/util');
 
 //Init
 const Item = mongoose.model('Item');
@@ -30,10 +31,12 @@ module.exports = class extends Command {
 
       let priceStr = '';
 
-      if (item.discount === 0) priceStr = `${item.price} Coins`;
+      if (item.discount === 0)
+        priceStr = `${numberWithCommas(item.price)} Coins`;
       else
-        priceStr = ` ${item.price -
-          item.price * (item.discount / 100)} Coins ~~${item.price} Coins~~ (${
+        priceStr = ` ${numberWithCommas(
+          item.price - item.price * (item.discount / 100)
+        )} Coins ~~${numberWithCommas(item.price)} Coins~~ (${
           item.discount
         }% off)`;
 

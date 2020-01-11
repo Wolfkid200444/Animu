@@ -1,6 +1,7 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
+const { numberWithCommas } = require('../../util/util');
 
 //Init
 const Profile = mongoose.model('Profile');
@@ -24,16 +25,18 @@ module.exports = class extends Command {
       const richest10 = await Inventory.find(
         {},
         {},
-        { sort: { coins: -1 }, limit: 10 },
+        { sort: { coins: -1 }, limit: 10 }
       );
 
       let str = '';
 
       richest10.forEach((inv, i) => {
         if (this.client.users.get(inv.memberID))
-          str += `${i + 1}) ${this.client.users.get(inv.memberID).username} - ${
-            inv.coins
-          } Coins ${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''}\n\n`;
+          str += `${i + 1}) ${
+            this.client.users.get(inv.memberID).username
+          } - ${numberWithCommas(inv.coins)} Coins ${
+            i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''
+          }\n\n`;
         else str += '[Can we get an F?]';
       });
 
@@ -42,7 +45,7 @@ module.exports = class extends Command {
           title: 'Top 10 Richest People in Animu',
           description: str,
           color: '#2196f3',
-        }),
+        })
       );
     } else if (leaderboard === 'reputation') {
       const members = await Profile.find({
@@ -50,12 +53,8 @@ module.exports = class extends Command {
       });
 
       members.sort((a, b) => {
-        const indexA = a.reputation.findIndex(
-          (r) => r.guildID === msg.guild.id,
-        );
-        const indexB = b.reputation.findIndex(
-          (r) => r.guildID === msg.guild.id,
-        );
+        const indexA = a.reputation.findIndex(r => r.guildID === msg.guild.id);
+        const indexB = b.reputation.findIndex(r => r.guildID === msg.guild.id);
         return a.reputation[indexA].rep > b.reputation[indexB].rep ? -1 : 1;
       });
 
@@ -65,7 +64,7 @@ module.exports = class extends Command {
 
       top10.forEach((profile, i) => {
         const index = profile.reputation.findIndex(
-          (r) => r.guildID === msg.guild.id,
+          r => r.guildID === msg.guild.id
         );
 
         if (this.client.users.get(profile.memberID))
@@ -81,7 +80,7 @@ module.exports = class extends Command {
           title: `Top 10 Reputable members of ${msg.guild.name}`,
           description: str,
           color: '#2196f3',
-        }),
+        })
       );
     } else if (leaderboard === 'levels') {
       const members = await Profile.find({
@@ -89,8 +88,8 @@ module.exports = class extends Command {
       });
 
       members.sort((a, b) => {
-        const indexA = a.level.findIndex((r) => r.guildID === msg.guild.id);
-        const indexB = b.level.findIndex((r) => r.guildID === msg.guild.id);
+        const indexA = a.level.findIndex(r => r.guildID === msg.guild.id);
+        const indexB = b.level.findIndex(r => r.guildID === msg.guild.id);
         return a.level[indexA].level > b.level[indexB].level ? -1 : 1;
       });
 
@@ -99,9 +98,7 @@ module.exports = class extends Command {
       let str = '';
 
       top10.forEach((profile, i) => {
-        const index = profile.level.findIndex(
-          (r) => r.guildID === msg.guild.id,
-        );
+        const index = profile.level.findIndex(r => r.guildID === msg.guild.id);
 
         if (this.client.users.get(profile.memberID))
           str += `${i + 1}) ${
@@ -116,7 +113,7 @@ module.exports = class extends Command {
           title: `Top 10 Active members of ${msg.guild.name}`,
           description: str,
           color: '#2196f3',
-        }),
+        })
       );
     }
   }

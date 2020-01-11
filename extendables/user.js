@@ -5,6 +5,7 @@ const { model } = require('mongoose');
 const _ = require('lodash');
 const redis = require('redis');
 const bluebird = require('bluebird');
+const { numberWithCommas } = require('../util/util');
 
 //Init
 const Profile = model('Profile');
@@ -227,7 +228,7 @@ module.exports = class extends Extendable {
         `${this.client.users.get(inventory.memberID).username ||
           'Unknown'}'s Inventory`
       )
-      .addField('Coins', inventory.coins)
+      .addField('Coins', numberWithCommas(inventory.coins))
       .addField('Inventory', inventoryStr || '[Inventory is empty]')
       .setColor('#2196f3');
   }
@@ -1023,7 +1024,12 @@ module.exports = class extends Extendable {
       description: `**Current Deposits**\n${
         bankAccount.deposits.length > 0
           ? bankAccount.deposits
-              .map(d => `• ${d.coins} Coins - ${d.daysLeft} Days Left`)
+              .map(
+                d =>
+                  `• ${numberWithCommas(d.coins)} Coins - ${
+                    d.daysLeft
+                  } Days Left`
+              )
               .join('\n')
           : '[No Deposits]'
       }`,
