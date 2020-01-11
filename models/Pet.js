@@ -80,7 +80,7 @@ petSchema.methods.notFedInHour = async function() {
 
 petSchema.methods.notPlayedInHour = async function() {
   const Item = this.model('Item');
-  const toys = Item.find({ itemName: { $in: this.toys } });
+  const toys = await Item.find({ itemName: { $in: this.toys } });
 
   console.log(toys);
 
@@ -127,7 +127,7 @@ petSchema.methods.petFed = async function() {
 
 petSchema.methods.petHappy = async function(rate) {
   const Item = this.model('Item');
-  const toys = Item.find({ itemName: { $in: this.toys } });
+  const toys = await Item.find({ itemName: { $in: this.toys } });
 
   let happinessToAdd =
     this.personality === 2 || this.personality === 3
@@ -136,10 +136,11 @@ petSchema.methods.petHappy = async function(rate) {
       ? rate * 0.5
       : rate;
 
-  toys.forEach(t => {
-    if (t.properties[2] === 'happiness_increase')
-      happinessToAdd += t.properties[3];
-  });
+  if (toys.length > 0)
+    toys.forEach(t => {
+      if (t.properties[2] === 'happiness_increase')
+        happinessToAdd += t.properties[3];
+    });
 
   this.happiness += happinessToAdd;
 
