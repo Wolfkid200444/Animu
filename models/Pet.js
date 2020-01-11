@@ -98,7 +98,7 @@ petSchema.methods.notPlayedInHour = async function() {
 
   this.happiness -= happinessToDeduct >= 1 ? happinessToDeduct : 1;
 
-  if (this.happiness <= this.happinessCap) this.happiness = this.happinessCap;
+  if (this.happiness >= this.happinessCap) this.happiness = this.happinessCap;
 
   await this.save();
   return this.happiness;
