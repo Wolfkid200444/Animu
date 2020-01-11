@@ -989,6 +989,13 @@ module.exports = class extends Extendable {
         color: 0xf44336,
       });
 
+    if (res.res === 'insufficient_coins')
+      return new MessageEmbed({
+        title: 'Insufficient Coins',
+        description: "You don't have enough coins to create a bank a account",
+        color: 0xf44336,
+      });
+
     return new MessageEmbed({
       title: 'Bank Account Created',
       description: 'Congrats, now you have a bank account',

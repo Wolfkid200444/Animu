@@ -16,8 +16,15 @@ const bankAccountSchema = new Schema({
 // Statics
 bankAccountSchema.statics.createAccount = async function(memberID) {
   const bankAccount = await this.findOne({ memberID }).exec();
+  const inventory = await this.model('Inventory')
+    .findOne({ memberID })
+    .exec();
 
   if (bankAccount) return { res: 'already_exists', bankAccount ***REMOVED***
+
+  if (inventory.coins < 500) return { res: 'insufficient_coins' ***REMOVED***
+
+  await inventory.deductCoins(500);
 
   return {
     res: 'created',
