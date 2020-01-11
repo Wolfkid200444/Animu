@@ -74,6 +74,18 @@ petSchema.methods.notFedInHour = async function() {
       ? 5
       : 4;
 
+  const hungerEndurability =
+    this.personality === 1 || this.personality === 3
+      ? 60
+      : this.personality === 2 || this.personality === 4
+      ? 40
+      : 50;
+
+  if (this.hunger >= hungerEndurability && this.happinessCap > 30)
+    this.happinessCap -= 10;
+
+  if (this.happinessCap < 30) this.happinessCap = 30;
+
   await this.save();
   return this.hunger;
 ***REMOVED***

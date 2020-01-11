@@ -15,13 +15,6 @@ module.exports = class extends Task {
       const hunger = await pet.notFedInHour();
       const happiness = await pet.notPlayedInHour();
 
-      const hungerEndurability =
-        pet.personality === 1 || pet.personality === 3
-          ? 70
-          : pet.personality === 2 || pet.personality === 4
-          ? 40
-          : 50;
-
       const happinessRequired =
         pet.personality === 2 || pet.personality === 3
           ? 40
@@ -50,12 +43,6 @@ module.exports = class extends Task {
         await Pet.updateOne(
           { memberID: pet.memberID },
           { $inc: { petUnhappyforHours: 1 } }
-        ).exec();
-
-      if (hunger >= hungerEndurability && pet.happinessCap > 30)
-        await Pet.updateOne(
-          { memberID: pet.memberID },
-          { $inc: { happinessCap: -10 } }
         ).exec();
 
       if (hunger >= 100) {
