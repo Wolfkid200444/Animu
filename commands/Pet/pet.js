@@ -46,7 +46,10 @@ module.exports = class extends Command {
           true
         )
         .addField('❯ Age', pet.age)
-        .addField('❯ Toys', pet.toys.join(', '))
+        .addField(
+          '❯ Toys',
+          pet.toys.length > 0 ? pet.toys.join(', ') : '[No Toys]'
+        )
         .setColor('#2196f3')
     );
   }
