@@ -45,7 +45,7 @@ module.exports = class extends Command {
           }`,
           true
         )
-        .addField('❯ Age', pet.age)
+        .addField('❯ Age', `${pet.age} Days`)
         .addField(
           '❯ Toys',
           pet.toys.length > 0 ? pet.toys.join(', ') : '[No Toys]'
