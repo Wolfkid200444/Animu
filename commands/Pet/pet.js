@@ -45,6 +45,7 @@ module.exports = class extends Command {
           }`,
           true
         )
+        .addField('❯ Age', pet.age)
         .addField('❯ Toys', pet.toys.join(', '))
         .setColor('#2196f3')
     );

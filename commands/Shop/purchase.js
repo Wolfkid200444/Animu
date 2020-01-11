@@ -46,7 +46,7 @@ module.exports = class extends Command {
 
     const fuse = new Fuse(itemArr, {
       keys: ['name'],
-      threshold: 0.1,
+      threshold: 0.2,
     });
 
     const item = fuse.search(itemName)[0];
