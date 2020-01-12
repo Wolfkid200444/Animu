@@ -128,7 +128,8 @@ module.exports = class extends Extendable {
           ['lite', 'plus', 'pro'],
           await redisClient.hgetAsync('guild_tiers', guildID)
         )
-      ) proceedLevel = false;
+      )
+        proceedLevel = false;
 
       for (let i = 0; i < thisGuild.settings.ignoreLevelRoles.length; i++) {
         const ignoreLevelRole = thisGuild.settings.ignoreLevelRoles[i];
@@ -974,6 +975,8 @@ module.exports = class extends Extendable {
     if (period === 4) coins = coins * 1.02 ** 4;
     if (period === 12) coins = coins * 1.03 ** 12;
 
+    coins = Math.round(coins);
+
     await bankAccount.addDeposit(period, coins);
 
     return new MessageEmbed({
@@ -1033,7 +1036,7 @@ module.exports = class extends Extendable {
           ? bankAccount.deposits
               .map(
                 d =>
-                  `• ${numberWithCommas(d.coins)} Coins - ${
+                  `• ${numberWithCommas(Math.round(d.coins))} Coins - ${
                     d.daysLeft
                   } Days Left`
               )
