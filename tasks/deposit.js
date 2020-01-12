@@ -13,19 +13,18 @@ module.exports = class extends Task {
     const bankaccounts = await BankAccount.find({}).exec();
 
     bankaccounts.forEach(async account => {
-      console.log(account);
-      account.deposits.forEach(async (deposit, i) => {
+      console.log('Deposit Account (Before)', account);
+      const inv = await Inventory.findOne({ memberID: account.memberID });
+
+      account.deposits.forEach((deposit, i) => {
         if (deposit.daysLeft > 0) deposit.daysLeft--;
         if (deposit.daysLeft === 0) {
-          const inv = await Inventory.findOne({ memberID: account.memberID });
-          console.log(inv);
-          await inv.addCoins(deposit.coins);
-          console.log(inv);
+          inv.addCoins(deposit.coins);
 
           account.deposits.splice(i, 1);
         }
       });
-      console.log(account);
+      console.log('Deposit Account (After)', account);
       await account.save();
     });
   }
