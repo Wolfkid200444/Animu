@@ -123,6 +123,13 @@ module.exports = class extends Extendable {
 
       if (!thisGuild.settings.enableLevels) proceedLevel = false;
 
+      if (
+        !_.includes(
+          ['lite', 'plus', 'pro'],
+          await redisClient.hgetAsync('guild_tiers', guildID)
+        )
+      ) proceedLevel = false;
+
       for (let i = 0; i < thisGuild.settings.ignoreLevelRoles.length; i++) {
         const ignoreLevelRole = thisGuild.settings.ignoreLevelRoles[i];
         if (
