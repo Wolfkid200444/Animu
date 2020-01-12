@@ -37,7 +37,7 @@ module.exports = class extends Command {
           } - ${numberWithCommas(inv.coins)} Coins ${
             i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''
           }\n\n`;
-        else str += '[Can we get an F?]\n';
+        else str += '[Can we get an F?]\n\n';
       });
 
       msg.sendEmbed(
