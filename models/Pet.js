@@ -156,7 +156,7 @@ petSchema.methods.petHappy = async function(rate) {
 
   this.happiness += happinessToAdd;
 
-  if (this.happiness <= this.happinessCap) this.happiness = this.happinessCap;
+  if (this.happiness >= this.happinessCap) this.happiness = this.happinessCap;
 
   await this.save();
   return this.happiness;
