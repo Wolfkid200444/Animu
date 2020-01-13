@@ -710,8 +710,7 @@ module.exports = class extends Extendable {
             color: 0xf44336,
           });
 
-        guild.tier = 'lite';
-        guild.premiumDaysLeft += _.includes(item.properties, '7_days')
+        const daysToGive = _.includes(item.properties, '7_days')
           ? 7
           : _.includes(item.properties, '1_month')
           ? 30
@@ -720,6 +719,11 @@ module.exports = class extends Extendable {
           : _.includes(item.properties, '6_months')
           ? 180
           : 365;
+
+        guild.tier = 'lite';
+
+        if (!guild.premiumDaysLeft) guild.premiumDaysLeft = daysToGive;
+        else guild.premiumDaysLeft += daysToGive;
 
         await guild.save();
 
@@ -739,8 +743,7 @@ module.exports = class extends Extendable {
             color: 0xf44336,
           });
 
-        guild.tier = 'plus';
-        guild.premiumDaysLeft += _.includes(item.properties, '7_days')
+        const daysToGive = _.includes(item.properties, '7_days')
           ? 7
           : _.includes(item.properties, '1_month')
           ? 30
@@ -749,6 +752,11 @@ module.exports = class extends Extendable {
           : _.includes(item.properties, '6_months')
           ? 180
           : 365;
+
+        guild.tier = 'plus';
+
+        if (!guild.premiumDaysLeft) guild.premiumDaysLeft = daysToGive;
+        else guild.premiumDaysLeft += daysToGive;
 
         await guild.save();
 
@@ -768,8 +776,7 @@ module.exports = class extends Extendable {
             color: 0xf44336,
           });
 
-        guild.tier = 'pro';
-        guild.premiumDaysLeft += _.includes(item.properties, '7_days')
+        const daysToGive = _.includes(item.properties, '7_days')
           ? 7
           : _.includes(item.properties, '1_month')
           ? 30
@@ -778,6 +785,11 @@ module.exports = class extends Extendable {
           : _.includes(item.properties, '6_months')
           ? 180
           : 365;
+
+        guild.tier = 'pro';
+
+        if (!guild.premiumDaysLeft) guild.premiumDaysLeft = daysToGive;
+        else guild.premiumDaysLeft += daysToGive;
 
         await guild.save();
 
