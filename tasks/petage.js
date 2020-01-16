@@ -17,7 +17,7 @@ module.exports = class extends Task {
 
       const chancesOfDying = (age - 91.8367) / 816.327;
 
-      if (Math.random() > chancesOfDying) {
+      if (Math.random() < chancesOfDying) {
         await Pet.deleteOne({ memberID: pet.memberID }).exec();
 
         this.client.users.get(pet.memberID).send(_.sample(reasons));
