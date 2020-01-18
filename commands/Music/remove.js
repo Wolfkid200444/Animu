@@ -14,6 +14,7 @@ module.exports = class extends Command {
   }
 
   async run(msg, index) {
+    console.log('Index to remove:', index);
     if (!msg.member.voice.channel)
       return msg.send(
         new MessageEmbed({
@@ -62,6 +63,8 @@ module.exports = class extends Command {
       );
 
     const tracks = await queue.tracks(index - 1, index - 1);
+
+    console.log('Tracks:', tracks);
 
     if (tracks.length < 1)
       return msg.send(

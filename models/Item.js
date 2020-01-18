@@ -50,12 +50,14 @@ itemSchema.statics.createItem = async function(
 ***REMOVED***
 
 //Schema Methods
-itemSchema.methods.purchase = async function(msg, memberID) {
+itemSchema.methods.purchase = async function(msg, memberID, isStaff) {
   const inventory = await this.model('Inventory')
     .findOne({ memberID })
     .exec();
 
-  const price = this.price - this.price * (this.discount / 100);
+  let price = this.price - this.price * (this.discount / 100);
+
+  if (isStaff) price = 0;
 
   if (inventory.coins < price)
     return {

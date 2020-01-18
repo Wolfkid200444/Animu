@@ -23,13 +23,9 @@ module.exports = class extends Command {
   }
 
   async run(msg, [itemName]) {
-    if (await msg.hasAtLeastPermissionLevel(8))
-      return msg.sendEmbed(
-        new MessageEmbed()
-          .setTitle("Can't purchase item")
-          .setDescription("Animu Staff can't purchase items")
-          .setColor('#f44336')
-      );
+    let isStaff = false;
+
+    if (await msg.hasAtLeastPermissionLevel(8)) isStaff = true;
 
     const profile = await Profile.findOne({ memberID: msg.author.id }).exec();
 
@@ -68,7 +64,7 @@ module.exports = class extends Command {
         })
       );
 
-    const res = await item.purchase(msg, msg.author.id);
+    const res = await item.purchase(msg, msg.author.id, isStaff);
 
     return msg.sendEmbed(
       new MessageEmbed()
