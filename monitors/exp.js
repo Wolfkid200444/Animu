@@ -63,7 +63,7 @@ module.exports = class extends Monitor {
           );
 
           const index = guild.levelPerks.findIndex(l => l.level === level);
-          if (!index) return true;
+          if (index < 0) return true;
 
           //Assign reward(s)
           if (guild.levelPerks[index]) {
