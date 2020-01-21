@@ -46,6 +46,10 @@ AnimuClient.defaultGuildSchema.add('defaultVolume', 'number', {
   min: 1,
   max: 100,
 });
+/* Level Settings */
+AnimuClient.defaultGuildSchema.add('enableLevels', 'boolean', {
+  default: true,
+});
 AnimuClient.defaultGuildSchema.add('expRate', 'number', {
   default: 1,
   min: 0.1,
@@ -56,31 +60,35 @@ AnimuClient.defaultGuildSchema.add('expTime', 'number', {
   min: 1,
   max: 60,
 });
-AnimuClient.defaultGuildSchema.add('enableLevels', 'boolean', {
-  default: true,
+AnimuClient.defaultGuildSchema.add('ignoreExpChannels', 'channel', {
+  array: true,
 });
-AnimuClient.defaultGuildSchema.add('djRole', 'role');
-AnimuClient.defaultGuildSchema.add('joinRoles', 'role', { array: true });
-AnimuClient.defaultGuildSchema.add('verifiedRole', 'role');
-AnimuClient.defaultGuildSchema.add('mutedRole', 'role');
-AnimuClient.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
-AnimuClient.defaultGuildSchema.add('selfRolesMessage', 'string');
-AnimuClient.defaultGuildSchema.add('startingRep', 'number', { default: 50 });
-AnimuClient.defaultGuildSchema.add('banOnLowRep', 'boolean');
-AnimuClient.defaultGuildSchema.add('ignoreRepRoles', 'role', { array: true });
 AnimuClient.defaultGuildSchema.add('ignoreLevelRoles', 'role', { array: true });
 AnimuClient.defaultGuildSchema.add('allowExpBottles', 'boolean', {
   default: true,
 });
+
+/* Roles */
+AnimuClient.defaultGuildSchema.add('djRole', 'role');
+AnimuClient.defaultGuildSchema.add('verifiedRole', 'role');
+AnimuClient.defaultGuildSchema.add('mutedRole', 'role');
+
+/* Reputation */
+AnimuClient.defaultGuildSchema.add('startingRep', 'number', { default: 50 });
+AnimuClient.defaultGuildSchema.add('banOnLowRep', 'boolean');
+AnimuClient.defaultGuildSchema.add('ignoreRepRoles', 'role', { array: true });
+
+/* Self Roles */
+AnimuClient.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
+AnimuClient.defaultGuildSchema.add('selfRolesMessage', 'string');
+
+/* Welcome */
 AnimuClient.defaultGuildSchema.add('welcomeChannel', 'textchannel');
 AnimuClient.defaultGuildSchema.add('welcomeMessage', 'string');
 AnimuClient.defaultGuildSchema.add('welcomeImageURL', 'string');
-AnimuClient.defaultGuildSchema.add('deleteMessagesChannels', 'textchannel', {
-  array: true,
-});
-AnimuClient.defaultGuildSchema.add('ignoreExpChannels', 'channel', {
-  array: true,
-});
+AnimuClient.defaultGuildSchema.add('joinRoles', 'role', { array: true });
+
+/* Toxicity Filters */
 AnimuClient.defaultGuildSchema.add('deleteToxicMessages', 'bool');
 AnimuClient.defaultGuildSchema.add('toxicityFilters', folder => {
   folder.add('toxicity', 'bool');
@@ -92,13 +100,17 @@ AnimuClient.defaultGuildSchema.add('toxicityFilters', folder => {
   folder.add('flirtation', 'bool');
   folder.add('threat', 'bool');
 });
+
+/* Logs */
 AnimuClient.defaultGuildSchema.add('logChannels', folder => {
   folder.add('deletedMessages', 'textchannel');
   folder.add('reports', 'textchannel');
 });
-AnimuClient.defaultGuildSchema.add('verifiedMemberPerks', folder =>
-  folder.add('changeBanner', 'boolean')
-);
+
+/* Misc */
+AnimuClient.defaultGuildSchema.add('deleteMessagesChannels', 'textchannel', {
+  array: true,
+});
 
 //-> User Schema
 AnimuClient.defaultUserSchema.add('TODOs', 'any', { array: true });
@@ -170,6 +182,7 @@ mongoose
     require('./routes/webhooks')(app, client);
     require('./routes/api')(app, client);
 
+    //-> Adding Lavalink
     client.lVoice = new Lavaqueue({
       password: keys.lavalinkPassword,
       userID: client.user.id,
@@ -185,11 +198,13 @@ mongoose
       },
     });
 
+    //-> Lavalink Packets
     client.on('raw', pk => {
       if (pk.t === 'VOICE_STATE_UPDATE') client.lVoice.voiceStateUpdate(pk.d);
       if (pk.t === 'VOICE_SERVER_UPDATE') client.lVoice.voiceServerUpdate(pk.d);
     });
 
+    //-> Music Queue hanling
     client.lVoice.on('event', async d => {
       if (d.type === 'TrackEndEvent') {
         redisClient.delAsync(`skip_votes:${d.guildId}`);
@@ -204,8 +219,6 @@ mongoose
         }
 
         const allTracks = await client.lVoice.queues.get(d.guildId).tracks();
-
-        console.log(allTracks);
 
         if (!looping && allTracks.length === 0)
           await client.lVoice.queues.get(d.guildId).player.leave();

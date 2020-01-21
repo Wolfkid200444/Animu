@@ -23,13 +23,6 @@ module.exports = class extends Event {
     if (!this.client.schedule.tasks.find(task => task.taskName === 'petsats'))
       this.client.schedule.create('petstats', '0 * * * *');
 
-    if (
-      !this.client.schedule.tasks.find(
-        task => task.taskName === 'changedbanner'
-      )
-    )
-      this.client.schedule.create('changedbanner', '0 0 * * *');
-
     if (!this.client.schedule.tasks.find(task => task.taskName === 'checkedIn'))
       this.client.schedule.create('checkedIn', '0 0 * * *');
 

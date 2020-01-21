@@ -29,12 +29,6 @@ const profileSchema = new Schema({
       },
     },
   ],
-  lastBannerChange: [
-    {
-      guildID: String,
-      daysAgo: Number,
-    },
-  ],
   level: [
     {
       guildID: String,
