@@ -24,9 +24,9 @@ module.exports = class extends Command {
 
     await member.roles.remove(msg.guild.settings.mutedRole);
 
-    const profile = await Profile.findOne({ memberID: user.id }).exec();
+    const profile = await Profile.findOne({ memberID: msg.user.id }).exec();
 
-    const index = profile.mutedIn.indexOf(guild.id);
+    const index = profile.mutedIn.indexOf(msg.user.guild.id);
 
     if (index >= 0) profile.mutedIn.splice(index, 1);
 
