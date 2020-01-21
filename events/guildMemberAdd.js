@@ -41,14 +41,19 @@ module.exports = class extends Event {
       await profileFind.save();
     }
 
+    if (member.guild.settings.joinRoles)
+      member.guild.settings.joinRoles.forEach(r => {
+        if (member.guild.roles.has(r))
+          member.roles.add(r, 'Assigning Member role');
+      });
+
     if (
       profile.res === 'already_exists' &&
       member.guild.settings.mutedRole &&
-      _.includes(profile.mutedIn, member.guild.id)
+      _.includes(profile.mutedIn, member.guild.id) &&
+      member.guild.roles.has(member.guild.settings.mutedRole)
     )
       member.roles.add(member.guild.settings.mutedRole, 'Assigning Muted role');
-    else if (member.guild.settings.joinRole)
-      member.roles.add(member.guild.settings.joinRole, 'Assigning Member role');
 
     if (member.guild.settings.welcomeChannel) {
       // Send Welcome message

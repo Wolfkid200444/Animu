@@ -60,7 +60,7 @@ AnimuClient.defaultGuildSchema.add('enableLevels', 'boolean', {
   default: true,
 });
 AnimuClient.defaultGuildSchema.add('djRole', 'role');
-AnimuClient.defaultGuildSchema.add('joinRole', 'role');
+AnimuClient.defaultGuildSchema.add('joinRoles', 'role', { array: true });
 AnimuClient.defaultGuildSchema.add('verifiedRole', 'role');
 AnimuClient.defaultGuildSchema.add('mutedRole', 'role');
 AnimuClient.defaultGuildSchema.add('selfRolesChannel', 'textchannel');
@@ -72,7 +72,7 @@ AnimuClient.defaultGuildSchema.add('ignoreLevelRoles', 'role', { array: true });
 AnimuClient.defaultGuildSchema.add('allowExpBottles', 'boolean', {
   default: true,
 });
-AnimuClient.defaultGuildSchema.add('welcomeChannel', 'channel');
+AnimuClient.defaultGuildSchema.add('welcomeChannel', 'textchannel');
 AnimuClient.defaultGuildSchema.add('welcomeMessage', 'string');
 AnimuClient.defaultGuildSchema.add('welcomeImageURL', 'string');
 AnimuClient.defaultGuildSchema.add('deleteMessagesChannels', 'textchannel', {
