@@ -643,6 +643,8 @@ module.exports = class extends Extendable {
 
       const levelUps = await this.addExp(expToAdd, guildID);
 
+      console.log('Level Ups:', levelUps);
+
       //If member actually levelled up
       if (levelUps.length) {
         levelUps.forEach(level => {
@@ -655,25 +657,32 @@ module.exports = class extends Extendable {
             );
 
           const index = guild.levelPerks.findIndex(l => l.level === level);
+          console.log('Index of Guild:', index);
           if (!index) return true;
 
           //Assign reward(s)
           if (guild.levelPerks[index]) {
-            if (guild.levelPerks[index].badge)
-              this.giveBadge(guild.levelPerks[index].badge, guildID);
-            if (guild.levelPerks[index].role) {
-              const role = this.client.guilds
-                .get(guildID)
-                .roles.get(r => r.name === guild.levelPerks[index].role);
+            console.log('Perks:', guild.levelPerks[index]);
 
-              this.client.guilds
-                .get(guildID)
-                .members.get(this.id)
-                .roles.add(role);
+            try {
+              if (guild.levelPerks[index].badge)
+                this.giveBadge(guild.levelPerks[index].badge, guildID);
+              if (guild.levelPerks[index].role) {
+                const role = this.client.guilds
+                  .get(guildID)
+                  .roles.get(r => r.name === guild.levelPerks[index].role);
+
+                this.client.guilds
+                  .get(guildID)
+                  .members.get(this.id)
+                  .roles.add(role);
+              }
+
+              if (guild.levelPerks[index].rep)
+                this.editReputation('+', guild.levelPerks[index].rep, guildID);
+            } catch (e) {
+              console.log('An error occured while handling Level up perks:', e);
             }
-
-            if (guild.levelPerks[index].rep)
-              this.editReputation('+', guild.levelPerks[index].rep, guildID);
           }
         });
       }
