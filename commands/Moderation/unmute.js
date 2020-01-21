@@ -1,4 +1,8 @@
 const { Command } = require('klasa');
+const { model } = require('mongoose');
+
+//Init
+const Profile = model('Profile');
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -19,6 +23,14 @@ module.exports = class extends Command {
       throw 'This user is not muted.';
 
     await member.roles.remove(msg.guild.settings.mutedRole);
+
+    const profile = await Profile.findOne({ memberID: user.id }).exec();
+
+    const index = profile.mutedIn.indexOf(guild.id);
+
+    if (index >= 0) profile.mutedIn.splice(index, 1);
+
+    await profile.save();
 
     return msg.sendMessage(
       `${member.user.tag} was unmuted.${

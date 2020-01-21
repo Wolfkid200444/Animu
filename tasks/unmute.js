@@ -1,9 +1,8 @@
 const { Task } = require('klasa');
+const { model } = require('mongoose');
 
-/*
-	This is to be used with the mute command located in
-	/commands/Moderation/mute.js
-*/
+//Init
+const Profile = model('Profile');
 
 module.exports = class extends Task {
   async run({ guild, user }) {
@@ -12,5 +11,13 @@ module.exports = class extends Task {
     const member = await _guild.members.fetch(user).catch(() => null);
     if (!member) return;
     await member.roles.remove(_guild.settings.mutedRole);
+
+    const profile = await Profile.findOne({ memberID: user.id }).exec();
+
+    const index = profile.mutedIn.indexOf(guild.id);
+
+    if (index >= 0) profile.mutedIn.splice(index, 1);
+
+    await profile.save();
   }
 ***REMOVED***

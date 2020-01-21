@@ -1,4 +1,8 @@
 const { Command, Duration } = require('klasa');
+const { model } = require('mongoose');
+
+//Init
+const Profile = model('Profile');
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -26,6 +30,12 @@ module.exports = class extends Command {
     if (member.roles.has(msg.guild.settings.mutedRole))
       throw 'The member is already muted.';
     await member.roles.add(msg.guild.settings.mutedRole);
+
+    const profile = await Profile.findOne({ memberID: msg.member.id }).exec();
+
+    profile.mutedIn.push(msg.guild.id);
+
+    await profile.save();
 
     if (when) {
       await this.client.schedule.create('unmute', when, {
