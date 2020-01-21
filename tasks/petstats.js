@@ -12,6 +12,7 @@ module.exports = class extends Task {
     const pets = await Pet.find({}).exec();
 
     pets.forEach(async pet => {
+      console.log('Handling Pet Stats:', pet.memberID);
       const hunger = await pet.notFedInHour();
       const happiness = await pet.notPlayedInHour();
 
