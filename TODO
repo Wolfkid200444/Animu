@@ -2,6 +2,15 @@
 TODO: Update Games redis to auto-delete after certain time
 TODO: Test and fix Mafia
 
+# Reputation
+TODO: Add ability to disable Reputation
+
+# Welcome Message
+TODO: Add ability to enable/disable Welcome Message
+
+# Join Roles
+TODO: Change welcome role to an array of multiple roles
+
 # Pets
 
 # Music

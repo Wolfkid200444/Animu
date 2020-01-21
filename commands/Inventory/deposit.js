@@ -8,7 +8,7 @@ module.exports = class extends Command {
       cooldown: 10,
       description:
         'Deposit coins to the bank to earn interest after specific time',
-      usage: '<1|4|12> <coins:int>',
+      usage: '<1|4|12> <coins:int{1000}>',
       usageDelim: ' ',
       quotedStringSupport: true,
       extendedHelp:
