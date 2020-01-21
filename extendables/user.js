@@ -658,7 +658,7 @@ module.exports = class extends Extendable {
 
           const index = guild.levelPerks.findIndex(l => l.level === level);
           console.log('Index of Guild:', index);
-          if (!index) return true;
+          if (index < 0) return true;
 
           //Assign reward(s)
           if (guild.levelPerks[index]) {
