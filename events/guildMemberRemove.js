@@ -20,7 +20,7 @@ module.exports = class extends Event {
     // Deleting Messages
     if (
       _.includes(
-        ['lite', 'plus', 'pro'],
+        ['plus', 'pro'],
         await redisClient.hgetAsync('guild_tiers', member.guild.id)
       )
     ) {
