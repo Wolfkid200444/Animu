@@ -74,6 +74,9 @@ AnimuClient.defaultGuildSchema.add('verifiedRole', 'role');
 AnimuClient.defaultGuildSchema.add('mutedRole', 'role');
 
 /* Reputation */
+AnimuClient.defaultGuildSchema.add('enableReputation', 'bool', {
+  default: true,
+});
 AnimuClient.defaultGuildSchema.add('startingRep', 'number', { default: 50 });
 AnimuClient.defaultGuildSchema.add('banOnLowRep', 'bool');
 AnimuClient.defaultGuildSchema.add('ignoreRepRoles', 'role', { array: true });

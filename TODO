@@ -2,9 +2,6 @@
 TODO: Update Games redis to auto-delete after certain time
 TODO: Test and fix Mafia
 
-# Reputation
-TODO: Add ability to disable Reputation
-
 # Moderation
 TODO: Add report system
 TODO: Add Warnings system

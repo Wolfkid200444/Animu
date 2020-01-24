@@ -16,7 +16,7 @@ module.exports = class extends Command {
       cooldown: 10,
       description: 'View leaderboards',
       extendedHelp: 'View leaderboards',
-      usage: '<coins|reputation|levels>',
+      usage: '<coins:default|reputation|levels>',
     });
   }
 
@@ -48,6 +48,15 @@ module.exports = class extends Command {
         })
       );
     } else if (leaderboard === 'reputation') {
+      if (!msg.guild.settings.enableReputation)
+        return msg.sendEmbed(
+          new MessageEmbed({
+            title: 'Reputation is Disabled',
+            description: 'Reputation is disabled by server owner',
+            color: '0xf44336',
+          })
+        );
+
       const members = await Profile.find({
         reputation: { $elemMatch: { guildID: msg.guild.id } },
       });
