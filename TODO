@@ -1,5 +1,4 @@
 # Games
-TODO: Update Games redis to auto-delete after certain time
 TODO: Test and fix Mafia
 
 # Moderation
@@ -12,7 +11,8 @@ TODO: Add Youtube Channel upload Webhooks
 TODO: Add Twitch live stream Webhooks
 TODO: Add Anime episode release Webhooks
 
-# Pets
+# Logs
+TODO: Add edited messages logs
 
 # Music
 TODO: Add Lyrics
