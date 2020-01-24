@@ -2,10 +2,14 @@ const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
 const { numberWithCommas } = require('../../util/util');
+const redis = require('redis');
+const bluebird = require('bluebird');
 
 //Init
 const Profile = mongoose.model('Profile');
 const Inventory = mongoose.model('Inventory');
+bluebird.promisifyAll(redis.RedisClient.prototype);
+const redisClient = redis.createClient();
 
 module.exports = class extends Command {
   constructor(...args) {
@@ -92,6 +96,14 @@ module.exports = class extends Command {
         })
       );
     } else if (leaderboard === 'levels') {
+      const guildTier = await redisClient.hgetAsync(
+        'guild_tiers',
+        msg.guild.id
+      );
+
+      if (guildTier === 'free')
+        throw 'Upgrade to Lite or above tier to use Levels (Upgrade Now: https://patreon.com/Aldovia)';
+
       const members = await Profile.find({
         level: { $elemMatch: { guildID: msg.guild.id } },
       });
