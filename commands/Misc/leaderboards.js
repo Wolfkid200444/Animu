@@ -20,7 +20,7 @@ module.exports = class extends Command {
       cooldown: 10,
       description: 'View leaderboards',
       extendedHelp: 'View leaderboards',
-      usage: '<coins:default|reputation|levels>',
+      usage: '<coins|reputation|levels>',
     });
   }
 
