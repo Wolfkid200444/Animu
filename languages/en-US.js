@@ -5,7 +5,7 @@ module.exports = class extends Language {
   constructor(...args) {
     super(...args);
     this.language = {
-      COMMAND_INFO: ['Aldovia bot for management of Aldovia Network']
+      COMMAND_INFO: ['Meow?'],
     ***REMOVED***
   }
 
