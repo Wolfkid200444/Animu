@@ -8,7 +8,7 @@ const {
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       description: 'Get an image from deviantart',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -33,17 +33,17 @@ module.exports = class extends Command {
           access_token: this.token,
           mature_content: msg.channel.nsfw || false,
         },
-      },
+      }
     );
 
     const images = body.results.filter(
-      (image) => image.content && image.content.src,
+      image => image.content && image.content.src
     );
 
     if (!images.length) return msg.send('Could not find any results.');
 
     return msg.send(
-      images[Math.floor(Math.random() * images.length)].content.src,
+      images[Math.floor(Math.random() * images.length)].content.src
     );
   }
 
@@ -56,7 +56,7 @@ module.exports = class extends Command {
           client_id: deviantartClientID,
           client_secret: deviantartClientSecret,
         },
-      },
+      }
     );
     this.token = body.access_token;
     setTimeout(() => {

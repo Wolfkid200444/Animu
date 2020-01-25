@@ -7,6 +7,7 @@ const { shorten } = require('../../util/util');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Get info about a meme',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -24,7 +25,7 @@ module.exports = class extends Command {
       .setAuthor(
         'Know Your Meme',
         'https://i.imgur.com/WvcH4Z2.png',
-        'https://knowyourmeme.com/',
+        'https://knowyourmeme.com/'
       )
       .setTitle(data.name)
       .setDescription(shorten(data.description || 'No description available.'))
@@ -48,7 +49,7 @@ module.exports = class extends Command {
 
   async fetchMeme(location) {
     const { data: text } = await axios.get(
-      `https://knowyourmeme.com${location}`,
+      `https://knowyourmeme.com${location}`
     );
     const $ = cheerio.load(text);
     const thumbnail =

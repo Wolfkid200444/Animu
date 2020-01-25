@@ -10,7 +10,7 @@ registerFont(path.join(__dirname, '..', '..', 'fonts', 'Minecraftia.ttf'), {
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       aliases: ['minecraft-achievement'],
       cooldown: 10,
       description: 'Sends a minecraft achievement with your text',

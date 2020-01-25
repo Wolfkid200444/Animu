@@ -8,7 +8,7 @@ const { githubUsername, githubPassword } = require('../../config/keys');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       description: 'Get info on a Github Repo',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -25,22 +25,22 @@ module.exports = class extends Command {
         {
           headers: {
             Authorization: `Basic ${base64(
-              `${githubUsername}:${githubPassword}`,
+              `${githubUsername}:${githubPassword}`
             )}`,
           },
-        },
+        }
       );
       const embed = new MessageEmbed()
         .setColor(0xffffff)
         .setAuthor(
           'GitHub',
           'https://i.imgur.com/e4HunUm.png',
-          'https://github.com/',
+          'https://github.com/'
         )
         .setTitle(body.full_name)
         .setURL(body.html_url)
         .setDescription(
-          body.description ? shorten(body.description) : 'No description.',
+          body.description ? shorten(body.description) : 'No description.'
         )
         .setThumbnail(body.owner.avatar_url)
         .addField('❯ Stars', formatNumber(body.stargazers_count), true)
@@ -50,18 +50,18 @@ module.exports = class extends Command {
         .addField(
           '❯ Creation Date',
           moment.utc(body.created_at).format('MM/DD/YYYY h:mm A'),
-          true,
+          true
         )
         .addField(
           '❯ Modification Date',
           moment.utc(body.updated_at).format('MM/DD/YYYY h:mm A'),
-          true,
+          true
         );
       return msg.send(embed);
     } catch (err) {
       if (err.status === 404) return msg.send('Could not find any results.');
       return msg.reply(
-        `Oh no, an error occurred: \`${err.message}\`. Try again later!`,
+        `Oh no, an error occurred: \`${err.message}\`. Try again later!`
       );
     }
   }

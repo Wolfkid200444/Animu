@@ -3,7 +3,7 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       aliases: ['shields-io-badge'],
       cooldown: 10,
       description: 'Generate a Shields IO badge',

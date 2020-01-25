@@ -5,6 +5,7 @@ const axios = require('axios');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Search for a recipe',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -19,7 +20,7 @@ module.exports = class extends Command {
         'http://www.recipepuppy.com/api/',
         {
           params: { q: query },
-        },
+        }
       );
       if (!body.results.length) return msg.send('Could not find any results.');
       const recipe =
@@ -28,7 +29,7 @@ module.exports = class extends Command {
         .setAuthor(
           'Recipe Puppy',
           'https://i.imgur.com/lT94snh.png',
-          'http://www.recipepuppy.com/',
+          'http://www.recipepuppy.com/'
         )
         .setColor(0xc20000)
         .setURL(recipe.href)
@@ -39,7 +40,7 @@ module.exports = class extends Command {
     } catch (err) {
       if (err.status === 500) return msg.send('Could not find any results.');
       return msg.reply(
-        `Oh no, an error occurred: \`${err.message}\`. Try again later!`,
+        `Oh no, an error occurred: \`${err.message}\`. Try again later!`
       );
     }
   }

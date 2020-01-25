@@ -14,7 +14,7 @@ registerFont(path.join(__dirname, '..', '..', 'fonts', 'Noto-Emoji.ttf'), {
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Steam Card...',
       usage: '<user:user>',

@@ -10,6 +10,7 @@ const ZWS = '\u200B';
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       aliases: ['ud', 'urbandictionary'],
       requiredPermissions: ['EMBED_LINKS'],
       description:
@@ -27,8 +28,8 @@ module.exports = class extends Command {
 
     const response = await fetch(
       `http://api.urbandictionary.com/v0/define?term=${encodeURIComponent(
-        query,
-      )}`,
+        query
+      )}`
     );
     const { list } = await response.json();
 
@@ -53,7 +54,7 @@ module.exports = class extends Command {
         ])
         .addField(ZWS, `\\👍 ${result.thumbs_up}`, true)
         .addField(ZWS, `\\👎 ${result.thumbs_down}`, true)
-        .setFooter('© Urban Dictionary'),
+        .setFooter('© Urban Dictionary')
     );
   }
 
@@ -61,7 +62,7 @@ module.exports = class extends Command {
     if (definition.length < 750) return definition;
     return `${this.cutText(
       definition,
-      750,
+      750
     )}... [continue reading](${permalink})`;
   }
 

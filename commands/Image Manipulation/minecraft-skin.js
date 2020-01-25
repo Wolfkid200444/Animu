@@ -4,7 +4,7 @@ const axios = require('axios');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: "View a user's Minecraft Skin",
       usage: '<user:string> <face|front|frontfull|head|bust|full|skin>',

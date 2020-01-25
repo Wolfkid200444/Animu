@@ -28,12 +28,20 @@ module.exports = class extends Inhibitor {
     // Plus+ Commands
     const plusCommands = ['pixiv'];
 
+    // Validation
+    if (
+      !_.includes(liteCategories, command.fullCategory[0]) &&
+      !_.includes(plusCategories, command.fullCategory[0]) &&
+      !_.includes(liteCommands, command.name) &&
+      !_.includes(plusCommands, command.name)
+    )
+      return false;
+
     const guildTier = await redisClient.hgetAsync(
       'guild_tiers',
       message.guild.id
     );
 
-    // Validation
     if (
       _.includes(liteCategories, command.fullCategory[0]) &&
       guildTier === 'free'

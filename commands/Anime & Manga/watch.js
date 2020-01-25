@@ -7,6 +7,7 @@ const request = require('request');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Watch an Anime (or hentai)',
       cooldown: 60,
       requiredPermissions: ['EMBED_LINKS'],

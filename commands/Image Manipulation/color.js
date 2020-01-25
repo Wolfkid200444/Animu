@@ -4,7 +4,7 @@ const { createCanvas } = require('canvas');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Get image of a color',
       usage: '<color:string>',

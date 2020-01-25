@@ -5,6 +5,7 @@ const axios = require('axios');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Search the Pokédex for a Pokémon',
       cooldown: 10,
       aliases: ['pokemon'],
@@ -16,7 +17,7 @@ module.exports = class extends Command {
 
   async run(msg, [pokemon]) {
     const { data } = await axios.get(
-      `https://pokeapi.co/api/v2/pokemon/${pokemon}`,
+      `https://pokeapi.co/api/v2/pokemon/${pokemon}`
     );
     if (!data) return msg.send('Pokemon Not Found');
     const embed = new MessageEmbed()

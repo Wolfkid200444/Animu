@@ -5,7 +5,7 @@ const { distort } = require('../../util/Canvas');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Get glitched image or avatar',
       usage: '<image:image>',

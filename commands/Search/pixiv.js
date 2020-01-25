@@ -8,7 +8,7 @@ const { pixivUsername, pixivPassword } = require('../../config/keys');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       description: 'Search Pixiv for illustrations',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],

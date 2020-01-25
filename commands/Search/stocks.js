@@ -7,7 +7,7 @@ const { alphaVantageAPIKey } = require('../../config/keys');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       description: 'Get current stocks for a symbol',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -26,7 +26,7 @@ module.exports = class extends Command {
           interval: '1min',
           apikey: alphaVantageAPIKey,
         },
-      },
+      }
     );
     if (body['Error Message']) return msg.send('Could not find any results.');
     const data = Object.values(body['Time Series (1min)'])[0];

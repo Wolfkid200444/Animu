@@ -12,6 +12,7 @@ const redisClient = redis.createClient();
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Read a manga (or doujin)',
       cooldown: 60,
       requiredPermissions: ['EMBED_LINKS'],

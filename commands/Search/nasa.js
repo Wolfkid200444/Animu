@@ -6,7 +6,7 @@ const { shorten } = require('../../util/util');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       aliases: ['nasa-image', 'search-nasa'],
       description: 'Search NASA archives for an image',
       cooldown: 10,
@@ -24,7 +24,7 @@ module.exports = class extends Command {
           q: query,
           media_type: 'image',
         },
-      },
+      }
     );
     const images = body.collection.items;
     if (!images.length) return msg.send('Could not find any results.');
@@ -36,10 +36,10 @@ module.exports = class extends Command {
       .setAuthor(
         'NASA',
         'https://i.imgur.com/Wh8jY9c.png',
-        'https://www.nasa.gov/multimedia/imagegallery/index.html',
+        'https://www.nasa.gov/multimedia/imagegallery/index.html'
       )
       .setImage(
-        `https://images-assets.nasa.gov/image/${data.data[0].nasa_id}/${data.data[0].nasa_id}~thumb.jpg`,
+        `https://images-assets.nasa.gov/image/${data.data[0].nasa_id}/${data.data[0].nasa_id}~thumb.jpg`
       )
       .setFooter(`Image Credits: ${data.data[0].center || 'Public Domain'}`)
       .setTimestamp(new Date(data.data[0].date_created));
@@ -53,7 +53,7 @@ module.exports = class extends Command {
       .replace(/<\/?i>/g, '*')
       .replace(
         /<a href="(https?:\/\/[^ ]+)" rel="nofollow">([^<>]+)<\/a>/g,
-        '[$2]($1)',
+        '[$2]($1)'
       );
   }
 ***REMOVED***

@@ -15,7 +15,7 @@ registerFont(path.join(__dirname, '..', '..', 'fonts', 'Noto-Emoji.ttf'), {
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Playing Loli Simulator',
       usage: '<user:user> <game:...string>',

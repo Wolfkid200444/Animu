@@ -7,7 +7,7 @@ const { trimArray } = require('../../util/util');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       aliases: ['nasa-image', 'search-nasa'],
       description: 'Show information about an NPM package',
       cooldown: 10,
@@ -23,7 +23,7 @@ module.exports = class extends Command {
     if (body.time.unpublished)
       return msg.send('This package no longer exists.');
     const version = body.versions[body['dist-tags'].latest];
-    const maintainers = trimArray(body.maintainers.map((user) => user.name));
+    const maintainers = trimArray(body.maintainers.map(user => user.name));
     const dependencies = version.dependencies
       ? trimArray(Object.keys(version.dependencies))
       : null;
@@ -32,7 +32,7 @@ module.exports = class extends Command {
       .setAuthor(
         'NPM',
         'https://i.imgur.com/ErKf5Y0.png',
-        'https://www.npmjs.com/',
+        'https://www.npmjs.com/'
       )
       .setTitle(body.name)
       .setURL(`https://www.npmjs.com/package/${pkg}`)
@@ -43,17 +43,17 @@ module.exports = class extends Command {
       .addField(
         '❯ Creation Date',
         moment.utc(body.time.created).format('MM/DD/YYYY h:mm A'),
-        true,
+        true
       )
       .addField(
         '❯ Modification Date',
         moment.utc(body.time.modified).format('MM/DD/YYYY h:mm A'),
-        true,
+        true
       )
       .addField('❯ Main File', version.main || 'index.js', true)
       .addField(
         '❯ Dependencies',
-        dependencies && dependencies.length ? dependencies.join(', ') : 'None',
+        dependencies && dependencies.length ? dependencies.join(', ') : 'None'
       )
       .addField('❯ Maintainers', maintainers.join(', '));
     return msg.send(embed);

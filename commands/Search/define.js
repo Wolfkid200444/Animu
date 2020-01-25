@@ -7,6 +7,7 @@ const { websterAPIKey } = require('../../config/keys');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Define a word',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -16,9 +17,11 @@ module.exports = class extends Command {
   }
 
   async run(msg, [word]) {
-    const { data: body } = await axios.get(
+    const {
+      data: body,
+    } = await axios.get(
       `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}`,
-      { params: { key: websterAPIKey } },
+      { params: { key: websterAPIKey } }
     );
 
     if (!body.length) return msg.send('Could not find any results.');
@@ -34,7 +37,7 @@ module.exports = class extends Command {
         color: 0x2196f3,
       })
         .addField('❯ Definition', data.shortdef[0])
-        .setFooter(data.fl),
+        .setFooter(data.fl)
     );
   }
 ***REMOVED***

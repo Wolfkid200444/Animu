@@ -7,6 +7,7 @@ const { formatNumber } = require('../../util/util');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Get info about a Reddit user',
       cooldown: 10,
       aliases: ['reddit-user', 'u/'],
@@ -19,7 +20,7 @@ module.exports = class extends Command {
   async run(msg, [user]) {
     try {
       const { data: body } = await axios.get(
-        `https://www.reddit.com/user/${user}/about.json`,
+        `https://www.reddit.com/user/${user}/about.json`
       );
       const { data } = body;
       if (data.hide_from_robots)
@@ -29,7 +30,7 @@ module.exports = class extends Command {
         .setAuthor(
           'Reddit',
           'https://i.imgur.com/DSBOK0P.png',
-          'https://www.reddit.com/',
+          'https://www.reddit.com/'
         )
         .setThumbnail(data.icon_img)
         .setURL(`https://www.reddit.com/user/${user}`)
@@ -39,12 +40,12 @@ module.exports = class extends Command {
         .addField(
           '❯ Karma',
           formatNumber(data.link_karma + data.comment_karma),
-          true,
+          true
         )
         .addField(
           '❯ Creation Date',
           moment.utc(data.created_utc * 1000).format('MM/DD/YYYY h:mm A'),
-          true,
+          true
         )
         .addField('❯ Gold?', data.is_gold ? 'Yes' : 'No', true)
         .addField('❯ Verified?', data.verified ? 'Yes' : 'No', true);
@@ -52,7 +53,7 @@ module.exports = class extends Command {
     } catch (err) {
       if (err.status === 404) return msg.send('Could not find any results.');
       return msg.reply(
-        `Oh no, an error occurred: \`${err.message}\`. Try again later!`,
+        `Oh no, an error occurred: \`${err.message}\`. Try again later!`
       );
     }
   }

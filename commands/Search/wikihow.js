@@ -4,6 +4,7 @@ const axios = require('axios');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Search Wikihow',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],

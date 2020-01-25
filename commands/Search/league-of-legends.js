@@ -5,6 +5,7 @@ const axios = require('axios');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description:
         'Get complete information about a League Of Legends Champion',
       cooldown: 10,
@@ -36,12 +37,12 @@ module.exports = class extends Command {
       .setAuthor(
         'League of Legends',
         'https://i.imgur.com/2JL4Rko.png',
-        'https://leagueoflegends.com/',
+        'https://leagueoflegends.com/'
       )
       .setTitle(`${data.name} ${data.title}`)
       .setDescription(data.blurb)
       .setThumbnail(
-        `https://ddragon.leagueoflegends.com/cdn/${this.version}/img/champion/${data.image.full}`,
+        `https://ddragon.leagueoflegends.com/cdn/${this.version}/img/champion/${data.image.full}`
       )
       .addField('❯ Attack', data.info.attack, true)
       .addField('❯ Defense', data.info.defense, true)
@@ -50,50 +51,50 @@ module.exports = class extends Command {
       .addField(
         '❯ HP',
         `${data.stats.hp} (${data.stats.hpperlevel}/level)`,
-        true,
+        true
       )
       .addField(
         '❯ HP Regen',
         `${data.stats.hpregen} (${data.stats.hpregenperlevel}/level)`,
-        true,
+        true
       )
       .addField(
         '❯ MP',
         `${data.stats.mp} (${data.stats.mpperlevel}/level)`,
-        true,
+        true
       )
       .addField(
         '❯ MP Regen',
         `${data.stats.mpregen} (${data.stats.mpregenperlevel}/level)`,
-        true,
+        true
       )
       .addField('❯ Resource', data.partype, true)
       .addField(
         '❯ Armor',
         `${data.stats.armor} (${data.stats.armorperlevel}/level)`,
-        true,
+        true
       )
       .addField(
         '❯ Attack Damage',
         `${data.stats.attackdamage} (${data.stats.attackdamageperlevel}/level)`,
-        true,
+        true
       )
       .addField('❯ Attack Range', data.stats.attackrange, true)
       .addField(
         '❯ Attack Speed Offset',
         `${data.stats.attackspeedoffset} (${data.stats.attackspeedperlevel}/level)`,
-        true,
+        true
       )
       .addField(
         '❯ Crit',
         `${data.stats.crit} (${data.stats.critperlevel}/level)`,
-        true,
+        true
       )
       .addField('❯ Move Speed', data.stats.movespeed, true)
       .addField(
         '❯ Spell Block',
         `${data.stats.spellblock} (${data.stats.spellblockperlevel}/level)`,
-        true,
+        true
       )
       .addField('❯ Passive', data.passive.name, true)
       .addField(
@@ -101,7 +102,7 @@ module.exports = class extends Command {
         data.spells
           .map((spell, i) => `${spell.name} (${this.buttons[i]})`)
           .join('\n'),
-        true,
+        true
       );
     return msg.send(`Tip: ${tips[Math.floor(Math.random() * tips.length)]}`, {
       embed,
@@ -110,7 +111,7 @@ module.exports = class extends Command {
 
   async fetchVersion() {
     const { data: body } = await axios.get(
-      'https://ddragon.leagueoflegends.com/api/versions.json',
+      'https://ddragon.leagueoflegends.com/api/versions.json'
     );
     [this.version] = body;
     setTimeout(() => {
@@ -123,7 +124,7 @@ module.exports = class extends Command {
     if (this.champions && this.champions.version === this.version)
       return this.champions;
     const { data: body } = await axios.get(
-      `https://ddragon.leagueoflegends.com/cdn/${this.version}/data/en_US/champion.json`,
+      `https://ddragon.leagueoflegends.com/cdn/${this.version}/data/en_US/champion.json`
     );
     this.champions = body;
     return body;
@@ -132,12 +133,12 @@ module.exports = class extends Command {
   async fetchChampion(champion) {
     const champions = await this.fetchChampions();
     const name = Object.keys(champions.data).find(
-      (key) => key.toLowerCase() === champion,
+      key => key.toLowerCase() === champion
     );
     if (!name) return null;
     const { id } = champions.data[name];
     const { data: body } = await axios.get(
-      `https://ddragon.leagueoflegends.com/cdn/${this.version}/data/en_US/champion/${id}.json`,
+      `https://ddragon.leagueoflegends.com/cdn/${this.version}/data/en_US/champion/${id}.json`
     );
     return body.data[id];
   }

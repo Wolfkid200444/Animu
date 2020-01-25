@@ -3,7 +3,7 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Get a robot generated based using your text',
       usage: '<text:string>',

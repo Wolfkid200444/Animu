@@ -7,7 +7,7 @@ const { OSUAPIKey } = require('../../config/keys');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       description: 'Get info on a OSU User',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -31,7 +31,7 @@ module.exports = class extends Command {
       .setAuthor(
         'osu!',
         'https://i.imgur.com/hWrw2Sv.png',
-        'https://osu.ppy.sh/',
+        'https://osu.ppy.sh/'
       )
       .addField('❯ Username', data.username, true)
       .addField('❯ ID', data.user_id, true)
@@ -39,43 +39,43 @@ module.exports = class extends Command {
       .addField(
         '❯ Accuracy',
         data.accuracy ? `${Math.round(data.accuracy)}%` : '???',
-        true,
+        true
       )
       .addField(
         '❯ Rank',
         data.pp_rank ? formatNumber(data.pp_rank) : '???',
-        true,
+        true
       )
       .addField(
         '❯ Play Count',
         data.playcount ? formatNumber(data.playcount) : '???',
-        true,
+        true
       )
       .addField('❯ Country', data.country || '???', true)
       .addField(
         '❯ Ranked Score',
         data.ranked_score ? formatNumber(data.ranked_score) : '???',
-        true,
+        true
       )
       .addField(
         '❯ Total Score',
         data.total_score ? formatNumber(data.total_score) : '???',
-        true,
+        true
       )
       .addField(
         '❯ SS',
         data.count_rank_ss ? formatNumber(data.count_rank_ss) : '???',
-        true,
+        true
       )
       .addField(
         '❯ S',
         data.count_rank_s ? formatNumber(data.count_rank_s) : '???',
-        true,
+        true
       )
       .addField(
         '❯ A',
         data.count_rank_a ? formatNumber(data.count_rank_a) : '???',
-        true,
+        true
       );
     return msg.send(embed);
   }

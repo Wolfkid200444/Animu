@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Most british command ever',
       usage: '<user:member> [left|right]',

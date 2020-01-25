@@ -4,7 +4,7 @@ const { createCanvas, loadImage } = require('canvas');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Create a monstrosity',
       usage: '<overlay:user> <base:user>',

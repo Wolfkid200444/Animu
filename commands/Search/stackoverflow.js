@@ -8,7 +8,7 @@ const { stackoverflowKey } = require('../../config/keys');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       description: 'Search Stackoverflow for you question',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -32,7 +32,7 @@ module.exports = class extends Command {
           site: 'stackoverflow',
           key: stackoverflowKey,
         },
-      },
+      }
     );
     if (!body.items.length) return msg.send('Could not find any results.');
     const data = body.items[0];
@@ -41,7 +41,7 @@ module.exports = class extends Command {
       .setAuthor(
         'Stack Overflow',
         'https://i.imgur.com/P2jAgE3.png',
-        'https://stackoverflow.com/',
+        'https://stackoverflow.com/'
       )
       .setURL(data.link)
       .setTitle(data.title)
@@ -49,19 +49,19 @@ module.exports = class extends Command {
       .addField(
         '❯ Asker',
         `[${data.owner.display_name}](${data.owner.link})`,
-        true,
+        true
       )
       .addField('❯ Views', formatNumber(data.view_count), true)
       .addField('❯ Score', formatNumber(data.score), true)
       .addField(
         '❯ Creation Date',
         moment.utc(data.creation_date * 1000).format('MM/DD/YYYY h:mm A'),
-        true,
+        true
       )
       .addField(
         '❯ Last Activity',
         moment.utc(data.last_activity_date * 1000).format('MM/DD/YYYY h:mm A'),
-        true,
+        true
       );
     return msg.send(embed);
   }

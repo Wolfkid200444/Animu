@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Discover new types of Pokemon (your friends)',
       usage: '<user:member>',

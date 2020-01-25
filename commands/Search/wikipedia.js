@@ -6,6 +6,7 @@ const { shorten } = require('../../util/util');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Search wikipedia',
       aliases: ['wiki'],
       cooldown: 10,
@@ -30,7 +31,7 @@ module.exports = class extends Command {
           redirects: '',
           formatversion: 2,
         },
-      },
+      }
     );
     const data = body.query.pages[0];
 
@@ -41,14 +42,14 @@ module.exports = class extends Command {
       .setAuthor(
         'Wikipedia',
         'https://i.imgur.com/Z7NJBK2.png',
-        'https://www.wikipedia.org/',
+        'https://www.wikipedia.org/'
       )
       .setThumbnail(data.thumbnail ? data.thumbnail.source : null)
       .setURL(
         `https://en.wikipedia.org/wiki/${encodeURIComponent(query).replace(
           /\)/g,
-          '%29',
-        )}`,
+          '%29'
+        )}`
       )
       .setDescription(shorten(data.extract.replace(/\n/g, '\n\n')));
     return msg.send(embed);

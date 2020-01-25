@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Look at this photograph, DAMNIT!',
       usage: '<user:member>',

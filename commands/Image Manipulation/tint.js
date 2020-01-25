@@ -5,7 +5,7 @@ const { drawImageWithTint } = require('../../util/Canvas');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: "Draw a tint over an image or a user's avatar",
       usage: '<image:image> <color:string>',

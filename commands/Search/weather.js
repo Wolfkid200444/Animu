@@ -6,6 +6,7 @@ const { openWeatherAPIKey } = require('../../config/keys');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Show weather info of a location',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -28,22 +29,22 @@ module.exports = class extends Command {
             units: 'metric',
             appid: openWeatherAPIKey,
           },
-        },
+        }
       );
       const embed = new MessageEmbed()
         .setColor(0xff7a09)
         .setAuthor(
           `${body.name}, ${body.sys.country}`,
           'https://i.imgur.com/NjMbE9o.png',
-          'https://openweathermap.org/city',
+          'https://openweathermap.org/city'
         )
         .setURL(`https://openweathermap.org/city/${body.id}`)
         .setTimestamp()
         .addField(
           '❯ Condition',
           body.weather
-            .map((data) => `${data.main} (${data.description})`)
-            .join('\n'),
+            .map(data => `${data.main} (${data.description})`)
+            .join('\n')
         )
         .addField('❯ Temperature', `${body.main.temp}°C`, true)
         .addField('❯ Humidity', `${body.main.humidity}%`, true)
@@ -52,7 +53,7 @@ module.exports = class extends Command {
     } catch (err) {
       if (err.status === 404) return msg.send('Could not find any results.');
       return msg.send(
-        `Oh no, an error occurred: \`${err.message}\`. Try again later!`,
+        `Oh no, an error occurred: \`${err.message}\`. Try again later!`
       );
     }
   }

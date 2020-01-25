@@ -6,6 +6,7 @@ const { shorten } = require('../../util/util');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Search a fandom wikia',
       aliases: ['fandom'],
       cooldown: 10,
@@ -29,17 +30,17 @@ module.exports = class extends Command {
         .setAuthor(
           'Wikia',
           'https://i.imgur.com/15A34JT.png',
-          'http://www.wikia.com/fandom',
+          'http://www.wikia.com/fandom'
         )
         .setDescription(
-          shorten(data.content.map((section) => section.text).join('\n\n')),
+          shorten(data.content.map(section => section.text).join('\n\n'))
         )
         .setThumbnail(data.images.length ? data.images[0].src : null);
       return msg.send(embed);
     } catch (err) {
       if (err.status === 404) return msg.send('Could not find any results');
       return msg.send(
-        `Oh no, an error occurred: \`${err.message}\`. Perhaps you entered an invalid wiki?`,
+        `Oh no, an error occurred: \`${err.message}\`. Perhaps you entered an invalid wiki?`
       );
     }
   }
@@ -53,16 +54,18 @@ module.exports = class extends Command {
           limit: 1,
           namespaces: 0,
         },
-      },
+      }
     );
     const data = body.items[0];
     return { id: data.id, url: data.url ***REMOVED***
   }
 
   async fetchArticle(wiki, id) {
-    const { data: body } = await axios.get(
+    const {
+      data: body,
+    } = await axios.get(
       `https://${wiki}.wikia.com/api/v1/Articles/AsSimpleJson/`,
-      { params: { id } },
+      { params: { id } }
     );
     return body.sections[0];
   }

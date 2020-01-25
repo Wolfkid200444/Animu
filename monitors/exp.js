@@ -16,6 +16,8 @@ module.exports = class extends Monitor {
   }
 
   async run(message) {
+    if (message.channel.type === 'dm') return;
+
     if (!message.guild.settings.enableLevels) return;
 
     if (message.attachments.size > 0) return;

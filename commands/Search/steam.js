@@ -6,6 +6,7 @@ const { formatNumber } = require('../../util/util');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
+      runIn: ['text'],
       description: 'Search steam for a game',
       cooldown: 10,
       requiredPermissions: ['EMBED_LINKS'],
@@ -36,7 +37,7 @@ module.exports = class extends Command {
       .setAuthor(
         'Steam',
         'https://i.imgur.com/xxr2UBZ.png',
-        'http://store.steampowered.com/',
+        'http://store.steampowered.com/'
       )
       .setTitle(data.name)
       .setURL(`http://store.steampowered.com/app/${data.steam_appid}`)
@@ -45,31 +46,31 @@ module.exports = class extends Command {
       .addField(
         '❯ Metascore',
         data.metacritic ? data.metacritic.score : '???',
-        true,
+        true
       )
       .addField(
         '❯ Recommendations',
         data.recommendations ? formatNumber(data.recommendations.total) : '???',
-        true,
+        true
       )
       .addField('❯ Platforms', platforms.join(', ') || 'None', true)
       .addField(
         '❯ Release Date',
         data.release_date ? data.release_date.date : '???',
-        true,
+        true
       )
       .addField(
         '❯ DLC Count',
         data.dlc ? formatNumber(data.dlc.length) : 0,
-        true,
+        true
       )
       .addField(
         '❯ Developers',
-        data.developers ? data.developers.join(', ') || '???' : '???',
+        data.developers ? data.developers.join(', ') || '???' : '???'
       )
       .addField(
         '❯ Publishers',
-        data.publishers ? data.publishers.join(', ') || '???' : '???',
+        data.publishers ? data.publishers.join(', ') || '???' : '???'
       );
     return msg.send(embed);
   }
@@ -83,17 +84,18 @@ module.exports = class extends Command {
           l: 'en',
           term: query,
         },
-      },
+      }
     );
     if (!body.items.length) return null;
     return body.items[0].id;
   }
 
   async fetchGame(id) {
-    const { data: body } = await axios.get(
-      'https://store.steampowered.com/api/appdetails',
-      { params: { appids: id } },
-    );
+    const {
+      data: body,
+    } = await axios.get('https://store.steampowered.com/api/appdetails', {
+      params: { appids: id },
+    });
     return body[id.toString()].data;
   }
 ***REMOVED***

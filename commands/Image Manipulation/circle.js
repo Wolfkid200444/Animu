@@ -4,7 +4,7 @@ const { createCanvas, loadImage } = require('canvas');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'group'],
+      runIn: ['text'],
       cooldown: 10,
       description: 'Crop an image in circle shape',
       usage: '<image:image>',

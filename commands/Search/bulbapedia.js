@@ -6,7 +6,7 @@ const { shorten } = require('../../util/util');
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text', 'dm', 'group'],
+      runIn: ['text'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
       description: 'Search Bulbapedia about something',
@@ -29,7 +29,7 @@ module.exports = class extends Command {
           redirects: '',
           formatversion: 2,
         },
-      },
+      }
     );
     const data = body.query.pages[0];
     if (data.missing) return msg.send('Could not find any results.');
@@ -39,13 +39,13 @@ module.exports = class extends Command {
       .setAuthor(
         'Bulbapedia',
         'https://i.imgur.com/ePpoeFA.png',
-        'https://bulbapedia.bulbagarden.net/',
+        'https://bulbapedia.bulbagarden.net/'
       )
       .setThumbnail(data.thumbnail ? data.thumbnail.source : null)
       .setURL(
         `https://bulbapedia.bulbagarden.net/wiki/${encodeURIComponent(
-          query,
-        ).replace(/\)/g, '%29')}`,
+          query
+        ).replace(/\)/g, '%29')}`
       )
       .setDescription(shorten(data.extract.replace(/\n/g, '\n\n')));
     return msg.send(embed);
