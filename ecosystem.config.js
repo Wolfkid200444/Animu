@@ -3,7 +3,7 @@
     {
       name: 'animu',
       script: 'yarn',
-      args: 'start',
+      args: 'compile',
       interpreter: '/bin/bash',
       env: {
         NODE_ENV: 'production',
