@@ -1,32 +1,29 @@
 //=====================
 //DEPENDENCIES
 //=====================
-const { Client } = require('klasa');
-const { Client: Lavaqueue } = require('lavaqueue');
-const keys = require('./config/keys');
-const mongoose = require('mongoose');
-const express = require('express');
-const bodyParser = require('body-parser');
-const redis = require('redis');
-const bluebird = require('bluebird');
+import { Client } from 'klasa';
+import { Client as Lavaqueue } from 'lavaqueue';
+import keys from './config/keys';
+import mongoose from 'mongoose';
+import express from 'express';
+import bodyParser from 'body-parser';
+import redis from 'redis';
+import bluebird from 'bluebird';
+import LavaqueueNode from 'lavaqueue/typings/Node';
 //=====================
 
 //=====================
 //Initialization
 //=====================
 bluebird.promisifyAll(redis.RedisClient.prototype);
-const redisClient = redis.createClient();
+const redisClient: any = redis.createClient();
 //=====================
 
 //=====================
 //Animu Client
 //=====================
 class AnimuClient extends Client {
-  constructor(...args) {
-    super(...args);
-
-    this.lVoice = null;
-  }
+  lVoice: LavaqueueNode;
 }
 //=====================
 
@@ -34,7 +31,7 @@ class AnimuClient extends Client {
 //SCHEMAS
 //=====================
 //-> AnimuClient Schema
-AnimuClient.defaultClientSchema.add('aldoviaSeniorMods', 'User', {
+AnimuClient.defaultClientSchema.add('animuStaff', 'User', {
   array: true,
 });
 AnimuClient.defaultClientSchema.add('aldoviaInviteLink', 'String');
@@ -136,7 +133,7 @@ AnimuClient.defaultPermissionLevels
     { fetch: true }
   )
   .add(8, ({ client, author }) =>
-    client.settings.aldoviaSeniorMods.includes(author.id)
+    client.settings.get('animuStaff').includes(author.id)
   );
 //-> Mongoose
 mongoose
@@ -203,31 +200,42 @@ mongoose
     });
 
     //-> Lavalink Packets
-    client.on('raw', pk => {
+    client.on('raw', (pk: { t: string; d: any }) => {
       if (pk.t === 'VOICE_STATE_UPDATE') client.lVoice.voiceStateUpdate(pk.d);
       if (pk.t === 'VOICE_SERVER_UPDATE') client.lVoice.voiceServerUpdate(pk.d);
     });
 
     //-> Music Queue hanling
-    client.lVoice.on('event', async d => {
-      if (d.type === 'TrackEndEvent') {
-        redisClient.delAsync(`skip_votes:${d.guildId}`);
+    client.lVoice.on(
+      'event',
+      async (d: {
+        op: string;
+        reason: string;
+        type: string;
+        track?: string;
+        guildId: string;
+        code?: number;
+        byRemote?: boolean;
+      }) => {
+        if (d.type === 'TrackEndEvent') {
+          redisClient.delAsync(`skip_votes:${d.guildId}`);
 
-        const looping = await redisClient.sismemberAsync(
-          'loop_guilds',
-          d.guildId
-        );
+          const looping = await redisClient.sismemberAsync(
+            'loop_guilds',
+            d.guildId
+          );
 
-        if (looping) {
-          await client.lVoice.queues.get(d.guildId).add([d.track]);
+          if (looping) {
+            await client.lVoice.queues.get(d.guildId).add(d.track);
+          }
+
+          const allTracks = await client.lVoice.queues.get(d.guildId).tracks();
+
+          if (!looping && allTracks.length === 0)
+            await client.lVoice.queues.get(d.guildId).player.leave();
         }
-
-        const allTracks = await client.lVoice.queues.get(d.guildId).tracks();
-
-        if (!looping && allTracks.length === 0)
-          await client.lVoice.queues.get(d.guildId).player.leave();
       }
-    });
+    );
   });
 //=====================
 

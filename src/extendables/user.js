@@ -67,9 +67,7 @@ module.exports = class extends Extendable {
     //If is owner
     if (isOwner) profileEmbed.setFooter('👑 Bot Owner 👑');
     //If is 🛡 Senior Moderator
-    else if (
-      _.includes(this.client.settings.aldoviaSeniorMods, profile.memberID)
-    )
+    else if (_.includes(this.client.settings.animuStaff, profile.memberID))
       profileEmbed.setFooter('🛡 Bot Staff');
     //Else
     else {
@@ -280,7 +278,7 @@ module.exports = class extends Extendable {
 
     if (
       isOwner ||
-      _.includes(this.client.settings.aldoviaSeniorMods, profile.memberID)
+      _.includes(this.client.settings.animuStaff, profile.memberID)
     )
       return new MessageEmbed()
         .setTitle('No Badges')
@@ -375,7 +373,7 @@ module.exports = class extends Extendable {
 
     if (
       isOwner ||
-      _.includes(this.client.settings.aldoviaSeniorMods, profile.memberID)
+      _.includes(this.client.settings.animuStaff, profile.memberID)
     )
       return true;
 

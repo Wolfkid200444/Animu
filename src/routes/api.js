@@ -115,7 +115,7 @@ module.exports = (app, client) => {
         badges: {
           activeBadge: isOwner
             ? '👑 Bot Owner 👑'
-            : _.includes(client.settings.aldoviaSeniorMods, member.id)
+            : _.includes(client.settings.animuStaff, member.id)
             ? '🛡 Bot Staff'
             : badges !== null && badges !== undefined
             ? badges.activeBadge
