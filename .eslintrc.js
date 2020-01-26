@@ -2,17 +2,17 @@
   env: {
     commonjs: true,
     es6: true,
-    node: true
+    node: true,
   },
-  extends: 'eslint:recommended',
+  extends: 'klasa/eslint-ts',
   globals: {
     Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+    SharedArrayBuffer: 'readonly',
   },
   parserOptions: {
-    ecmaVersion: 2018
+    ecmaVersion: 2018,
   },
   rules: {
-    'no-console': 'off'
-  }
+    'no-console': 'off',
+  },
 ***REMOVED***

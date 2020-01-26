@@ -4,7 +4,9 @@
   "description": "Aldovia bot for Aldovia Network of Servers",
   "main": ".eslintrc.js",
   "scripts": {
-    "start": "node -r dotenv/config index.js",
+    "start": "node -r dotenv/config dist/index.js",
+    "compile": "tsc && npm run start",
+    "dev": "nodemon --watch src --exec \"npm run compile\"",
     "test": "echo No Test Provided"
   },
   "repository": {
@@ -29,7 +31,7 @@
     "common-tags": "^1.8.0",
     "discord.js": "discordjs/discord.js",
     "discord.js-pagination": "^1.0.2",
-    "discordjs-prompter": "^1.0.0",
+    "discordjs-prompter": "https://github.com/LightYagami200/discordjs-prompter",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "ffmpeg-static": "^2.7.0",
@@ -59,6 +61,7 @@
     "ytdl-core-discord": "^1.0.3"
   },
   "devDependencies": {
-    "eslint": "^6.1.0"
+    "eslint": "^6.1.0",
+    "nodemon": "^2.0.2"
   }
 }
