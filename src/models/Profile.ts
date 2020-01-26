@@ -1,8 +1,25 @@
-//Dependencies
-const { Schema, model } = require('mongoose');
+// Dependencies
+import { Schema, model, Model } from 'mongoose';
+import { IProfileDocument } from '../interfaces/IProfileDocument';
 
-//Schema
-const profileSchema = new Schema({
+// Interfaces
+export interface IProfile extends IProfileDocument {
+  addReputation(reputation: number, guildID: string): Promise<boolean>;
+  deductReputation(reputation: number, guildID: string): Promise<boolean>;
+  edit(field: string, value: string): Promise<IProfile>;
+  addExp(
+    expToAdd: number,
+    guildID: string,
+    defaultRep: number
+  ): Promise<number[]>;
+}
+
+export interface IProfileModel extends Model<IProfile> {
+  register(): boolean;
+}
+
+// Schema
+export const profileSchema: Schema<IProfile> = new Schema({
   memberID: {
     type: String,
     unique: true,
@@ -38,7 +55,7 @@ const profileSchema = new Schema({
   ],
 });
 
-//Schema Methods
+// Static Methods
 profileSchema.statics.register = async function(memberID) {
   const profile = await this.findOne({ memberID }).exec();
 
@@ -66,7 +83,11 @@ profileSchema.statics.register = async function(memberID) {
   ***REMOVED***
 ***REMOVED***
 
-profileSchema.methods.addReputation = async function(amount, guildID) {
+// Methods
+profileSchema.methods.addReputation = async function(
+  amount: number,
+  guildID: string
+) {
   const index = this.reputation.findIndex(rep => rep.guildID === guildID);
   this.reputation[index].rep += amount;
 
@@ -74,7 +95,10 @@ profileSchema.methods.addReputation = async function(amount, guildID) {
   return true;
 ***REMOVED***
 
-profileSchema.methods.deductReputation = async function(amount, guildID) {
+profileSchema.methods.deductReputation = async function(
+  amount: number,
+  guildID: string
+) {
   const index = this.reputation.findIndex(rep => rep.guildID === guildID);
   this.reputation[index].rep -= amount;
 
@@ -90,8 +114,7 @@ profileSchema.methods.deductReputation = async function(amount, guildID) {
   return true;
 ***REMOVED***
 
-profileSchema.methods.edit = async function(field, value) {
-  console.log(field, value);
+profileSchema.methods.edit = async function(field: string, value: string) {
   this[field] = value;
 
   await this.save();
@@ -100,9 +123,9 @@ profileSchema.methods.edit = async function(field, value) {
 ***REMOVED***
 
 profileSchema.methods.addExp = async function(
-  expToAdd,
-  guildID,
-  defaultRep = 50
+  expToAdd: number,
+  guildID: string,
+  defaultRep: number = 50
 ) {
   let index = this.level.findIndex(guildLev => guildLev.guildID === guildID);
   let levelUps = [];
@@ -124,7 +147,7 @@ profileSchema.methods.addExp = async function(
     index = this.level.findIndex(guildLev => guildLev.guildID === guildID);
   }
 
-  if (this.level[index].level === 100) return true;
+  if (this.level[index].level === 100) return [];
 
   const levelUp = async exp => {
     this.level[index].level++;
@@ -151,10 +174,15 @@ profileSchema.methods.addExp = async function(
   return levelUps;
 ***REMOVED***
 
-//Helper Functions
-function expToNextLevel(currentLevel, currentExp) {
+// Helper Functions
+function expToNextLevel(currentLevel: number, currentExp: number) {
   return 10 * (currentLevel + 1) ** 2 - currentExp;
 }
 
-//Model
-model('Profile', profileSchema);
+// Model & Exporting
+export const Profile: IProfileModel = model<IProfile, IProfileModel>(
+  'Profile',
+  profileSchema
+);
+
+export default Profile;

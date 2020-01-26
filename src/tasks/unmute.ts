@@ -1,5 +1,6 @@
-const { Task } = require('klasa');
-const { model } = require('mongoose');
+import { Task } from 'klasa';
+import { model } from 'mongoose';
+import { IProfile } from '../models/Profile';
 
 //Init
 const Profile = model('Profile');
@@ -10,9 +11,11 @@ module.exports = class extends Task {
     if (!_guild) return;
     const member = await _guild.members.fetch(user).catch(() => null);
     if (!member) return;
-    await member.roles.remove(_guild.settings.mutedRole);
+    await member.roles.remove(_guild.settings.get('mutedRole'));
 
-    const profile = await Profile.findOne({ memberID: user.id }).exec();
+    const profile: IProfile = await (<Promise<IProfile>>Profile.findOne({
+      memberID: user.id,
+    }).exec());
 
     const index = profile.mutedIn.indexOf(guild.id);
 
