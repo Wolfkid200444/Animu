@@ -1,16 +1,17 @@
-const { Monitor } = require('klasa');
+import { Monitor, MonitorStore } from 'klasa';
 import _ from 'lodash';
-const redis = require('redis');
-const bluebird = require('bluebird');
-const { model } = require('mongoose');
+import redis from 'redis';
+import bluebird from 'bluebird';
+import { model } from 'mongoose';
+import { IGuild } from '../models/Guild';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
-const redisClient = redis.createClient();
+const redisClient: any = redis.createClient();
 const Guild = model('Guild');
 
 module.exports = class extends Monitor {
-  constructor(...args) {
-    super(...args, {
+  constructor(store: MonitorStore, file: string[], dir: string) {
+    super(store, file, dir, {
       ignoreOthers: false,
     });
   }
@@ -58,7 +59,9 @@ module.exports = class extends Monitor {
 
       //If member actually levelled up
       if (levelUps.length) {
-        const guild = await Guild.findOne({ guildID: message.guild.id });
+        const guild: IGuild = await (<Promise<IGuild>>(
+          Guild.findOne({ guildID: message.guild.id }).exec()
+        ));
         levelUps.forEach(level => {
           message.author.send(
             `Congrats, you just levelled up and reached Level ${level} in ${message.guild.name} 🎉`

@@ -1,20 +1,20 @@
-const { MessageEmbed } = require('discord.js');
-const { Monitor } = require('klasa');
-const Perspective = require('perspective-api-client');
-const { model } = require('mongoose');
+import { MessageEmbed } from 'discord.js';
+import { Monitor, MonitorStore } from 'klasa';
+import Perspective from 'perspective-api-client';
+import { model } from 'mongoose';
 import { perspectiveAPIKey } from '../config/keys';
-const _ = require('lodash');
-const redis = require('redis');
-const bluebird = require('bluebird');
+import _ from 'lodash';
+import redis from 'redis';
+import bluebird from 'bluebird';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
-const redisClient = redis.createClient();
+const redisClient: any = redis.createClient();
 const perspective = new Perspective({ apiKey: perspectiveAPIKey });
 const Log = model('Log');
 
 module.exports = class extends Monitor {
-  constructor(...args) {
-    super(...args, {
+  constructor(store: MonitorStore, file: string[], dir: string) {
+    super(store, file, dir, {
       ignoreOthers: false,
     });
   }
