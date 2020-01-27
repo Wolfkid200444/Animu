@@ -58,4 +58,4 @@ module.exports = class extends Command {
       .addField('❯ Maintainers', maintainers.join(', '));
     return msg.send(embed);
   }
-***REMOVED***
+};

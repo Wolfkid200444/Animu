@@ -59,4 +59,4 @@ module.exports = class extends Command {
     if (!data.query.random[0].title) return 'Facts are hard to find sometimes.';
     return data.query.random[0].title;
   }
-***REMOVED***
+};

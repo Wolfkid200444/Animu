@@ -15,7 +15,7 @@ module.exports = class extends Command {
       `${msg.guild.members.get(member.id)}: ${_.sample(roasts)}`
     );
   }
-***REMOVED***
+};
 
 //Roasts
 const roasts = [

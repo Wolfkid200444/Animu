@@ -104,7 +104,7 @@ module.exports = class extends Command {
       throw err;
     }
   }
-***REMOVED***
+};
 
 // Script
 const script = {
@@ -180,4 +180,4 @@ const script = {
       end: true,
     },
   ],
-***REMOVED***
+};

@@ -24,7 +24,7 @@ module.exports = class extends Command {
       if (!member.bannable) throw 'I cannot ban this user.';
     }
 
-    const options = {***REMOVED***
+    const options = {};
     if (reason) options.reason = reason;
 
     await msg.guild.members.ban(user, options);
@@ -34,4 +34,4 @@ module.exports = class extends Command {
       }`,
     );
   }
-***REMOVED***
+};

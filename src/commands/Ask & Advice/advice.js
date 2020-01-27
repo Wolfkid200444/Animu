@@ -24,4 +24,4 @@ module.exports = class extends Command {
       }).setFooter(`Slip ID: ${data.slip.slip_id}`)
     );
   }
-***REMOVED***
+};

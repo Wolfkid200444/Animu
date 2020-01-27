@@ -34,4 +34,4 @@ module.exports = class extends Task {
       await account.save();
     });
   }
-***REMOVED***
+};

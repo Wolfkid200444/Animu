@@ -23,4 +23,4 @@ module.exports = class extends Task {
 
     await profile.save();
   }
-***REMOVED***
+};

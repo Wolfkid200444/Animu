@@ -98,4 +98,4 @@ module.exports = class extends Command {
     });
     return body[id.toString()].data;
   }
-***REMOVED***
+};

@@ -93,4 +93,4 @@ module.exports = class extends Command {
       throw err;
     }
   }
-***REMOVED***
+};

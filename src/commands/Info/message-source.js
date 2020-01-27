@@ -15,4 +15,4 @@ module.exports = class extends Command {
   async run(msg, [message]) {
     return msg.send(`\`${shorten(message.content, 1990)}\``);
   }
-***REMOVED***
+};

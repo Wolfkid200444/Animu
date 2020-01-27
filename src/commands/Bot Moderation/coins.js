@@ -21,4 +21,4 @@ module.exports = class extends Command {
       new MessageEmbed().setTitle('Coins Modified').setColor('#2196f3'),
     );
   }
-***REMOVED***
+};

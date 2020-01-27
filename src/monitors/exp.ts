@@ -1,5 +1,5 @@
 const { Monitor } = require('klasa');
-const _ = require('lodash');
+import _ from 'lodash';
 const redis = require('redis');
 const bluebird = require('bluebird');
 const { model } = require('mongoose');
@@ -107,4 +107,4 @@ module.exports = class extends Monitor {
       }, message.guild.settings.expTime * 1000);
     }
   }
-***REMOVED***
+};

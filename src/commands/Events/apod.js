@@ -41,4 +41,4 @@ module.exports = class extends Command {
       .setTimestamp();
     return msg.send(embed);
   }
-***REMOVED***
+};

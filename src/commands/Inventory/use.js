@@ -17,4 +17,4 @@ module.exports = class extends Command {
     const member = msg.author;
     msg.sendEmbed(await member.useItem(itemName, msg.guild.id));
   }
-***REMOVED***
+};

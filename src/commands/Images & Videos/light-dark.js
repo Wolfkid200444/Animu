@@ -19,4 +19,4 @@ module.exports = class extends Command {
       files: [`${__dirname}/../../../assets/images/lightdark-${meme}.png`],
     });
   }
-***REMOVED***
+};

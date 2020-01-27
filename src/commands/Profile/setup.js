@@ -14,4 +14,4 @@ module.exports = class extends Command {
   async run(msg) {
     msg.sendEmbed(await msg.author.setupProfile(msg.guild.id));
   }
-***REMOVED***
+};

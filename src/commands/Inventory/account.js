@@ -13,4 +13,4 @@ module.exports = class extends Command {
   async run(msg) {
     msg.sendEmbed(await msg.author.getAccountEmbed());
   }
-***REMOVED***
+};

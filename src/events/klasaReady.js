@@ -43,4 +43,4 @@ module.exports = class extends Event {
     if (!this.client.schedule.tasks.find(task => task.taskName === 'petage'))
       this.client.schedule.create('petage', '0 0 * * *');
   }
-***REMOVED***
+};

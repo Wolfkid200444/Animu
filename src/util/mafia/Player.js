@@ -2,7 +2,7 @@ const { stripIndents } = require('common-tags');
 const questions = {
   mafia: 'Who would you like to kill?',
   detective: 'Who do you think is a Mafia member?',
-***REMOVED***
+};
 
 module.exports = class Player {
   constructor(game, user, role) {
@@ -46,4 +46,4 @@ module.exports = class Player {
     }
     return choice;
   }
-***REMOVED***
+};

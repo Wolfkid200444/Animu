@@ -16,4 +16,4 @@ module.exports = class extends Command {
       files: [`${__dirname}/../../../assets/images/eggs-get-laid.png`],
     });
   }
-***REMOVED***
+};

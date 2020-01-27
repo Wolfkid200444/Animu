@@ -61,7 +61,7 @@ itemSchema.statics.createItem = async function(
 ) {
   const item = await this.findOne({ name: itemName }).exec();
 
-  if (item) return { res: 'already_exists', item ***REMOVED***
+  if (item) return { res: 'already_exists', item };
 
   return await new this({
     name: itemName,
@@ -74,7 +74,7 @@ itemSchema.statics.createItem = async function(
     purchaseMsg,
     properties: properties.split(',').map(role => role.trim()),
   }).save();
-***REMOVED***
+};
 
 //Schema Methods
 itemSchema.methods.purchase = async function(msg, memberID, isStaff) {
@@ -91,7 +91,7 @@ itemSchema.methods.purchase = async function(msg, memberID, isStaff) {
       res: 'err',
       title: 'Insufficient Coins',
       desc: "You don't have enough coins to purchase this item",
-    ***REMOVED***
+    };
 
   //Purchasing item
   inventory.coins -= price;
@@ -109,7 +109,7 @@ itemSchema.methods.purchase = async function(msg, memberID, isStaff) {
           title: 'Already Own a pet',
           desc:
             'You already own a pet, use `kickPet` command to kick out your current pet before you can purchase a new pet',
-        ***REMOVED***
+        };
 
       await new Pet({
         memberID: memberID,
@@ -124,15 +124,15 @@ itemSchema.methods.purchase = async function(msg, memberID, isStaff) {
       res: 'success',
       title: 'Item Purchased',
       desc: this.purchaseMsg,
-    ***REMOVED***
+    };
   } else {
     //Add item to inventory
     inventory.inventory.push(this.name);
 
     await inventory.save();
 
-    return { res: 'success', title: 'Item Purchased', desc: this.purchaseMsg ***REMOVED***
+    return { res: 'success', title: 'Item Purchased', desc: this.purchaseMsg };
   }
-***REMOVED***
+};
 
 export const Item: IItemModel = model<IItem, IItemModel>('Item', itemSchema);

@@ -42,7 +42,7 @@ module.exports = class extends Command {
       DEAFEN_MEMBERS: 'Deafen Members',
       MOVE_MEMBERS: 'Move Members',
       USE_VAD: 'Use Voice Activity',
-    ***REMOVED***
+    };
     this.timestamp = new Timestamp('dddd, MMMM d YYYY');
   }
 
@@ -78,4 +78,4 @@ module.exports = class extends Command {
         .addField('❯ Permissions', allPermissions || 'None'),
     );
   }
-***REMOVED***
+};

@@ -18,4 +18,4 @@ module.exports = class extends Command {
     const member = msg.author;
     msg.sendEmbed(await member.getInventoryEmbed(partner));
   }
-***REMOVED***
+};

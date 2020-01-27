@@ -93,4 +93,4 @@ module.exports = class extends Monitor {
 
     if (message.guild.settings.deleteToxicMessages) await message.delete();
   }
-***REMOVED***
+};

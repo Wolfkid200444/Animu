@@ -90,4 +90,4 @@ module.exports = class extends Command {
       })
     );
   }
-***REMOVED***
+};

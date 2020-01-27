@@ -16,4 +16,4 @@ module.exports = class extends Command {
   async run(msg, [type, member, value]) {
     msg.sendEmbed(await msg.author.give(type, value, member));
   }
-***REMOVED***
+};

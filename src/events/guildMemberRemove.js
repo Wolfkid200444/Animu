@@ -33,4 +33,4 @@ module.exports = class extends Event {
         });
     }
   }
-***REMOVED***
+};

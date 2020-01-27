@@ -111,4 +111,4 @@ module.exports = class extends Event {
         .send(welcomeEmbed);
     }
   }
-***REMOVED***
+};

@@ -28,4 +28,4 @@ module.exports = class extends Command {
     if (data.missing === '') return msg.send('Could not find any results.');
     return msg.send(`How to ${data.title}\n${data.fullurl}`);
   }
-***REMOVED***
+};

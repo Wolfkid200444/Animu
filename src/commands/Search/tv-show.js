@@ -77,4 +77,4 @@ module.exports = class extends Command {
       );
     return msg.send(embed);
   }
-***REMOVED***
+};

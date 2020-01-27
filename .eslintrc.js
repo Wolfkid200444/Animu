@@ -1,4 +1,4 @@
-***REMOVED***
+module.exports = {
   env: {
     commonjs: true,
     es6: true,
@@ -15,4 +15,4 @@
   rules: {
     'no-console': 'off',
   },
-***REMOVED***
+};

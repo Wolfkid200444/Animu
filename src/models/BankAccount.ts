@@ -34,9 +34,9 @@ bankAccountSchema.statics.createAccount = async function(memberID) {
     .findOne({ memberID })
     .exec();
 
-  if (bankAccount) return { res: 'already_exists', bankAccount ***REMOVED***
+  if (bankAccount) return { res: 'already_exists', bankAccount };
 
-  if (inventory.coins < 500) return { res: 'insufficient_coins' ***REMOVED***
+  if (inventory.coins < 500) return { res: 'insufficient_coins' };
 
   await inventory.deductCoins(500);
 
@@ -46,8 +46,8 @@ bankAccountSchema.statics.createAccount = async function(memberID) {
       memberID,
       deposits: [],
     }).save(),
-  ***REMOVED***
-***REMOVED***
+  };
+};
 
 // Schema Methods
 bankAccountSchema.methods.addDeposit = async function(period, coins) {
@@ -58,7 +58,7 @@ bankAccountSchema.methods.addDeposit = async function(period, coins) {
 
   this.save();
   return true;
-***REMOVED***
+};
 
 export const BankAccount: IBankAccountModel = model<
   IBankAccount,

@@ -114,12 +114,12 @@ module.exports = class extends Provider {
       .collection(table)
       .replaceOne(resolveQuery(id), this.parseUpdateInput(doc));
   }
-***REMOVED***
+};
 
 const resolveQuery = query => (isObject(query) ? query : { id: query });
 
 function flatten(obj, path = '') {
-  let output = {***REMOVED***
+  let output = {};
   for (const [key, value] of Object.entries(obj)) {
     if (isObject(value))
       output = Object.assign(

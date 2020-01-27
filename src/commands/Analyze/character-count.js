@@ -16,4 +16,4 @@ module.exports = class extends Command {
   async run(msg, [text]) {
     return msg.reply(formatNumber(text.length));
   }
-***REMOVED***
+};

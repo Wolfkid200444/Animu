@@ -13,4 +13,4 @@ module.exports = class extends Command {
   async run(msg) {
     msg.send('https://www.youtube.com/watch?v=ZXsQAXx_ao0');
   }
-***REMOVED***
+};

@@ -23,7 +23,7 @@ module.exports = class extends Command {
       }`
     );
   }
-***REMOVED***
+};
 
 // Qualityes
 const qualities = [

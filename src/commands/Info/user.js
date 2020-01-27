@@ -18,7 +18,7 @@ module.exports = class extends Command {
       STREAMING: 'Streaming',
       WATCHING: 'Watching',
       LISTENING: 'Listening to',
-    ***REMOVED***
+    };
   }
 
   async run(msg, [user = msg.author]) {
@@ -75,4 +75,4 @@ module.exports = class extends Command {
     }
     return msg.send(embed);
   }
-***REMOVED***
+};

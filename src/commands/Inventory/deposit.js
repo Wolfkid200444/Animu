@@ -19,4 +19,4 @@ module.exports = class extends Command {
   async run(msg, [period, coins]) {
     msg.sendEmbed(await msg.author.deposit(parseInt(period), coins));
   }
-***REMOVED***
+};

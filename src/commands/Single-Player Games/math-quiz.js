@@ -18,7 +18,7 @@ module.exports = class extends Command {
       hard: 500,
       extreme: 1000,
       impossible: Number.MAX_SAFE_INTEGER,
-    ***REMOVED***
+    };
   }
 
   async run(msg, [difficulty]) {
@@ -55,4 +55,4 @@ module.exports = class extends Command {
       return msg.reply(`Nope, sorry, it's ${answer}.`);
     return msg.reply('Nice job! 10/10! You deserve some cake!');
   }
-***REMOVED***
+};

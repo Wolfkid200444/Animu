@@ -29,4 +29,4 @@ module.exports = class Battle {
     if (this.opponent.hp <= 0) return this.user;
     return null;
   }
-***REMOVED***
+};

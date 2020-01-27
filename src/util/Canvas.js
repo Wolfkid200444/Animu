@@ -77,4 +77,4 @@ module.exports = class CanvasUtil {
     ctx.putImageData(data, x, y);
     return ctx;
   }
-***REMOVED***
+};

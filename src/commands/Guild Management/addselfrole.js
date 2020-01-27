@@ -91,4 +91,4 @@ For more help, visit this URL: https://aldovia.moe/how-to-set-up-self-roles/\
       })
     );
   }
-***REMOVED***
+};

@@ -179,4 +179,4 @@ module.exports = class extends Command {
         return a + value;
       }, 0);
   }
-***REMOVED***
+};

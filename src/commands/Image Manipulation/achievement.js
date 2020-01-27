@@ -38,4 +38,4 @@ module.exports = class extends Command {
       files: [{ attachment: canvas.toBuffer(), name: 'achievement.png' }],
     });
   }
-***REMOVED***
+};

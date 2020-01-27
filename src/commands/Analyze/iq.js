@@ -26,4 +26,4 @@ module.exports = class extends Command {
       } IQ score is ${score}.`
     );
   }
-***REMOVED***
+};

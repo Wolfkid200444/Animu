@@ -48,4 +48,4 @@ module.exports = class extends Command {
     silhouette(ctx, 0, 0, image.width, image.height);
     return canvas;
   }
-***REMOVED***
+};

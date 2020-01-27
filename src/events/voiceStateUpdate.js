@@ -31,4 +31,4 @@ module.exports = class extends Event {
       await queue.player.leave();
     }
   }
-***REMOVED***
+};

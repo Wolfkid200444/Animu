@@ -203,7 +203,7 @@ module.exports = (app, client) => {
       channels: guild.channels
         .filter(c => c.type === 'text')
         .map(c => {
-          return { id: c.id, name: c.name ***REMOVED***
+          return { id: c.id, name: c.name };
         }),
     });
   });
@@ -221,7 +221,7 @@ module.exports = (app, client) => {
 
     return res.json({
       roles: guild.roles.map(r => {
-        return { id: r.id, name: r.name ***REMOVED***
+        return { id: r.id, name: r.name };
       }),
     });
   });
@@ -589,4 +589,4 @@ module.exports = (app, client) => {
       settings: guild.settings,
     });
   });
-***REMOVED***
+};

@@ -77,7 +77,7 @@ petSchema.methods.petAge = async function() {
 
   await this.save();
   return this.age;
-***REMOVED***
+};
 
 petSchema.methods.notFedInHour = async function() {
   this.hunger +=
@@ -101,7 +101,7 @@ petSchema.methods.notFedInHour = async function() {
 
   await this.save();
   return this.hunger;
-***REMOVED***
+};
 
 petSchema.methods.notPlayedInHour = async function() {
   const Item = this.model('Item');
@@ -127,7 +127,7 @@ petSchema.methods.notPlayedInHour = async function() {
 
   await this.save();
   return this.happiness;
-***REMOVED***
+};
 
 petSchema.methods.petFed = async function() {
   this.hunger -=
@@ -148,7 +148,7 @@ petSchema.methods.petFed = async function() {
 
   await this.save();
   return this.hunger;
-***REMOVED***
+};
 
 petSchema.methods.petHappy = async function(rate) {
   const Item = this.model('Item');
@@ -173,7 +173,7 @@ petSchema.methods.petHappy = async function(rate) {
 
   await this.save();
   return this.happiness;
-***REMOVED***
+};
 
 petSchema.methods.giveToy = async function(toyName) {
   if (this.personality === 4 && Math.random() * 100 < 33) return false;
@@ -182,7 +182,7 @@ petSchema.methods.giveToy = async function(toyName) {
 
   await this.save();
   return this.toys;
-***REMOVED***
+};
 
 //Model
 export const IPet: IPetModel = model<IPet, IPetModel>('Pet', petSchema);

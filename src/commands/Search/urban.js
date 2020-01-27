@@ -79,4 +79,4 @@ module.exports = class extends Command {
     const pos = x === -1 ? length : x;
     return str.substring(0, pos);
   }
-***REMOVED***
+};

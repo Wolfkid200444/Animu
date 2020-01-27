@@ -102,7 +102,7 @@ module.exports = class Game {
       voted.push(res.author.id);
       res.react('✅').catch(() => null);
       return true;
-    ***REMOVED***
+    };
     const votes = await this.channel.awaitMessages(filter, {
       max: this.players.size,
       time: 90000,
@@ -143,4 +143,4 @@ module.exports = class Game {
   get voiceChannel() {
     return this.connection ? this.connection.channel : this.voiceChannelRaw;
   }
-***REMOVED***
+};

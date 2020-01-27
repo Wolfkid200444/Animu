@@ -18,7 +18,7 @@ module.exports = class extends Command {
       }).setImage(_.sample(urls))
     );
   }
-***REMOVED***
+};
 
 // URLs
 const urls = [

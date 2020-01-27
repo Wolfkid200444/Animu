@@ -35,4 +35,4 @@ module.exports = class extends Command {
         .addField('❯ Score', manga.score, true)
     );
   }
-***REMOVED***
+};

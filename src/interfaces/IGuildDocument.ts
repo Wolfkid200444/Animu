@@ -14,6 +14,6 @@ export interface IGuildDocument extends Document {
   premiumDaysLeft: {
     type: number;
     default: 0;
-  ***REMOVED***
+  };
   levelPerks: Array<ILevelPerk>;
 }

@@ -54,7 +54,7 @@ module.exports = class Battler {
         return true;
       }
       return false;
-    ***REMOVED***
+    };
     const turn = await msg.channel.awaitMessages(filter, {
       max: 1,
       time: 30000,
@@ -103,4 +103,4 @@ module.exports = class Battler {
   toString() {
     return this.user.toString();
   }
-***REMOVED***
+};

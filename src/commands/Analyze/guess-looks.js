@@ -37,7 +37,7 @@ module.exports = class extends Command {
       } ${weight} pounds. Don't forget the ${extra}!`
     );
   }
-***REMOVED***
+};
 
 const eyeColors = ['blue', 'brown', 'hazel', 'green', 'yellow'];
 

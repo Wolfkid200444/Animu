@@ -39,4 +39,4 @@ module.exports = class extends Command {
       .addField('❯ Jump', message.url);
     return msg.send(embed);
   }
-***REMOVED***
+};

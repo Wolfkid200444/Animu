@@ -68,7 +68,7 @@ module.exports = class extends Command {
       url: `https://knowyourmeme.com${location}`,
       description: this.getMemeDescription($),
       thumbnail,
-    ***REMOVED***
+    };
   }
 
   getMemeDescription($) {
@@ -86,4 +86,4 @@ module.exports = class extends Command {
     }
     return null;
   }
-***REMOVED***
+};

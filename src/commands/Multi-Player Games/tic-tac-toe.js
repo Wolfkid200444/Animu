@@ -74,7 +74,7 @@ module.exports = class extends Command {
             sides.includes(choice) &&
             !taken.includes(choice)
           );
-        ***REMOVED***
+        };
         const turn = await msg.channel.awaitMessages(filter, {
           max: 1,
           time: 30000,
@@ -111,4 +111,4 @@ module.exports = class extends Command {
       (sides[2] === sides[4] && sides[2] === sides[6])
     );
   }
-***REMOVED***
+};

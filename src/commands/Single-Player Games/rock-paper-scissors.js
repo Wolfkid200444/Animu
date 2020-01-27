@@ -35,4 +35,4 @@ module.exports = class extends Command {
       if (response === 'scissors') return msg.reply('Scissors! Aw... A tie...');
     }
   }
-***REMOVED***
+};

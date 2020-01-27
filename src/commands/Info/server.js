@@ -73,4 +73,4 @@ module.exports = class extends Command {
         .setFooter(`Animu ${_.capitalize(tier)}`),
     );
   }
-***REMOVED***
+};

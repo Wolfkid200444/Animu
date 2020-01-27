@@ -87,7 +87,7 @@ module.exports = class extends Command {
             return false;
           }
           return true;
-        ***REMOVED***
+        };
         const msgs = await msg.channel.awaitMessages(filter, {
           max: 1,
           time: 15000,
@@ -141,6 +141,6 @@ module.exports = class extends Command {
       question: decodeURIComponent(question.question),
       answers: shuffled,
       correct,
-    ***REMOVED***
+    };
   }
-***REMOVED***
+};

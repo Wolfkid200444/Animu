@@ -51,4 +51,4 @@ module.exports = class extends Command {
       console.log(e);
     }
   }
-***REMOVED***
+};

@@ -16,4 +16,4 @@ module.exports = class extends Command {
       `Someone born in ${year} would be ${currentYear - year} years old.`
     );
   }
-***REMOVED***
+};

@@ -28,8 +28,8 @@ module.exports = class extends Command {
 
     let randNum;
 
-    if (!profile) profile = {***REMOVED***
-    if (!profile2) profile2 = {***REMOVED***
+    if (!profile) profile = {};
+    if (!profile2) profile2 = {};
 
     if (
       (profile.marriedTo || profile2.marriedTo) &&
@@ -56,4 +56,4 @@ module.exports = class extends Command {
 
     msg.sendEmbed(embed);
   }
-***REMOVED***
+};

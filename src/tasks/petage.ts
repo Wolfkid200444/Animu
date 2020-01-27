@@ -26,7 +26,7 @@ module.exports = class extends Task {
       }
     });
   }
-***REMOVED***
+};
 
 const reasons = [
   'Your pet was hit by a car and died...F',

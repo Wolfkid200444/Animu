@@ -29,4 +29,4 @@ module.exports = class extends Command {
       }).setFooter(`${body.length} Humble Bumble(s) Available`)
     );
   }
-***REMOVED***
+};

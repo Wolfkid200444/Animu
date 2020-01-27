@@ -6,10 +6,10 @@ module.exports = class extends Language {
     super(...args);
     this.language = {
       COMMAND_INFO: ['Meow?'],
-    ***REMOVED***
+    };
   }
 
   async init() {
     await super.init();
   }
-***REMOVED***
+};

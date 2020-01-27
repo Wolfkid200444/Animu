@@ -43,7 +43,7 @@ module.exports = class extends Command {
     this.msg = msg;
     const stopwatch = new Stopwatch();
     let categories;
-    const commands = normalize ? [] : {***REMOVED***
+    const commands = normalize ? [] : {};
     if (normalize) categories = [];
     const commandNames = Array.from(this.client.commands.keys());
     await Promise.all(
@@ -61,7 +61,7 @@ module.exports = class extends Command {
           }
 
           if (!commands.hasOwnProperty(cmd.category))
-            commands[cmd.category] = {***REMOVED***
+            commands[cmd.category] = {};
           if (!commands[cmd.category].hasOwnProperty(cmd.subCategory)) {
             commands[cmd.category][cmd.subCategory] = [];
           }
@@ -82,7 +82,7 @@ module.exports = class extends Command {
       (long, str) => Math.max(long, str.length),
       0,
     );
-    return { commands, categories, longest, stopwatch ***REMOVED***
+    return { commands, categories, longest, stopwatch };
   }
 
   async markdown(msg) {
@@ -229,7 +229,7 @@ module.exports = class extends Command {
       prefix: this.prefix,
       invite: this.invite,
       categories,
-    ***REMOVED***
+    };
 
     this.finish(JSON.stringify({ commands, meta }), stopwatch, 'json');
   }
@@ -241,8 +241,8 @@ module.exports = class extends Command {
       '>': '&gt;',
       '"': '&quot;',
       "'": '&#039;',
-    ***REMOVED***
+    };
 
     return text.replace(/[&<>"']/g, (char) => map[char]);
   }
-***REMOVED***
+};

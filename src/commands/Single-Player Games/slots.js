@@ -26,4 +26,4 @@ module.exports = class extends Command {
 			Aww... You lost... Guess it's just bad luck, huh?
 		`);
   }
-***REMOVED***
+};

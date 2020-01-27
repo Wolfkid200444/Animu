@@ -73,4 +73,4 @@ module.exports = class extends Task {
           .send(pet.petType === 'cat' ? 'Meow!' : 'Bork!');
     });
   }
-***REMOVED***
+};

@@ -12,7 +12,7 @@ export interface IReputation {
   rep: {
     min: 0;
     type: number;
-  ***REMOVED***
+  };
 }
 
 export interface ILevel {

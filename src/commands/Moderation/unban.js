@@ -25,4 +25,4 @@ module.exports = class extends Command {
 
     throw `${user.tag} was never banned. How could I unban them?`;
   }
-***REMOVED***
+};

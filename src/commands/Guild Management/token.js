@@ -42,4 +42,4 @@ module.exports = class extends Command {
         .setFooter('DO NOT SHARE THIS TOKEN WITH ANYONE!')
     );
   }
-***REMOVED***
+};

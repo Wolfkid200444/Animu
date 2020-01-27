@@ -7,4 +7,4 @@ module.exports = class extends Task {
     if (_channel && _channel instanceof TextChannel)
       await _channel.send(`<@${user}> You wanted me to remind you: ${text}`);
   }
-***REMOVED***
+};

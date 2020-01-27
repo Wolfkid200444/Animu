@@ -15,4 +15,4 @@ module.exports = class extends Command {
       files: [`${__dirname}/../../../assets/images/spam.png`],
     });
   }
-***REMOVED***
+};

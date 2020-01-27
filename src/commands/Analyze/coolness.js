@@ -23,7 +23,7 @@ module.exports = class extends Command {
       `${authorUser ? 'You are' : `${user.username} is`} ${qualities[coolness]}`
     );
   }
-***REMOVED***
+};
 
 // Qualityes
 const qualities = [

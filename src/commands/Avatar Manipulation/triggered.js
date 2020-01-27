@@ -87,4 +87,4 @@ module.exports = class extends Command {
       stream.on('close', onClose);
     });
   }
-***REMOVED***
+};

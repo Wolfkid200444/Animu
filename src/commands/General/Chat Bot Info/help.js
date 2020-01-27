@@ -60,4 +60,4 @@ Hope that helps you :))`,
       color: 0x2196f3,
     });
   }
-***REMOVED***
+};

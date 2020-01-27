@@ -26,4 +26,4 @@ module.exports = class extends Command {
     }
     return message;
   }
-***REMOVED***
+};

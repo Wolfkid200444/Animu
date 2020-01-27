@@ -36,4 +36,4 @@ module.exports = class extends Command {
         .setColor('#2196f3'),
     );
   }
-***REMOVED***
+};

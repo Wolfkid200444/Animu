@@ -217,7 +217,7 @@ module.exports = class extends Extendable {
     }).exec();
 
     let inventoryStr = '';
-    const inventoryItems = {***REMOVED***
+    const inventoryItems = {};
 
     inventory.inventory.forEach(item => {
       inventoryItems[item] = inventoryItems[item] + 1 || 1;
@@ -1113,4 +1113,4 @@ module.exports = class extends Extendable {
           )
           .setColor('#f44336');
   }
-***REMOVED***
+};

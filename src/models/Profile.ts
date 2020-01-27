@@ -59,7 +59,7 @@ export const profileSchema: Schema<IProfile> = new Schema({
 profileSchema.statics.register = async function(memberID: string) {
   const profile = await this.findOne({ memberID }).exec();
 
-  if (profile) return { res: 'already_exists', profile ***REMOVED***
+  if (profile) return { res: 'already_exists', profile };
   const Inventory = this.model('Inventory');
 
   await new Inventory({
@@ -80,8 +80,8 @@ profileSchema.statics.register = async function(memberID: string) {
       marriedTo: '',
       reputation: [],
     }).save(),
-  ***REMOVED***
-***REMOVED***
+  };
+};
 
 // Methods
 profileSchema.methods.addReputation = async function(amount, guildID) {
@@ -90,7 +90,7 @@ profileSchema.methods.addReputation = async function(amount, guildID) {
 
   this.save();
   return true;
-***REMOVED***
+};
 
 profileSchema.methods.deductReputation = async function(amount, guildID) {
   const index = this.reputation.findIndex(rep => rep.guildID === guildID);
@@ -106,7 +106,7 @@ profileSchema.methods.deductReputation = async function(amount, guildID) {
 
   this.save();
   return true;
-***REMOVED***
+};
 
 profileSchema.methods.edit = async function(field, value) {
   this[field] = value;
@@ -114,7 +114,7 @@ profileSchema.methods.edit = async function(field, value) {
   await this.save();
 
   return this;
-***REMOVED***
+};
 
 profileSchema.methods.addExp = async function(
   expToAdd,
@@ -155,7 +155,7 @@ profileSchema.methods.addExp = async function(
     )
       levelUp(expLeft);
     else this.level[index].exp = expLeft;
-  ***REMOVED***
+  };
 
   if (
     this.level[index].exp + expToAdd >=
@@ -166,7 +166,7 @@ profileSchema.methods.addExp = async function(
 
   await this.save();
   return levelUps;
-***REMOVED***
+};
 
 // Helper Functions
 function expToNextLevel(currentLevel: number, currentExp: number) {

@@ -45,4 +45,4 @@ export {
   perspectiveAPIKey,
   lavalinkPassword,
   botEnv,
-***REMOVED***
+};

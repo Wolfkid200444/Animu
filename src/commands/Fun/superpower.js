@@ -54,4 +54,4 @@ module.exports = class extends Command {
     );
     return data.sections[0];
   }
-***REMOVED***
+};

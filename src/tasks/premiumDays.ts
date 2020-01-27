@@ -34,4 +34,4 @@ module.exports = class extends Task {
       await redisClient.hsetAsync('guild_tiers', guild.guildID, guild.tier);
     });
   }
-***REMOVED***
+};

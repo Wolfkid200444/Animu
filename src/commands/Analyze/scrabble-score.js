@@ -22,7 +22,7 @@ module.exports = class extends Command {
     }
     return msg.reply(formatNumber(score));
   }
-***REMOVED***
+};
 
 // Letters
 const letters = {
@@ -52,4 +52,4 @@ const letters = {
   x: 8,
   y: 4,
   z: 10,
-***REMOVED***
+};

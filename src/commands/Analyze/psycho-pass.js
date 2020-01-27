@@ -33,4 +33,4 @@ module.exports = class extends Command {
       } Crime Coefficient is ${coefficient}. ${res}`
     );
   }
-***REMOVED***
+};

@@ -44,4 +44,4 @@ module.exports = class extends Command {
     deck.push('⭐ Joker');
     return deck;
   }
-***REMOVED***
+};

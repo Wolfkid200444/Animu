@@ -21,4 +21,4 @@ module.exports = class extends Command {
     await msg.author.editProfile(key, value);
     msg.sendEmbed(await msg.author.getProfileEmbed(msg.guild.id));
   }
-***REMOVED***
+};

@@ -25,7 +25,7 @@ module.exports = class extends Command {
         .setColor(answer.color)
     );
   }
-***REMOVED***
+};
 
 //8Ball answers
 const answers = [

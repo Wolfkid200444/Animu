@@ -23,4 +23,4 @@ module.exports = class extends Command {
     const length = integer(0, 200)(random);
     return msg.reply(`8${'='.repeat(clientAuthor ? length + 1 : length)}D`);
   }
-***REMOVED***
+};

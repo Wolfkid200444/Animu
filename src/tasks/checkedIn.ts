@@ -20,4 +20,4 @@ module.exports = class extends Task {
       await inventory.save();
     });
   }
-***REMOVED***
+};

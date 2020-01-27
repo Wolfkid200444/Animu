@@ -16,8 +16,8 @@ module.exports = class extends Command {
   }
 
   async run(msg, [location]) {
-    if (/^[0-9]+$/.test(location)) location = { type: 'zip', data: location ***REMOVED***
-    location = { type: 'q', data: location ***REMOVED***
+    if (/^[0-9]+$/.test(location)) location = { type: 'zip', data: location };
+    location = { type: 'q', data: location };
 
     try {
       const { data: body } = await axios.get(
@@ -57,4 +57,4 @@ module.exports = class extends Command {
       );
     }
   }
-***REMOVED***
+};

@@ -15,4 +15,4 @@ module.exports = class extends Command {
       `Today **is${new Date().getDay() === 2 ? '' : ' not'}** Zero Twosday.`
     );
   }
-***REMOVED***
+};

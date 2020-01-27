@@ -62,7 +62,7 @@ module.exports = class extends Command {
         s: 0,
         h: 0,
         r: 0,
-      ***REMOVED***
+      };
       const blacklist = [];
       const questionNums = ['2', '3', '4', '5', '6', '7'];
       let turn = 1;
@@ -129,4 +129,4 @@ module.exports = class extends Command {
       throw err;
     }
   }
-***REMOVED***
+};

@@ -116,4 +116,4 @@ module.exports = class extends Command {
       color: '#2196f3',
     });
   }
-***REMOVED***
+};

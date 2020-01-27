@@ -54,4 +54,4 @@ module.exports = class extends Command {
       .setDescription(shorten(data.extract.replace(/\n/g, '\n\n')));
     return msg.send(embed);
   }
-***REMOVED***
+};

@@ -20,4 +20,4 @@ module.exports = class extends Argument {
       else throw 'Invalid Image URL';
     }
   }
-***REMOVED***
+};

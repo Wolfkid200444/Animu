@@ -17,7 +17,7 @@ module.exports = class extends Command {
       hard: 15000,
       extreme: 10000,
       impossible: 5000,
-    ***REMOVED***
+    };
   }
 
   async run(msg, [difficulty]) {
@@ -42,7 +42,7 @@ module.exports = class extends Command {
         1000} seconds)`
     );
   }
-***REMOVED***
+};
 
 const sentences = [
   'The quick brown fox jumps over the lazy dog.',

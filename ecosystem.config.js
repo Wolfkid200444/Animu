@@ -1,4 +1,4 @@
-***REMOVED***
+module.exports = {
   apps: [
     {
       name: 'animu',
@@ -10,4 +10,4 @@
       },
     },
   ],
-***REMOVED***
+};

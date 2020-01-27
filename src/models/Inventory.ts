@@ -30,21 +30,21 @@ inventorySchema.methods.addCoins = async function(amount) {
 
   await this.save();
   return true;
-***REMOVED***
+};
 
 inventorySchema.methods.giveItem = async function(itemName) {
   this.inventory.push(itemName);
 
   await this.save();
   return true;
-***REMOVED***
+};
 
 inventorySchema.methods.deductCoins = async function(amount) {
   this.coins -= amount;
 
   await this.save();
   return true;
-***REMOVED***
+};
 
 inventorySchema.methods.takeItem = async function(itemName) {
   const index = this.inventory.indexOf(itemName);
@@ -55,7 +55,7 @@ inventorySchema.methods.takeItem = async function(itemName) {
 
   await this.save();
   return true;
-***REMOVED***
+};
 
 inventorySchema.methods.checkIn = async function() {
   this.coins += 30;
@@ -63,7 +63,7 @@ inventorySchema.methods.checkIn = async function() {
 
   await this.save();
   return true;
-***REMOVED***
+};
 
 // Exporting
 export const Inventory: IInventoryModel = model<IInventory, IInventoryModel>(

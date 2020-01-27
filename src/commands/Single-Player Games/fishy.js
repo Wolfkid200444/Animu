@@ -24,7 +24,7 @@ module.exports = class extends Command {
       `You caught a ${fish.symbol}. I bet it'd sell for around $${worth}.`
     );
   }
-***REMOVED***
+};
 
 // Fishes
 const fishes = {
@@ -48,4 +48,4 @@ const fishes = {
     max: 20,
     min: 10,
   },
-***REMOVED***
+};

@@ -49,4 +49,4 @@ module.exports = class extends Command {
         return () => true;
     }
   }
-***REMOVED***
+};

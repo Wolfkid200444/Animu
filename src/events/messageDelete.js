@@ -48,4 +48,4 @@ module.exports = class extends Event {
           }**:\n\`\`\`${message.content}\`\`\``
         );
   }
-***REMOVED***
+};

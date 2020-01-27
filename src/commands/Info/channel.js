@@ -19,7 +19,7 @@ module.exports = class extends Command {
       voice: 'Voice Channel',
       category: 'Category',
       unknown: 'Unknown',
-    ***REMOVED***
+    };
   }
 
   async run(msg, [channel = msg.channel]) {
@@ -47,4 +47,4 @@ module.exports = class extends Command {
 
     return msg.send(embed);
   }
-***REMOVED***
+};

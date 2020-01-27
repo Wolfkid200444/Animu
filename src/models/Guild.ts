@@ -44,7 +44,7 @@ guildSchema.methods.addLevelPerk = async function(level, perkName, perkValue) {
     // Level perks doesn't exist
     const perks: ILevelPerk = {
       level,
-    ***REMOVED***
+    };
 
     if (perkName === 'badge') perks.badge = perkValue;
     if (perkName === 'role') perks.role = perkValue;
@@ -65,7 +65,7 @@ guildSchema.methods.addLevelPerk = async function(level, perkName, perkValue) {
   await this.save();
 
   return true;
-***REMOVED***
+};
 
 guildSchema.methods.removeLevelPerk = async function(level) {
   const levelPerkIndex = this.levelPerks.findIndex(
@@ -79,7 +79,7 @@ guildSchema.methods.removeLevelPerk = async function(level) {
   await this.save();
 
   return true;
-***REMOVED***
+};
 
 export const Guild: IGuildModel = model<IGuild, IGuildModel>(
   'Guild',

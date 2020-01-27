@@ -56,4 +56,4 @@ module.exports = class extends Command {
         '[$2]($1)'
       );
   }
-***REMOVED***
+};

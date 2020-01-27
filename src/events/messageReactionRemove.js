@@ -29,4 +29,4 @@ module.exports = class extends Event {
       member.roles.remove(role);
     }
   }
-***REMOVED***
+};

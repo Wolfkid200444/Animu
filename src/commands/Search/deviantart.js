@@ -64,4 +64,4 @@ module.exports = class extends Command {
     }, body.expires_in * 1000);
     return body;
   }
-***REMOVED***
+};

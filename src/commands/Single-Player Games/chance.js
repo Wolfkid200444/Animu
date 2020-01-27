@@ -17,4 +17,4 @@ module.exports = class extends Command {
     if (!loss) return msg.reply('Nice job! 10/10! You deserve some cake!');
     return msg.reply('Nope, sorry, you lost.');
   }
-***REMOVED***
+};

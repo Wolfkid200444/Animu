@@ -26,4 +26,4 @@ module.exports = (app, client) => {
       return res.json({ success: 'Reputation successfully modified' });
     }
   });
-***REMOVED***
+};

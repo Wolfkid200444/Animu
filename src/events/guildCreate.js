@@ -42,4 +42,4 @@ Need help? Join the support server: discord.gg/JGsgBsN
 
     await redisClient.hsetAsync('guild_tiers', guild.id, 'free');
   }
-***REMOVED***
+};

@@ -53,4 +53,4 @@ module.exports = class extends Command {
         .addField('❯ MAL ID', character.mal_id, true)
     );
   }
-***REMOVED***
+};

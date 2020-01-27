@@ -73,4 +73,4 @@ module.exports = class extends Command {
         .setColor(res.res === 'err' ? '#f44336' : '#2196f3')
     );
   }
-***REMOVED***
+};

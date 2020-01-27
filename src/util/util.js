@@ -1,4 +1,4 @@
-***REMOVED***
+module.exports = {
   trimArray: function(arr, maxLen = 10) {
     if (arr.length > maxLen) {
       const len = arr.length - maxLen;
@@ -58,4 +58,4 @@
   numberWithCommas: function(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   },
-***REMOVED***
+};

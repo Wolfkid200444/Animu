@@ -57,7 +57,7 @@ module.exports = class extends Command {
       }
     );
     const data = body.items[0];
-    return { id: data.id, url: data.url ***REMOVED***
+    return { id: data.id, url: data.url };
   }
 
   async fetchArticle(wiki, id) {
@@ -69,4 +69,4 @@ module.exports = class extends Command {
     );
     return body.sections[0];
   }
-***REMOVED***
+};

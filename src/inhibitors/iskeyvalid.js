@@ -78,4 +78,4 @@ module.exports = class extends Inhibitor {
 
     await redisClient.hsetAsync('guild_tiers', '628931282851856394', 'pro'); //Setting Dev Server's Tier to 'pro'
   }
-***REMOVED***
+};

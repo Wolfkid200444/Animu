@@ -100,4 +100,4 @@ module.exports = class extends Command {
     if (!result) return false;
     return false;
   }
-***REMOVED***
+};

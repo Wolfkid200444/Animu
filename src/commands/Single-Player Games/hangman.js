@@ -65,7 +65,7 @@ module.exports = class extends Command {
             !confirmation.includes(choice) &&
             !incorrect.includes(choice)
           );
-        ***REMOVED***
+        };
         const guess = await msg.channel.awaitMessages(filter, {
           max: 1,
           time: 30000,
@@ -103,4 +103,4 @@ module.exports = class extends Command {
       );
     }
   }
-***REMOVED***
+};
