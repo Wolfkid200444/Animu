@@ -7,6 +7,7 @@
     "start": "node -r dotenv/config dist/index.js",
     "compile": "tsc && npm run start",
     "dev": "nodemon --watch src -e js,ts --exec \"npm run compile\"",
+    "prod": "rm -rf dist/ && npm run compile",
     "test": "echo No Test Provided"
   },
   "repository": {
