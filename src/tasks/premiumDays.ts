@@ -3,10 +3,10 @@ import { botEnv } from '../config/keys';
 import { model } from 'mongoose';
 import redis from 'redis';
 import bluebird from 'bluebird';
-import { IGuild } from '../models/Guild';
+import { IGuildModel } from '../models/Guild';
 
 // Init
-const Guild = model('Guild');
+const Guild: IGuildModel = <IGuildModel>model('Guild');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
 
@@ -26,9 +26,7 @@ module.exports = class extends Task {
       { multi: true }
     ).exec();
 
-    const expiredGuilds: Array<IGuild> = await (<Promise<Array<IGuild>>>(
-      Guild.find({ premiumDaysLeft: 0 }).exec()
-    ));
+    const expiredGuilds = await Guild.find({ premiumDaysLeft: 0 }).exec();
 
     expiredGuilds.forEach(async guild => {
       await redisClient.hsetAsync('guild_tiers', guild.guildID, guild.tier);

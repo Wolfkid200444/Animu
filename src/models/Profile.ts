@@ -120,7 +120,7 @@ profileSchema.methods.addExp = async function(
   expToAdd,
   guildID,
   defaultRep = 50
-) {
+): Promise<number[]> {
   let index = this.level.findIndex(guildLev => guildLev.guildID === guildID);
   let levelUps = [];
 

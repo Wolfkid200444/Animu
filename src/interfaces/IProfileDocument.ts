@@ -3,16 +3,13 @@ import { Document } from 'mongoose';
 // Interfaces
 export interface IBadge {
   guildID: string;
-  activeBadge: string;
+  activeBadge?: string;
   badges: string[];
 }
 
 export interface IReputation {
   guildID: string;
-  rep: {
-    min: 0;
-    type: number;
-  };
+  rep: number;
 }
 
 export interface ILevel {

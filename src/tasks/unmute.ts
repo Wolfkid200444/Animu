@@ -1,9 +1,9 @@
 import { Task } from 'klasa';
 import { model } from 'mongoose';
-import { IProfile } from '../models/Profile';
+import { IProfileModel } from '../models/Profile';
 
 //Init
-const Profile = model('Profile');
+const Profile: IProfileModel = <IProfileModel>model('Profile');
 
 module.exports = class extends Task {
   async run({ guild, user }) {
@@ -13,9 +13,9 @@ module.exports = class extends Task {
     if (!member) return;
     await member.roles.remove(_guild.settings.get('mutedRole'));
 
-    const profile: IProfile = await (<Promise<IProfile>>Profile.findOne({
+    const profile = await Profile.findOne({
       memberID: user.id,
-    }).exec());
+    }).exec();
 
     const index = profile.mutedIn.indexOf(guild.id);
 

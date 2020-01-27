@@ -1,25 +1,31 @@
 //Dependencies
-const { Extendable } = require('klasa');
-const { User, MessageEmbed } = require('discord.js');
-const { model } = require('mongoose');
-const _ = require('lodash');
-const redis = require('redis');
-const bluebird = require('bluebird');
-const { numberWithCommas } = require('../util/util');
+import { Extendable, ExtendableStore } from 'klasa';
+import { User, MessageEmbed } from 'discord.js';
+import { model } from 'mongoose';
+import _ from 'lodash';
+import redis from 'redis';
+import bluebird from 'bluebird';
+import { numberWithCommas } from '../util/util';
+import { IProfileModel, IProfile } from '../models/Profile';
+import { IPetModel } from '../models/Pet';
+import { IInventoryModel } from '../models/Inventory';
+import { IItemModel } from '../models/Item';
+import { IGuildModel } from '../models/Guild';
+import { IBankAccountModel } from '../models/BankAccount';
 
 //Init
-const Profile = model('Profile');
-const Inventory = model('Inventory');
-const Item = model('Item');
-const Pet = model('Pet');
-const Guild = model('Guild');
-const BankAccount = model('BankAccount');
+const Profile: IProfileModel = <IProfileModel>model('Profile');
+const Inventory: IInventoryModel = <IInventoryModel>model('Inventory');
+const Item: IItemModel = <IItemModel>model('Item');
+const Pet: IPetModel = <IPetModel>model('Pet');
+const Guild: IGuildModel = <IGuildModel>model('Guild');
+const BankAccount: IBankAccountModel = <IBankAccountModel>model('BankAccount');
 bluebird.promisifyAll(redis.RedisClient.prototype);
-const redisClient = redis.createClient();
+const redisClient: any = redis.createClient();
 
 module.exports = class extends Extendable {
-  constructor(...args) {
-    super(...args, {
+  constructor(store: ExtendableStore, file: string[], dir: string) {
+    super(store, file, dir, {
       enabled: true,
       appliesTo: [User],
     });
@@ -28,9 +34,9 @@ module.exports = class extends Extendable {
   /**
    * Register a user's profile
    *
-   * @returns {boolean} - True if profile was register, false if profile already exists
+   * @returns False if profile already exists or Profile if it doesn't exist
    */
-  async register() {
+  async register(this: User): Promise<IProfile | false> {
     const profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (profile) return false;
@@ -40,11 +46,12 @@ module.exports = class extends Extendable {
 
   /**
    * Get User's profile embed
-   * @param {String} guildID - ID of the guild to fetch profile for
    *
-   * @returns {MessageEmbed} - MessageEmbed containing profile or error
+   * @param guildID - ID of the guild to fetch profile for
+   *
+   * @returns The MessageEmbed containing profile or error
    */
-  async getProfileEmbed(guildID) {
+  async getProfileEmbed(this: User, guildID) {
     const profile = await Profile.findOne({ memberID: this.id }).exec();
     const pet = await Pet.findOne({ memberID: this.id }).exec();
 
@@ -67,7 +74,9 @@ module.exports = class extends Extendable {
     //If is owner
     if (isOwner) profileEmbed.setFooter('👑 Bot Owner 👑');
     //If is 🛡 Senior Moderator
-    else if (_.includes(this.client.settings.animuStaff, profile.memberID))
+    else if (
+      _.includes(this.client.settings.get('animuStaff'), profile.memberID)
+    )
       profileEmbed.setFooter('🛡 Bot Staff');
     //Else
     else {
@@ -85,8 +94,12 @@ module.exports = class extends Extendable {
 
       const thisGuild = this.client.guilds.get(guildID);
 
-      for (let i = 0; i < thisGuild.settings.ignoreRepRoles.length; i++) {
-        const ignoreRepRole = thisGuild.settings.ignoreRepRoles[i];
+      for (
+        let i = 0;
+        i < thisGuild.settings.get('ignoreRepRoles').length;
+        i++
+      ) {
+        const ignoreRepRole = thisGuild.settings.get('ignoreRepRoles')[i];
         if (
           this.client.guilds
             .get(guildID)
@@ -119,7 +132,7 @@ module.exports = class extends Extendable {
 
       let proceedLevel = true;
 
-      if (!thisGuild.settings.enableLevels) proceedLevel = false;
+      if (!thisGuild.settings.get('enableLevels')) proceedLevel = false;
 
       if (
         !_.includes(
@@ -129,8 +142,12 @@ module.exports = class extends Extendable {
       )
         proceedLevel = false;
 
-      for (let i = 0; i < thisGuild.settings.ignoreLevelRoles.length; i++) {
-        const ignoreLevelRole = thisGuild.settings.ignoreLevelRoles[i];
+      for (
+        let i = 0;
+        i < thisGuild.settings.get('ignoreLevelRoles').length;
+        i++
+      ) {
+        const ignoreLevelRole = thisGuild.settings.get('ignoreLevelRoles')[i];
         if (
           this.client.guilds
             .get(guildID)
@@ -194,10 +211,10 @@ module.exports = class extends Extendable {
   /**
    * Get Inventory Embed
    *
-   * @param {boolean} [partner=false] - Whether this is partner's inventory
-   * @returns {MessageEmbed} - MessageEmbed containing inventory or error
+   * @param partner - Whether this is partner's inventory or not
+   * @returns The MessageEmbed containing inventory or error
    */
-  async getInventoryEmbed(partner = false) {
+  async getInventoryEmbed(this: User, partner = false) {
     const profile = await Profile.findOne({
       memberID: this.id,
     }).exec();
@@ -240,30 +257,12 @@ module.exports = class extends Extendable {
   }
 
   /**
-   * Get Profile Wallpapers Embed
-   * @returns {MessageEmbed} - Message embed containing wallpapers
-   */
-  async getWallpapersEmbed() {
-    const inventory = await Inventory.findOne({ memberID: this.id }).exec();
-
-    if (!inventory) return this._noProfile(true);
-
-    return new MessageEmbed({
-      title: 'Profile Wallpapers',
-      description:
-        inventory.profileWallpapers.length === 0
-          ? '[Empty]'
-          : inventory.profileWallpapers.map(w => `• ${w.name}`).join('\n'),
-      color: 0x2196f3,
-    });
-  }
-
-  /**
    * Get Badges embed
-   * @param {string} guildID - ID of Guild to get badges embed for
-   * @returns {MessageEmbed} - Message embed containing badges
+   *
+   * @param guildID - ID of Guild to get badges embed for
+   * @returns The Message embed containing badges
    */
-  async getBadgesEmbed(guildID) {
+  async getBadgesEmbed(this: User, guildID) {
     const profile = await Profile.findOne({
       memberID: this.id,
     }).exec();
@@ -278,7 +277,7 @@ module.exports = class extends Extendable {
 
     if (
       isOwner ||
-      _.includes(this.client.settings.animuStaff, profile.memberID)
+      _.includes(this.client.settings.get('animuStaff'), profile.memberID)
     )
       return new MessageEmbed()
         .setTitle('No Badges')
@@ -290,10 +289,8 @@ module.exports = class extends Extendable {
     if (profile.badges.find(guildBadges => guildBadges.guildID === guildID)) {
       if (
         profile.badges.find(guildBadges => guildBadges.guildID === guildID)
-          .badges.length < 1
+          .badges.length >= 1
       )
-        badgesString = false;
-      else
         profile.badges
           .find(guildBadges => guildBadges.guildID === guildID)
           .badges.forEach(badge => (badgesString += `${badge}\n`));
@@ -322,11 +319,11 @@ module.exports = class extends Extendable {
   /**
    * Edit a profile
    *
-   * @param {String} key - Key to edit
-   * @param {String} value - New value for specified key
-   * @returns {true} - True
+   * @param key - Key to edit
+   * @param value - New value for specified key
+   * @returns True, yup, just a smol little true
    */
-  async editProfile(key, value) {
+  async editProfile(this: User, key, value) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) profile = await Profile.register(this.id);
@@ -348,8 +345,6 @@ module.exports = class extends Extendable {
         await inventory.giveItem(profile.profileWallpaper);
     }
 
-    console.log(value);
-
     await profile.edit(key, value);
     return true;
   }
@@ -357,12 +352,12 @@ module.exports = class extends Extendable {
   /**
    * Edit Reputation of a user
    *
-   * @param {('+'|'-')} change - Add (+) or deduct (-) rep?
-   * @param {number} amount - amount of rep to add/deduct
-   * @param {String} guildID - ID of guild to add/deduct rep for
-   * @returns {boolean} - True if reputation was added/deducted, False if user was banned due to low rep
+   * @param change - Add (+) or deduct (-) rep?
+   * @param amount - amount of rep to add/deduct
+   * @param guildID - ID of guild to add/deduct rep for
+   * @returns True if reputation was added/deducted, False if user was banned due to low rep
    */
-  async editReputation(change, amount, guildID) {
+  async editReputation(this: User, change, amount, guildID) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     //Checking Aldovia Title
@@ -373,7 +368,7 @@ module.exports = class extends Extendable {
 
     if (
       isOwner ||
-      _.includes(this.client.settings.animuStaff, profile.memberID)
+      _.includes(this.client.settings.get('animuStaff'), profile.memberID)
     )
       return true;
 
@@ -381,8 +376,8 @@ module.exports = class extends Extendable {
 
     const thisGuild = this.client.guilds.get(guildID);
 
-    for (let i = 0; i < thisGuild.settings.ignoreRepRoles.length; i++) {
-      const ignoreRepRole = thisGuild.settings.ignoreRepRoles[i];
+    for (let i = 0; i < thisGuild.settings.get('ignoreRepRoles').length; i++) {
+      const ignoreRepRole = thisGuild.settings.get('ignoreRepRoles')[i];
       if (
         this.client.guilds
           .get(guildID)
@@ -401,7 +396,7 @@ module.exports = class extends Extendable {
     if (change === '+') return await profile.addReputation(amount, guildID);
     else {
       const res = await profile.deductReputation(amount, guildID);
-      if (!res && this.client.guilds.get(guildID).settings.banOnLowRep) {
+      if (!res && this.client.guilds.get(guildID).settings.get('banOnLowRep')) {
         this.client.guilds
           .get(guildID)
           .members.get(this.id)
@@ -414,11 +409,11 @@ module.exports = class extends Extendable {
   /**
    * Add or deduct coins of a user
    *
-   * @param {('+'|'-')} change - Add (+) or deduct (-)
-   * @param {number} amount - Amount of coins to add/deduct
-   * @returns {true} - True
+   * @param change - Add (+) or deduct (-)
+   * @param amount - Amount of coins to add/deduct
+   * @returns True
    */
-  async editCoins(change, amount) {
+  async editCoins(this: User, change, amount) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) profile = await Profile.register(this.id);
@@ -433,11 +428,11 @@ module.exports = class extends Extendable {
   /**
    * Give a badge to a member
    *
-   * @param {string} badgeName - Badge to give
-   * @param {string} guildID - ID of Guild for which this badge is being given
-   * @returns {boolean} - True if badge was given & false if badge is already given
+   * @param badgeName - Badge to give
+   * @param guildID - ID of Guild for which this badge is being given
+   * @returns True if badge was given & false if badge is already given
    */
-  async giveBadge(badgeName, guildID) {
+  async giveBadge(this: User, badgeName, guildID) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) profile = await Profile.register(this.id);
@@ -471,11 +466,11 @@ module.exports = class extends Extendable {
   /**
    * Add Exp to a user's profile
    *
-   * @param {Number} expToAdd - Amount of Exp to add
-   * @param {String} guildID - ID of guild to add exp for
-   * @returns {Promise<Array<Role>|False>} - Array if a role is to be added, False otherwise
+   * @param expToAdd - Amount of Exp to add
+   * @param guildID - ID of guild to add exp for
+   * @returns An Array of levels if a role is to be added, otherwise an empty array
    */
-  async addExp(expToAdd, guildID) {
+  async addExp(this: User, expToAdd, guildID) {
     return new Promise(resolve => {
       Profile.findOne({ memberID: this.id }).then(async profile => {
         if (!profile) profile = await Profile.register(this.id);
@@ -483,7 +478,7 @@ module.exports = class extends Extendable {
         const res = await profile.addExp(
           expToAdd,
           guildID,
-          this.client.guilds.get(guildID).settings.startingRep
+          this.client.guilds.get(guildID).settings.get('startingRep')
         );
         resolve(res);
       });
@@ -493,11 +488,11 @@ module.exports = class extends Extendable {
   /**
    * Set an active badge
    *
-   * @param {string} badgeName - Badge to set active
-   * @param {string} guildID - ID of Guild for which this badge is being set as active
-   * @returns {boolean} - True if badge was given & false if badge is already given
+   * @param badgeName - Badge to set active
+   * @param guildID - ID of Guild for which this badge is being set as active
+   * @returns True if badge was given & false if badge is already given
    */
-  async setActiveBadge(badgeName, guildID) {
+  async setActiveBadge(this: User, badgeName, guildID) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) return this._noProfile(true);
@@ -543,11 +538,12 @@ module.exports = class extends Extendable {
 
   /**
    * Use an item from inventory
-   * @param {String} itemName - Name of item to use
-   * @param {String} guildID - ID of the guild
-   * @returns {MessageEmbed} - Embed to show to user
+   *
+   * @param itemName - Name of item to use
+   * @param guildID - ID of the guild
+   * @returns An Embed to show to user
    */
-  async useItem(itemName, guildID) {
+  async useItem(this: User, itemName, guildID) {
     const inventory = await Inventory.findOne({ memberID: this.id }).exec();
 
     if (!inventory) return this._noProfile(true);
@@ -609,7 +605,7 @@ module.exports = class extends Extendable {
       item.name === 'Medium Exp Bottle' ||
       item.name === 'Large Exp Bottle'
     ) {
-      if (!this.client.guilds.get(guildID).settings.allowExpBottles)
+      if (!this.client.guilds.get(guildID).settings.get('allowExpBottles'))
         return new MessageEmbed({
           title: "Can't use",
           description: "This guild doesn't allow exp bottles",
@@ -627,21 +623,22 @@ module.exports = class extends Extendable {
       let returnCoins;
 
       if (item.name === 'Small Exp Bottle') {
-        expToAdd = 100 * this.client.guilds.get(guildID).settings.expRate;
+        expToAdd =
+          100 * this.client.guilds.get(guildID).settings.get('expRate');
         returnCoins = 25;
       } else if (item.name === 'Medium Exp Bottle') {
-        expToAdd = 300 * this.client.guilds.get(guildID).settings.expRate;
+        expToAdd =
+          300 * this.client.guilds.get(guildID).settings.get('expRate');
         returnCoins = 75;
       } else {
-        expToAdd = 500 * this.client.guilds.get(guildID).settings.expRate;
+        expToAdd =
+          500 * this.client.guilds.get(guildID).settings.get('expRate');
         returnCoins = 125;
       }
 
       if (ownerInventory) ownerInventory.addCoins(returnCoins);
 
       const levelUps = await this.addExp(expToAdd, guildID);
-
-      console.log('Level Ups:', levelUps);
 
       //If member actually levelled up
       if (levelUps.length) {
@@ -668,7 +665,7 @@ module.exports = class extends Extendable {
               if (guild.levelPerks[index].role) {
                 const role = this.client.guilds
                   .get(guildID)
-                  .roles.get(r => r.name === guild.levelPerks[index].role);
+                  .roles.find(r => r.name === guild.levelPerks[index].role);
 
                 this.client.guilds
                   .get(guildID)
@@ -898,12 +895,13 @@ module.exports = class extends Extendable {
 
   /**
    * Give an item or coins to a user
-   * @param {String} type - Type of item to give
-   * @param {*} value - Value
-   * @param {User} member - User to give item to
-   * @returns {MessageEmbed} - Embed containing result
+   *
+   * @param type - Type of item to give
+   * @param value - Value
+   * @param member - User to give item to
+   * @returns The Embed containing result
    */
-  async give(type, value, member) {
+  async give(this: User, type, value, member) {
     const senderInv = await Inventory.findOne({ memberID: this.id });
     const receiverInv = await Inventory.findOne({ memberID: member.id });
 
@@ -933,8 +931,8 @@ module.exports = class extends Extendable {
         title: `Transaction Successful`,
         color: 0x2196f3,
       })
-        .addField('❯ Sender', this.client.users.get(this.id).tag, 'true')
-        .addField('❯ Receiver', this.client.users.get(member.id).tag, 'true')
+        .addField('❯ Sender', this.client.users.get(this.id).tag, true)
+        .addField('❯ Receiver', this.client.users.get(member.id).tag, true)
         .addField('❯ Amount Sent', value)
         .setTimestamp(Date.now());
     } else if (type === 'item') {
@@ -954,8 +952,8 @@ module.exports = class extends Extendable {
         title: `Transaction Successful`,
         color: 0x2196f3,
       })
-        .addField('❯ Sender', this.client.users.get(this.id).tag, 'true')
-        .addField('❯ Receiver', this.client.users.get(member.id).tag, 'true')
+        .addField('❯ Sender', this.client.users.get(this.id).tag, true)
+        .addField('❯ Receiver', this.client.users.get(member.id).tag, true)
         .addField('❯ Item Sent', value)
         .setTimestamp(Date.now());
     }
@@ -963,11 +961,12 @@ module.exports = class extends Extendable {
 
   /**
    * Deposit a number of coins for a period
-   * @param {int} period - Period for this deposit in weeks
-   * @param {int} coins - Amount of coins to deposit
-   * @returns {MessageEmbed} - MessageEmbed to show to the user
+   *
+   * @param period - Period for this deposit in weeks
+   * @param coins - Amount of coins to deposit
+   * @returns The MessageEmbed to show to the user
    */
-  async deposit(period, coins) {
+  async deposit(this: User, period, coins) {
     const inventory = await Inventory.findOne({ memberID: this.id });
     const bankAccount = await BankAccount.findOne({ memberID: this.id });
 
@@ -1007,9 +1006,10 @@ module.exports = class extends Extendable {
 
   /**
    * Create a new bank account for a user
-   * @returns {MessageEmbed} - Embed to show to the user
+   *
+   * @returns The Embed to show to the user
    */
-  async createAccount() {
+  async createAccount(this: User) {
     const res = await BankAccount.createAccount(this.id);
 
     if (res.res === 'already_exists')
@@ -1035,9 +1035,10 @@ module.exports = class extends Extendable {
 
   /**
    * Get Embed for a user's bank account
-   * @returns {MessageEmbed} - Embed containing user's Bank Account info
+   *
+   * @returns The Embed containing user's Bank Account info
    */
-  async getAccountEmbed() {
+  async getAccountEmbed(this: User) {
     const bankAccount = await BankAccount.findOne({ memberID: this.id });
 
     if (!bankAccount)
@@ -1068,10 +1069,11 @@ module.exports = class extends Extendable {
 
   /**
    * Setup profile for a guild
-   * @param {String} guildID - ID of guild to setup this profile for
-   * @returns {MessageEmbed} - Embed containing details
+   *
+   * @param guildID - ID of guild to setup this profile for
+   * @returns The Embed containing details
    */
-  async setupProfile(guildID) {
+  async setupProfile(this: User, guildID) {
     const profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (!profile) return this._noProfile(true);
@@ -1079,7 +1081,7 @@ module.exports = class extends Extendable {
     if (!profile.reputation.find(rep => rep.guildID === guildID))
       profile.reputation.push({
         guildID: guildID,
-        rep: this.client.guilds.get(guildID).settings.startingRep,
+        rep: this.client.guilds.get(guildID).settings.get('startingRep'),
       });
 
     if (!profile.level.find(level => level.guildID === guildID))

@@ -11,9 +11,6 @@ export interface ILevelPerk {
 export interface IGuildDocument extends Document {
   guildID: string;
   tier: 'free' | 'lite' | 'plus' | 'pro';
-  premiumDaysLeft: {
-    type: number;
-    default: 0;
-  };
+  premiumDaysLeft: number;
   levelPerks: Array<ILevelPerk>;
 }

@@ -3,16 +3,16 @@ import { Task } from 'klasa';
 import { botEnv } from '../config/keys';
 import { model } from 'mongoose';
 import _ from 'lodash';
-import { IPet } from '../models/Pet';
+import { IPetModel } from '../models/Pet';
 
 // Init
-const Pet = model('Pet');
+const Pet: IPetModel = <IPetModel>model('Pet');
 
 module.exports = class extends Task {
   async run() {
     if (botEnv !== 'production') return;
 
-    const pets: Array<IPet> = await (<Promise<Array<IPet>>>Pet.find({}).exec());
+    const pets = await Pet.find({}).exec();
 
     pets.forEach(async pet => {
       const age = await pet.petAge();

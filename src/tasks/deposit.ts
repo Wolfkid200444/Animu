@@ -2,25 +2,23 @@
 import { Task } from 'klasa';
 import { botEnv } from '../config/keys';
 import { model } from 'mongoose';
-import { IBankAccount } from '../models/BankAccount';
-import { IInventory } from '../models/Inventory';
+import { IBankAccountModel } from '../models/BankAccount';
+import { IInventoryModel } from '../models/Inventory';
 
 // Init
-const BankAccount = model('BankAccount');
-const Inventory = model('Inventory');
+const BankAccount: IBankAccountModel = <IBankAccountModel>model('BankAccount');
+const Inventory: IInventoryModel = <IInventoryModel>model('Inventory');
 
 module.exports = class extends Task {
   async run() {
     if (botEnv !== 'production') return;
 
-    const bankaccounts: Array<IBankAccount> = await (<
-      Promise<Array<IBankAccount>>
-    >BankAccount.find({}).exec());
+    const bankaccounts = await BankAccount.find({}).exec();
 
     bankaccounts.forEach(async account => {
-      const inv: IInventory = await (<Promise<IInventory>>Inventory.findOne({
+      const inv = await Inventory.findOne({
         memberID: account.memberID,
-      }).exec());
+      }).exec();
 
       account.deposits.forEach((deposit, i) => {
         if (deposit.daysLeft > 0) deposit.daysLeft--;
