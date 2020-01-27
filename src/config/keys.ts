@@ -2,26 +2,26 @@ const keys =
   process.env.NODE_ENV === 'production' ? require('./prod') : require('./dev');
 
 const mongoConnectionString: string = keys.mongoConnectionString;
-const discordBotToken: string = keys.DISCORD_BOT_TOKEN;
-const youtubeAPIKey: string = keys.YOUTUBE_API_KEY;
-const animuAPIKey: string = keys.ANIMU_API_KEY;
-const nasaAPIKey: string = keys.NASA_API_KEY;
-const booksAPIKey: string = keys.BOOKS_API_KEY;
-const websterAPIKey: string = keys.WEBSTER_API_KEY;
-const deviantartClientID: string = keys.DEVIANTART_CLIENT_ID;
-const deviantartClientSecret: string = keys.DEVIANTART_CLIENT_SECRE;
-const githubUsername: string = keys.GITHUB_USERNAME;
-const githubPassword: string = keys.GITHUB_PASSWORD;
-const pixivUsername: string = keys.PIXIV_USERNAME;
-const pixivPassword: string = keys.PIXIV_PASSWORD;
-const TMBDAPIKey: string = keys.TMDB_API_KEY;
-const OSUAPIKey: string = keys.OSU_API_KEY;
-const stackoverflowKey: string = keys.STACKOVERFLOW_KEY;
-const alphaVantageAPIKey: string = keys.ALPHA_VANTAGE_API_KEY;
-const openWeatherAPIKey: string = keys.OPEN_WEATHER_API_KEY;
-const perspectiveAPIKey: string = keys.PERSPECTIVE_API_KEY;
-const lavalinkPassword: string = keys.LAVALINK_PASSWORD;
-const botEnv: string = keys.BOT_ENV;
+const discordBotToken: string = keys.discordBotToken;
+const youtubeAPIKey: string = keys.youtubeAPIKey;
+const animuAPIKey: string = keys.animuAPIKey;
+const nasaAPIKey: string = keys.nasaAPIKey;
+const booksAPIKey: string = keys.booksAPIKey;
+const websterAPIKey: string = keys.websterAPIKey;
+const deviantartClientID: string = keys.deviantartClientID;
+const deviantartClientSecret: string = keys.deviantartClientSecret;
+const githubUsername: string = keys.githubUsername;
+const githubPassword: string = keys.githubPassword;
+const pixivUsername: string = keys.pixivUsername;
+const pixivPassword: string = keys.pixivPassword;
+const TMBDAPIKey: string = keys.TMBDAPIKey;
+const OSUAPIKey: string = keys.OSUAPIKey;
+const stackoverflowKey: string = keys.stackoverflowKey;
+const alphaVantageAPIKey: string = keys.alphaVantageAPIKey;
+const openWeatherAPIKey: string = keys.openWeatherAPIKey;
+const perspectiveAPIKey: string = keys.perspectiveAPIKey;
+const lavalinkPassword: string = keys.lavalinkPassword;
+const botEnv: string = keys.botEnv;
 
 export {
   mongoConnectionString,

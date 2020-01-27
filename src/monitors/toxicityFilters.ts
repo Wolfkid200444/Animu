@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const { Monitor } = require('klasa');
 const Perspective = require('perspective-api-client');
 const { model } = require('mongoose');
-const { perspectiveAPIKey } = require('../config/keys');
+import { perspectiveAPIKey } from '../config/keys';
 const _ = require('lodash');
 const redis = require('redis');
 const bluebird = require('bluebird');
