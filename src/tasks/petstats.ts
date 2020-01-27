@@ -1,18 +1,19 @@
-const { Task } = require('klasa');
-const { botEnv } = require('../config/keys');
-const mongoose = require('mongoose');
+// Dependencies
+import { Task } from 'klasa';
+import { botEnv } from '../config/keys';
+import { model } from 'mongoose';
+import { IPet } from '../models/Pet';
 
-//Init
-const Pet = mongoose.model('Pet');
+// Init
+const Pet = model('Pet');
 
 module.exports = class extends Task {
   async run() {
     if (botEnv !== 'production') return;
 
-    const pets = await Pet.find({}).exec();
+    const pets: Array<IPet> = await (<Promise<Array<IPet>>>Pet.find({}).exec());
 
     pets.forEach(async pet => {
-      console.log('Handling Pet Stats:', pet.memberID);
       const hunger = await pet.notFedInHour();
       const happiness = await pet.notPlayedInHour();
 
