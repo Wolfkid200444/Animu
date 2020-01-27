@@ -3,7 +3,11 @@
 //=====================
 import { Client } from 'klasa';
 import { Client as Lavaqueue } from 'lavaqueue';
-import keys from './config/keys';
+import {
+  mongoConnectionString,
+  discordBotToken,
+  lavalinkPassword,
+} from './config/keys';
 import mongoose from 'mongoose';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -137,7 +141,7 @@ AnimuClient.defaultPermissionLevels
   );
 //-> Mongoose
 mongoose
-  .connect(keys.mongoConnectionString, {
+  .connect(mongoConnectionString, {
     useNewUrlParser: true,
     useCreateIndex: true,
   })
@@ -161,7 +165,7 @@ mongoose
       providers: {
         default: 'mongodb',
         mongodb: {
-          connectionString: keys.mongoConnectionString,
+          connectionString: mongoConnectionString,
         },
       },
       owners: [
@@ -173,7 +177,7 @@ mongoose
       readyMessage: () => 'Bot ready',
     });
 
-    await client.login(keys.discordBotToken);
+    await client.login(discordBotToken);
 
     //-> Adding client-dependent routes
     require('./routes/webhooks')(app, client);
@@ -181,7 +185,7 @@ mongoose
 
     //-> Adding Lavalink
     client.lVoice = new Lavaqueue({
-      password: keys.lavalinkPassword,
+      password: lavalinkPassword,
       userID: client.user.id,
       hosts: {
         rest: 'http://localhost:2333',
