@@ -1,6 +1,33 @@
-const { Schema, model } = require('mongoose');
+// Dependencies
+import { Schema, model, Model } from 'mongoose';
+import { IITemDocument } from '../interfaces/IItemDocument';
+import { Message } from 'discord.js';
 
-const itemSchema = new Schema({
+// Interfaces
+export interface IItem extends IITemDocument {
+  purchase(
+    msg: Message,
+    memberID: string,
+    isStaff: boolean
+  ): Promise<{ res: string; title: string; desc: string }>;
+}
+
+export interface IItemModel extends Model<IItem> {
+  createItem(
+    itemName: string,
+    description: string,
+    price: number,
+    discount: number,
+    usable: boolean,
+    instantUse: boolean,
+    inShop: boolean,
+    purchaseMsg: string,
+    properties: Array<string | number>
+  ): Promise<IItem>;
+}
+
+// Schema
+const itemSchema: Schema<IItem> = new Schema({
   name: {
     type: String,
     unique: true,
@@ -108,4 +135,4 @@ itemSchema.methods.purchase = async function(msg, memberID, isStaff) {
   }
 ***REMOVED***
 
-model('Item', itemSchema);
+export const Item: IItemModel = model<IItem, IItemModel>('Item', itemSchema);

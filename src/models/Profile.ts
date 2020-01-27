@@ -15,7 +15,7 @@ export interface IProfile extends IProfileDocument {
 }
 
 export interface IProfileModel extends Model<IProfile> {
-  register(): boolean;
+  register(memberID: string): Promise<IProfile>;
 }
 
 // Schema
@@ -56,7 +56,7 @@ export const profileSchema: Schema<IProfile> = new Schema({
 });
 
 // Static Methods
-profileSchema.statics.register = async function(memberID) {
+profileSchema.statics.register = async function(memberID: string) {
   const profile = await this.findOne({ memberID }).exec();
 
   if (profile) return { res: 'already_exists', profile ***REMOVED***
@@ -84,10 +84,7 @@ profileSchema.statics.register = async function(memberID) {
 ***REMOVED***
 
 // Methods
-profileSchema.methods.addReputation = async function(
-  amount: number,
-  guildID: string
-) {
+profileSchema.methods.addReputation = async function(amount, guildID) {
   const index = this.reputation.findIndex(rep => rep.guildID === guildID);
   this.reputation[index].rep += amount;
 
@@ -95,10 +92,7 @@ profileSchema.methods.addReputation = async function(
   return true;
 ***REMOVED***
 
-profileSchema.methods.deductReputation = async function(
-  amount: number,
-  guildID: string
-) {
+profileSchema.methods.deductReputation = async function(amount, guildID) {
   const index = this.reputation.findIndex(rep => rep.guildID === guildID);
   this.reputation[index].rep -= amount;
 
@@ -114,7 +108,7 @@ profileSchema.methods.deductReputation = async function(
   return true;
 ***REMOVED***
 
-profileSchema.methods.edit = async function(field: string, value: string) {
+profileSchema.methods.edit = async function(field, value) {
   this[field] = value;
 
   await this.save();
@@ -123,9 +117,9 @@ profileSchema.methods.edit = async function(field: string, value: string) {
 ***REMOVED***
 
 profileSchema.methods.addExp = async function(
-  expToAdd: number,
-  guildID: string,
-  defaultRep: number = 50
+  expToAdd,
+  guildID,
+  defaultRep = 50
 ) {
   let index = this.level.findIndex(guildLev => guildLev.guildID === guildID);
   let levelUps = [];
@@ -184,5 +178,3 @@ export const Profile: IProfileModel = model<IProfile, IProfileModel>(
   'Profile',
   profileSchema
 );
-
-export default Profile;

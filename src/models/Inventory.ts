@@ -1,6 +1,20 @@
-const { Schema, model } = require('mongoose');
+// Dependencies
+import { Schema, model, Model } from 'mongoose';
+import { IInventoryDocument } from '../interfaces/IInventoryDocument';
 
-const inventorySchema = new Schema({
+// Interfaces
+export interface IInventory extends IInventoryDocument {
+  addCoins(amount: number): Promise<boolean>;
+  deductCoins(amount: number): Promise<boolean>;
+  giveItem(itemName: string): Promise<boolean>;
+  takeItem(itemName: string): Promise<boolean>;
+  checkIn(): Promise<boolean>;
+}
+
+export interface IInventoryModel extends Model<IInventory> {}
+
+// Schema
+const inventorySchema: Schema<IInventory> = new Schema({
   memberID: {
     type: String,
     unique: true,
@@ -10,6 +24,7 @@ const inventorySchema = new Schema({
   checkedIn: Boolean,
 });
 
+// Schema Methods
 inventorySchema.methods.addCoins = async function(amount) {
   this.coins += amount;
 
@@ -50,4 +65,8 @@ inventorySchema.methods.checkIn = async function() {
   return true;
 ***REMOVED***
 
-model('Inventory', inventorySchema);
+// Exporting
+export const Inventory: IInventoryModel = model<IInventory, IInventoryModel>(
+  'Inventory',
+  inventorySchema
+);

@@ -1,5 +1,18 @@
 //Dependencies
-const { Schema, model } = require('mongoose');
+import { Schema, model, Model } from 'mongoose';
+import { IPetDocument } from '../interfaces/IPetDocument';
+
+// Interfaces
+export interface IPet extends IPetDocument {
+  petAge(): Promise<number>;
+  notFedInHour(): Promise<number>;
+  notPlayedInHour(): Promise<number>;
+  petFed(): Promise<number>;
+  petHappy(rate: number): Promise<number>;
+  giveToy(toy: string): Promise<Array<string>>;
+}
+
+export interface IPetModel extends Model<IPet> {}
 
 /**
  * Pet Personality
@@ -16,7 +29,7 @@ const { Schema, model } = require('mongoose');
  */
 
 //Schema
-const petSchema = new Schema({
+const petSchema: Schema<IPet> = new Schema({
   memberID: {
     type: String,
     unique: true,
@@ -172,4 +185,4 @@ petSchema.methods.giveToy = async function(toyName) {
 ***REMOVED***
 
 //Model
-model('Pet', petSchema);
+export const IPet: IPetModel = model<IPet, IPetModel>('Pet', petSchema);

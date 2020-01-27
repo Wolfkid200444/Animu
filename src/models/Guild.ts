@@ -1,6 +1,21 @@
-const { Schema, model } = require('mongoose');
+// Dependencies
+import { Schema, model, Model } from 'mongoose';
+import { IGuildDocument, ILevelPerk } from '../interfaces/IGuildDocument';
 
-const guildSchema = new Schema({
+// Interfaces
+export interface IGuild extends IGuildDocument {
+  addLevelPerk(
+    level: number,
+    perkName: string,
+    perkValue: string
+  ): Promise<boolean>;
+  removeLevelPerk(level: number): Promise<boolean>;
+}
+
+export interface IGuildModel extends Model<IGuild> {}
+
+// Schema
+const guildSchema: Schema<IGuild> = new Schema({
   guildID: String,
   tier: {
     type: String,
@@ -27,7 +42,7 @@ guildSchema.methods.addLevelPerk = async function(level, perkName, perkValue) {
 
   if (levelPerkIndex < 0) {
     // Level perks doesn't exist
-    const perks = {
+    const perks: ILevelPerk = {
       level,
     ***REMOVED***
 
@@ -66,4 +81,7 @@ guildSchema.methods.removeLevelPerk = async function(level) {
   return true;
 ***REMOVED***
 
-model('Guild', guildSchema);
+export const Guild: IGuildModel = model<IGuild, IGuildModel>(
+  'Guild',
+  guildSchema
+);

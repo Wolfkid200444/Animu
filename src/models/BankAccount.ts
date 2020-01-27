@@ -1,6 +1,20 @@
-const { Schema, model } = require('mongoose');
+// Dependencies
+import { Schema, model, Model } from 'mongoose';
+import { IBankAccountDocument } from '../interfaces/IBankAccountDocument';
 
-const bankAccountSchema = new Schema({
+// Interface
+export interface IBankAccount extends IBankAccountDocument {
+  addDeposit(period: 1 | 4 | 12, coins: number): Promise<boolean>;
+}
+
+export interface IBankAccountModel extends Model<IBankAccount> {
+  createAccount(
+    memberID: string
+  ): Promise<{ res: string; bankAccount: IBankAccount }>;
+}
+
+// Schema
+const bankAccountSchema: Schema<IBankAccount> = new Schema({
   memberID: {
     type: String,
     unique: true,
@@ -46,4 +60,7 @@ bankAccountSchema.methods.addDeposit = async function(period, coins) {
   return true;
 ***REMOVED***
 
-model('BankAccount', bankAccountSchema);
+export const BankAccount: IBankAccountModel = model<
+  IBankAccount,
+  IBankAccountModel
+>('BankAccount', bankAccountSchema);

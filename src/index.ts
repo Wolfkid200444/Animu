@@ -148,13 +148,11 @@ mongoose
     require('./models/Inventory');
     require('./models/Profile');
     require('./models/Item');
-    require('./models/Partner');
     require('./models/Pet');
     require('./models/SelfRole');
     require('./models/Log');
     require('./models/Guild');
     require('./models/BankAccount');
-    require('./models/Config');
 
     //-> Klasa AnimuClient
     const client = new AnimuClient({

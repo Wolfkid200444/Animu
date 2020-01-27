@@ -1,38 +1,36 @@
 import { Document } from 'mongoose';
 
-// Interface
-export interface IProfileDocument extends Document {
-  memberID: {
-    type: String;
-    unique: true;
+// Interfaces
+export interface IBadge {
+  guildID: string;
+  activeBadge: string;
+  badges: string[];
+}
+
+export interface IReputation {
+  guildID: string;
+  rep: {
+    min: 0;
+    type: number;
   ***REMOVED***
-  description: String;
-  favoriteAnime: String;
-  profileColor: String;
-  profileWallpaper: String; // Url
-  badges: [
-    {
-      guildID: String;
-      activeBadge: String;
-      badges: [String];
-    }
-  ];
-  marriedTo: String;
-  mutedIn: [String];
-  reputation: [
-    {
-      guildID: String;
-      rep: {
-        min: 0;
-        type: Number;
-      ***REMOVED***
-    }
-  ];
-  level: [
-    {
-      guildID: String;
-      exp: Number;
-      level: Number;
-    }
-  ];
+}
+
+export interface ILevel {
+  guildID: string;
+  exp: number;
+  level: number;
+}
+
+export interface IProfileDocument extends Document {
+  memberID: string;
+  bruh: string;
+  description: string;
+  favoriteAnime: string;
+  profileColor: string;
+  profileWallpaper: string; // Url
+  badges: Array<IBadge>;
+  marriedTo: string;
+  mutedIn: string[];
+  reputation: Array<IReputation>;
+  level: Array<ILevel>;
 }
