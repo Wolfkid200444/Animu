@@ -6,7 +6,6 @@ export default class extends Command {
   constructor(store: CommandStore, file: string[], dir: string) {
     super(store, file, dir, {
       runIn: ['text'],
-      aliases: ['a'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 5,
       description: 'Gotta shoot em all',

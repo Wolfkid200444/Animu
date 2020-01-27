@@ -143,8 +143,6 @@ mongoose
   })
   .then(async () => {
     //->Creating models
-    require('./models/Reaction');
-    require('./models/Action');
     require('./models/Inventory');
     require('./models/Profile');
     require('./models/Item');
