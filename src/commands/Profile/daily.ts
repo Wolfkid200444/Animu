@@ -1,13 +1,14 @@
-const { Command } = require('klasa');
-const { model } = require('mongoose');
-const { MessageEmbed } = require('discord.js');
+import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { model } from 'mongoose';
+import { MessageEmbed } from 'discord.js';
+import { IInventoryModel } from '../../models/Inventory';
 
-const Inventory = model('Inventory');
+const Inventory = <IInventoryModel>model('Inventory');
 
 module.exports = class extends Command {
-  constructor(...args) {
-    super(...args, {
-      runIn: ['text', 'dm', 'group'],
+  constructor(store: CommandStore, file: string[], dir: string) {
+    super(store, file, dir, {
+      runIn: ['text', 'dm'],
       aliases: ['d', 'checkin', 'work'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 120,
@@ -15,7 +16,7 @@ module.exports = class extends Command {
     });
   }
 
-  async run(msg) {
+  async run(msg: KlasaMessage) {
     const inventory = await Inventory.findOne({
       memberID: msg.author.id,
     }).exec();
@@ -25,9 +26,9 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle('Profile not found')
           .setDescription(
-            "Your profile doesn't exist, use `register` command to register",
+            "Your profile doesn't exist, use `register` command to register"
           )
-          .setColor('#f44336'),
+          .setColor('#f44336')
       );
 
     if (await msg.hasAtLeastPermissionLevel(8))
@@ -35,7 +36,7 @@ module.exports = class extends Command {
         new MessageEmbed()
           .setTitle("Can't Check In")
           .setDescription("Animu Staff can't get daily coins")
-          .setColor('#f44336'),
+          .setColor('#f44336')
       );
 
     if (inventory.checkedIn)
@@ -44,7 +45,7 @@ module.exports = class extends Command {
           title: 'Already Checked In Today',
           description: 'Try again tommorow',
           color: '#f44336',
-        }),
+        })
       );
 
     inventory.checkIn();
@@ -54,7 +55,7 @@ module.exports = class extends Command {
         title: 'Checked In',
         description: 'Got 30 Coins :)',
         color: '#2196f3',
-      }),
+      })
     );
   }
 };

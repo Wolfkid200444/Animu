@@ -1,9 +1,9 @@
-const { Command } = require('klasa');
+import { Command, CommandStore, KlasaMessage } from 'klasa';
 
 module.exports = class extends Command {
-  constructor(...args) {
-    super(...args, {
-      runIn: ['text', 'dm', 'group'],
+  constructor(store: CommandStore, file: string[], dir: string) {
+    super(store, file, dir, {
+      runIn: ['text', 'dm'],
       aliases: ['ep', 'profiledit', 'pedit', 'editp', 'edit', 'editprofile'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 10,
@@ -17,8 +17,8 @@ module.exports = class extends Command {
     });
   }
 
-  async run(msg, [key, value]) {
+  async run(msg: KlasaMessage, [key, value]) {
     await msg.author.editProfile(key, value);
-    msg.sendEmbed(await msg.author.getProfileEmbed(msg.guild.id));
+    return msg.sendEmbed(await msg.author.getProfileEmbed(msg.guild.id));
   }
 };
