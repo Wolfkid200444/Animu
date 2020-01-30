@@ -1,22 +1,30 @@
-const redis = require('redis');
-const bluebird = require('bluebird');
-const moment = require('moment');
-const { model } = require('mongoose');
-const _ = require('lodash');
+import redis from 'redis';
+import bluebird from 'bluebird';
+import moment from 'moment';
+import { model } from 'mongoose';
+import _ from 'lodash';
+import { IProfileModel } from '../models/Profile';
+import { ILogModel } from '../models/Log';
+import { IGuildModel } from '../models/Guild';
+import { IItemModel } from '../models/Item';
+import { ISelfRoleModel } from '../models/SelfRole';
+import { Application } from 'express';
+import { KlasaClient } from 'klasa';
+import { TextChannel } from 'discord.js';
 
-const Profile = model('Profile');
-const Log = model('Log');
-const Guild = model('Guild');
-const SelfRole = model('SelfRole');
-const Item = model('Item');
+const Profile = <IProfileModel>model('Profile');
+const Log = <ILogModel>model('Log');
+const Guild = <IGuildModel>model('Guild');
+const SelfRole = <ISelfRoleModel>model('SelfRole');
+const Item = <IItemModel>model('Item');
 bluebird.promisifyAll(redis.RedisClient.prototype);
-const redisClient = redis.createClient();
+const redisClient: any = redis.createClient();
 
 // Versions
 const minAndroidVersion = 0.6;
 const currentAndroidVersion = 0.6;
 
-module.exports = (app, client) => {
+module.exports = (app: Application, client: KlasaClient) => {
   app.get('/api', (req, res) => {
     res.json({ ApiStatus: 'online' });
   });
@@ -67,7 +75,7 @@ module.exports = (app, client) => {
             m.presence.status === 'dnd'
         ).size,
         nitroBoostersCount: guild.premiumSubscriptionCount,
-        nitroLevel: guild.premumTier,
+        nitroLevel: guild.premiumTier,
         tier: await redisClient.hgetAsync('guild_tiers', guild.id),
       },
     });
@@ -115,7 +123,7 @@ module.exports = (app, client) => {
         badges: {
           activeBadge: isOwner
             ? '👑 Bot Owner 👑'
-            : _.includes(client.settings.animuStaff, member.id)
+            : _.includes(client.settings.get('animuStaff'), member.id)
             ? '🛡 Bot Staff'
             : badges !== null && badges !== undefined
             ? badges.activeBadge
@@ -420,14 +428,22 @@ module.exports = (app, client) => {
         e => e.name === req.body.emojiName.split(':')[1]
       );
 
-    if (!guildC.settings.selfRolesChannel || !guildC.settings.selfRolesMessage)
+    if (
+      !guildC.settings.get('selfRolesChannel') ||
+      !guildC.settings.get('selfRolesMessage')
+    )
       return res.json({ err: 'No self roles channel/msg set' });
 
     if (!role) return res.json({ err: 'No emoji/role found' });
 
-    const rCh = guildC.channels.get(guildC.settings.selfRolesChannel);
+    const rCh = guildC.channels.get(guildC.settings.get('selfRolesChannel'));
 
-    const rMsg = await rCh.messages.fetch(guildC.settings.selfRolesMessage);
+    if (!(rCh instanceof TextChannel))
+      return res.json({ err: 'Channel provided is not a valid text channel' });
+
+    const rMsg = await rCh.messages.fetch(
+      guildC.settings.get('selfRolesMessage')
+    );
 
     if (!rMsg || !rCh) return res.json({ err: 'Invalid message ID/Channel' });
 
@@ -435,7 +451,7 @@ module.exports = (app, client) => {
 
     await new SelfRole({
       guildID: guildID,
-      messageID: guildC.settings.selfRolesMessage,
+      messageID: guildC.settings.get('selfRolesMessage'),
       emojiName: emoji,
       roleName: req.body.roleName,
     }).save();

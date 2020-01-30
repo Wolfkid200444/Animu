@@ -17,6 +17,12 @@ import LavaqueueNode from 'lavaqueue/typings/Node';
 //=====================
 
 //=====================
+//Routes
+//=====================
+import rootRoute from './routes/root';
+//=====================
+
+//=====================
 //Initialization
 //=====================
 bluebird.promisifyAll(redis.RedisClient.prototype);
@@ -127,7 +133,9 @@ AnimuClient.defaultUserSchema.add('TODOs', 'any', { array: true });
 //-> Express App
 const app = express();
 app.use(bodyParser.json());
-require('./routes/root')(app);
+
+//-> Initializing Routes
+rootRoute(app);
 
 //-> Klasa AnimuClient
 AnimuClient.defaultPermissionLevels
@@ -180,7 +188,6 @@ mongoose
     await client.login(discordBotToken);
 
     //-> Adding client-dependent routes
-    require('./routes/webhooks')(app, client);
     require('./routes/api')(app, client);
 
     //-> Adding Lavalink
