@@ -11,11 +11,6 @@ module.exports = class extends Task {
   async run() {
     if (botEnv !== 'production') return;
 
-    const inventories = await Inventory.find({}).exec();
-
-    inventories.forEach(async inventory => {
-      inventory.checkedIn = false;
-      await inventory.save();
-    });
+    await Inventory.updateMany({}, { checkedIn: false });
   }
 };
