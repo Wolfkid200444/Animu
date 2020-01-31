@@ -1,19 +1,23 @@
-const { Event } = require('klasa');
-const { model } = require('mongoose');
-const _ = require('lodash');
-const redis = require('redis');
-const bluebird = require('bluebird');
+import { Event, KlasaMessage } from 'klasa';
+import { model } from 'mongoose';
+import _ from 'lodash';
+import redis from 'redis';
+import bluebird from 'bluebird';
+import { ILogModel } from '../models/Log';
+import { TextChannel, DMChannel } from 'discord.js';
 
 // Init
-const Log = model('Log');
+const Log = <ILogModel>model('Log');
 bluebird.promisifyAll(redis.RedisClient.prototype);
-const redisClient = redis.createClient();
+const redisClient: any = redis.createClient();
 
 module.exports = class extends Event {
-  async run(message) {
+  async run(message: KlasaMessage) {
     if (!message.author) return;
 
     if (message.author.id === this.client.user.id) return;
+
+    if (message.channel instanceof DMChannel) return;
 
     if (
       !_.includes(
@@ -37,15 +41,19 @@ module.exports = class extends Event {
       },
     }).save();
 
-    if (message.guild.settings.logChannels.deletedMessages)
-      message.guild.channels
-        .get(message.guild.settings.logChannels.deletedMessages)
-        .send(
+    if (message.guild.settings.get('logChannels.deletedMessages')) {
+      const delLogChannel = message.guild.channels.get(
+        message.guild.settings.get('logChannels.deletedMessages')
+      );
+
+      if (delLogChannel instanceof TextChannel)
+        delLogChannel.send(
           `A message by **${
             this.client.users.get(message.member.id).username
           }** was deleted at \`${new Date().toUTCString()}\` in **${
             message.channel.name
           }**:\n\`\`\`${message.content}\`\`\``
         );
+    }
   }
 };

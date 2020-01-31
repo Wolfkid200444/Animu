@@ -6,5 +6,5 @@ export interface IInventoryDocument extends Document {
   memberID: string;
   coins: number;
   inventory: string[];
-  checkedIn: boolean;
+  checkedIn(): boolean;
 }

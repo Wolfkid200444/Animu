@@ -1,22 +1,24 @@
-const { Event } = require('klasa');
-const mongoose = require('mongoose');
+import { Event, KlasaUser } from 'klasa';
+import mongoose from 'mongoose';
+import { ISelfRoleModel } from '../models/SelfRole';
+import { MessageReaction } from 'discord.js';
 
 //Init
-const SelfRole = mongoose.model('SelfRole');
+const SelfRole = <ISelfRoleModel>mongoose.model('SelfRole');
 
 module.exports = class extends Event {
-  async run(messageReaction, user) {
+  async run(messageReaction: MessageReaction, user: KlasaUser) {
     if (messageReaction.message.partial) await messageReaction.message.fetch();
 
     const selfRole = await SelfRole.findOne({
       messageID: messageReaction.message.id,
       $or: [
-        { emojiName: messageReaction._emoji.name },
+        { emojiName: messageReaction.emoji.name },
         {
           emojiName: `${'<:' +
-            messageReaction._emoji.name +
+            messageReaction.emoji.name +
             ':' +
-            messageReaction._emoji.id +
+            messageReaction.emoji.id +
             '>'}`,
         },
       ],

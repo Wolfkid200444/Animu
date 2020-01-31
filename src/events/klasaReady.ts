@@ -1,28 +1,27 @@
-const { Event } = require('klasa');
-const { botEnv } = require('../config/keys');
-const redis = require('redis');
-const bluebird = require('bluebird');
+import { Event } from 'klasa';
+import { botEnv } from '../config/keys';
+import redis from 'redis';
+import bluebird from 'bluebird';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
-const redisClient = redis.createClient();
+const redisClient: any = redis.createClient();
 
 module.exports = class extends Event {
   async run() {
     this.client.user.setActivity('Cultured Anime', { type: 'WATCHING' });
-    this.client.settings.aldoviaInviteLink = 'https://discord.gg/JGsgBsN';
-    this.client.settings.aldoviaDescription =
-      'An anime server made for weebs by weebs';
-    this.client.settings.animuStaff = [];
+    this.client.settings.update(
+      'supportServerInviteLink',
+      'https://discord.gg/JGsgBsN'
+    );
 
     if (botEnv === 'production') {
       this.client.guilds.get('556442896719544320').members.forEach(member => {
         if (member.roles.find(r => r.name === '🛡 Senior Moderator'))
-          this.client.settings.animuStaff.push(member.id);
+          this.client.settings.update('animuStaff', member.id);
       });
-    } else {
-      this.client.settings.animuStaff = [];
     }
 
+    //-> Delete Any active games that might be cached
     await redisClient.delAsync('active_games');
 
     //-> Scheduling Tasks

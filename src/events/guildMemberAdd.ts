@@ -1,15 +1,16 @@
 //Dependencies
-const { Event } = require('klasa');
-const { MessageEmbed } = require('discord.js');
-const mongoose = require('mongoose');
-const moment = require('moment');
-const _ = require('lodash');
+import { Event } from 'klasa';
+import { MessageEmbed, GuildMember, TextChannel } from 'discord.js';
+import mongoose from 'mongoose';
+import moment from 'moment';
+import _ from 'lodash';
+import { IProfileModel } from '../models/Profile';
 
 //Init
-const Profile = mongoose.model('Profile');
+const Profile = <IProfileModel>mongoose.model('Profile');
 
 module.exports = class extends Event {
-  async run(member) {
+  async run(member: GuildMember) {
     //Register Profile
     const profile = await Profile.register(member.id);
 
@@ -22,7 +23,7 @@ module.exports = class extends Event {
     ) {
       profileFind.reputation.push({
         guildID: member.guild.id,
-        rep: member.guild.settings.startingRep,
+        rep: member.guild.settings.get('startingRep'),
       });
 
       await profileFind.save();
@@ -42,23 +43,26 @@ module.exports = class extends Event {
       await profileFind.save();
     }
 
-    if (member.guild.settings.joinRoles)
-      member.guild.settings.joinRoles.forEach(r => {
+    if (member.guild.settings.get('joinRoles'))
+      member.guild.settings.get('joinRoles').forEach(r => {
         if (member.guild.roles.has(r))
           member.roles.add(r, 'Assigning Member role');
       });
 
     if (
       profile.res === 'already_exists' &&
-      member.guild.settings.mutedRole &&
-      _.includes(profile.mutedIn, member.guild.id) &&
-      member.guild.roles.has(member.guild.settings.mutedRole)
+      member.guild.settings.get('mutedRole') &&
+      _.includes(profile.profile.mutedIn, member.guild.id) &&
+      member.guild.roles.has(member.guild.settings.get('mutedRole'))
     )
-      member.roles.add(member.guild.settings.mutedRole, 'Assigning Muted role');
+      member.roles.add(
+        member.guild.settings.get('mutedRole'),
+        'Assigning Muted role'
+      );
 
     if (
-      member.guild.settings.welcomeChannel &&
-      member.guild.settings.enableWelcomeMessage
+      member.guild.settings.get('welcomeChannel') &&
+      member.guild.settings.get('enableWelcomeMessage')
     ) {
       // Send Welcome message
       const welcomeEmbed = new MessageEmbed()
@@ -75,9 +79,10 @@ module.exports = class extends Event {
       // $server = name of server
       // $membercount = number of members in server
 
-      if (member.guild.settings.welcomeMessage)
+      if (member.guild.settings.get('welcomeMessage'))
         welcomeEmbed.setDescription(
-          member.guild.settings.welcomeMessage
+          member.guild.settings
+            .get('welcomeMessage')
             // $username
             .split('$username')
             .join(member.user.username)
@@ -92,7 +97,7 @@ module.exports = class extends Event {
             .join(member.user.discriminator)
             // $mention
             .split('$mention')
-            .join(member.member)
+            .join(member)
             // $accountcreationdate
             .split('$accountcreationdate')
             .join(moment(member.user.createdAt).format('MMMM Do YYYY'))
@@ -103,12 +108,15 @@ module.exports = class extends Event {
             .split('$membercount')
             .join(member.guild.memberCount)
         );
-      if (member.guild.settings.welcomeImageURL)
-        welcomeEmbed.setImage(member.guild.settings.welcomeImageURL);
+      if (member.guild.settings.get('welcomeImageURL'))
+        welcomeEmbed.setImage(member.guild.settings.get('welcomeImageURL'));
 
-      member.guild.channels
-        .get(member.guild.settings.welcomeChannel)
-        .send(welcomeEmbed);
+      const welcomeChannel = member.guild.channels.get(
+        member.guild.settings.get('welcomeChannel')
+      );
+
+      if (welcomeChannel instanceof TextChannel)
+        welcomeChannel.send(welcomeEmbed);
     }
   }
 };

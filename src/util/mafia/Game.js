@@ -3,11 +3,6 @@ const path = require('path');
 const { stripIndents } = require('common-tags');
 const Player = require('./Player');
 const { shuffle } = require('../util');
-const redis = require('redis');
-const bluebird = require('bluebird');
-
-bluebird.promisifyAll(redis.RedisClient.prototype);
-const redisClient = redis.createClient();
 
 module.exports = class Game {
   constructor(client, channel, voiceChannel) {
@@ -56,8 +51,6 @@ module.exports = class Game {
 
   async end() {
     if (this.voiceChannel) this.voiceChannel.leave();
-    await redisClient.hdelAsync('active_games', this.channel.id);
-    await redisClient.sremAsync('mafia_games', this.channel.guild.id);
     return this;
   }
 

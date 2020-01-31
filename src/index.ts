@@ -44,8 +44,7 @@ class AnimuClient extends Client {
 AnimuClient.defaultClientSchema.add('animuStaff', 'User', {
   array: true,
 });
-AnimuClient.defaultClientSchema.add('aldoviaInviteLink', 'String');
-AnimuClient.defaultClientSchema.add('aldoviaDescription', 'String');
+AnimuClient.defaultClientSchema.add('supportServerInviteLink', 'String');
 
 //-> Guild Schema
 AnimuClient.defaultGuildSchema.add('defaultVolume', 'number', {

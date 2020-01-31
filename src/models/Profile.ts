@@ -15,7 +15,7 @@ export interface IProfile extends IProfileDocument {
 }
 
 export interface IProfileModel extends Model<IProfile> {
-  register(memberID: string): Promise<IProfile>;
+  register(memberID: string): Promise<{ res: string; profile: IProfile }>;
 }
 
 // Schema
