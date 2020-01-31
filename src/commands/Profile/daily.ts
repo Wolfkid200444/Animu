@@ -53,7 +53,8 @@ module.exports = class extends Command {
     return msg.send(
       new MessageEmbed({
         title: 'Checked In',
-        description: 'Got 30 Coins :)',
+        description:
+          'Got 15 Coins :)\n\nWant more coins? Just vote [here](https://top.gg/bot/585914522225868815) and get 15 more coins',
         color: '#2196f3',
       })
     );
