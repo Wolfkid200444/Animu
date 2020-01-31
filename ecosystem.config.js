@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'animu',
       script: 'yarn',
-      args: 'prod',
+      args: 'run prod',
       interpreter: '/bin/bash',
       env: {
         NODE_ENV: 'production',
