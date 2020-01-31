@@ -3,6 +3,7 @@ module.exports = {
   discordBotToken: process.env.DISCORD_BOT_TOKEN,
   youtubeAPIKey: process.env.YOUTUBE_API_KEY,
   animuAPIKey: process.env.ANIMU_API_KEY,
+  topGGAPIKey: process.env.TOP_GG_API_KEY,
   nasaAPIKey: process.env.NASA_API_KEY,
   booksAPIKey: process.env.BOOKS_API_KEY,
   websterAPIKey: process.env.WEBSTER_API_KEY,

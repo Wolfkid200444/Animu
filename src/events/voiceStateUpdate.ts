@@ -19,6 +19,7 @@ module.exports = class extends Event {
         )
       ) {
         //! Fix this
+        //@ts-ignore
         const queue = this.client.lVoice.queues.get(oldMember.guild.id);
         if (
           queue.player.status !== 1 && // Playing

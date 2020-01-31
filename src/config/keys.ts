@@ -5,6 +5,7 @@ const mongoConnectionString: string = keys.mongoConnectionString;
 const discordBotToken: string = keys.discordBotToken;
 const youtubeAPIKey: string = keys.youtubeAPIKey;
 const animuAPIKey: string = keys.animuAPIKey;
+const topGGAPIKey: string = keys.topGGAPIKey;
 const nasaAPIKey: string = keys.nasaAPIKey;
 const booksAPIKey: string = keys.booksAPIKey;
 const websterAPIKey: string = keys.websterAPIKey;
@@ -28,6 +29,7 @@ export {
   discordBotToken,
   youtubeAPIKey,
   animuAPIKey,
+  topGGAPIKey,
   nasaAPIKey,
   booksAPIKey,
   websterAPIKey,
