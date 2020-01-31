@@ -36,9 +36,13 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.post('/api/hook', (req, res) => {
-    console.log(req.body);
+  app.get('/api/hook', async (req, res) => {
+    console.log(req.params);
+    return res.json({ status: 'active' });
+  });
 
+  app.post('/api/hook', async (req, res) => {
+    console.log(req.body);
     return res.json({ status: 'active' });
   });
 
