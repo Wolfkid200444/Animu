@@ -36,6 +36,12 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
+  app.post('/api/hook', (req, res) => {
+    console.log(req.body);
+
+    return res.json({ status: 'active' });
+  });
+
   app.get('/api/auth', async (req, res) => {
     if (!req.query.token) return res.json({ err: 'Token not provided' });
 
