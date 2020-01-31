@@ -1,16 +1,9 @@
 import { Event } from 'klasa';
-import { topGGAPIKey, animuAPIKey, botEnv } from '../config/keys';
-import { model } from 'mongoose';
+import { topGGAPIKey, botEnv } from '../config/keys';
 import redis from 'redis';
 import bluebird from 'bluebird';
-import { IInventoryModel } from '../models/Inventory';
-const DBL = require('dblapi.js');
+import DBL from 'dblapi.js';
 
-const dbl = new DBL(topGGAPIKey, {
-  webhookPort: 5000,
-  webhookAuth: animuAPIKey,
-});
-const Inventory = <IInventoryModel>model('Inventory');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
 
@@ -29,17 +22,8 @@ module.exports = class extends Event {
       });
     }
 
-    //-> Top GG Webhooks
-    dbl.webhook.on('ready', hook => {
-      console.log(
-        `Webhook running at http://${hook.hostname}:${hook.port}${hook.path}`
-      );
-    });
-    dbl.webhook.on('vote', async vote => {
-      const inventory = await Inventory.findOne({ memberID: vote.user }).exec();
-      if (inventory) inventory.addCoins(15);
-      console.log(`User with ID ${vote.user} just voted!`);
-    });
+    //-> Post Servers count to Top.gg
+    new DBL(topGGAPIKey, this.client);
 
     //-> Delete Any active games that might be cached
     await redisClient.delAsync('active_games');
