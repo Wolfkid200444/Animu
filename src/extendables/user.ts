@@ -36,7 +36,9 @@ module.exports = class extends Extendable {
    *
    * @returns False if profile already exists or Profile if it doesn't exist
    */
-  async register(this: User): Promise<IProfile | false> {
+  async register(
+    this: User
+  ): Promise<{ res: string; profile: IProfile } | false> {
     const profile = await Profile.findOne({ memberID: this.id }).exec();
 
     if (profile) return false;
@@ -326,7 +328,7 @@ module.exports = class extends Extendable {
   async editProfile(this: User, key, value) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
-    if (!profile) profile = await Profile.register(this.id);
+    if (!profile) profile = (await Profile.register(this.id)).profile;
 
     if (key === 'profileWallpaper') {
       const inventory = await Inventory.findOne({ memberID: this.id }).exec();
@@ -391,7 +393,7 @@ module.exports = class extends Extendable {
 
     if (!proceed) return true;
 
-    if (!profile) profile = await Profile.register(this.id);
+    if (!profile) profile = (await Profile.register(this.id)).profile;
 
     if (change === '+') return await profile.addReputation(amount, guildID);
     else {
@@ -416,7 +418,7 @@ module.exports = class extends Extendable {
   async editCoins(this: User, change, amount) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
-    if (!profile) profile = await Profile.register(this.id);
+    if (!profile) profile = (await Profile.register(this.id)).profile;
 
     const inventory = await Inventory.findOne({ memberID: this.id }).exec();
 
@@ -435,7 +437,7 @@ module.exports = class extends Extendable {
   async giveBadge(this: User, badgeName, guildID) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
-    if (!profile) profile = await Profile.register(this.id);
+    if (!profile) profile = (await Profile.register(this.id)).profile;
 
     if (profile.badges.find(guildBadges => guildBadges.guildID === guildID)) {
       if (
@@ -473,7 +475,7 @@ module.exports = class extends Extendable {
   async addExp(this: User, expToAdd, guildID) {
     return new Promise(resolve => {
       Profile.findOne({ memberID: this.id }).then(async profile => {
-        if (!profile) profile = await Profile.register(this.id);
+        if (!profile) profile = (await Profile.register(this.id)).profile;
 
         const res = await profile.addExp(
           expToAdd,

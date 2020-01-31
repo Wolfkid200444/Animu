@@ -6,7 +6,7 @@ import { KlasaClient } from 'klasa';
 //@ts-ignore
 const Inventory = <IInventoryModel>model('Inventory');
 
-export default (app: Application, client: KlasaClient) => {
+module.exports = (app: Application, client: KlasaClient) => {
   app.post('/webhooks', (req, res) => {
     console.log(req.body);
     res.json({ status: 'active' });
