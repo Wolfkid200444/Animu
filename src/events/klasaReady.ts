@@ -1,8 +1,7 @@
 import { Event } from 'klasa';
-import { topGGAPIKey, botEnv } from '../config/keys';
+import { botEnv } from '../config/keys';
 import redis from 'redis';
 import bluebird from 'bluebird';
-import DBL from 'dblapi.js';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
@@ -21,9 +20,6 @@ module.exports = class extends Event {
           this.client.settings.update('animuStaff', member.id);
       });
     }
-
-    //-> Post Servers count to Top.gg
-    new DBL(topGGAPIKey, this.client);
 
     //-> Delete Any active games that might be cached
     await redisClient.delAsync('active_games');

@@ -30,7 +30,6 @@
     "canvas": "^2.6.0",
     "cheerio": "^1.0.0-rc.3",
     "common-tags": "^1.8.0",
-    "dblapi.js": "^2.3.1",
     "discord.js": "discordjs/discord.js",
     "discord.js-pagination": "^1.0.2",
     "discordjs-prompter": "https://github.com/LightYagami200/discordjs-prompter",
