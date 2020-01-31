@@ -7,6 +7,11 @@ import { KlasaClient } from 'klasa';
 // const Inventory = <IInventoryModel>model('Inventory');
 
 module.exports = (app: Application, client: KlasaClient) => {
+  app.get('/hook', (req, res) => {
+    res.json({ status: 'active' });
+    console.log(req.params);
+  });
+
   app.post('/hook', (req, res) => {
     res.json({ status: 'active' });
     console.log(req.body);
