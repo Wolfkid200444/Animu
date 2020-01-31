@@ -28,7 +28,8 @@ module.exports = class extends Monitor {
     )
       return;
 
-    if (message.content.trim.length < 1) return;
+    if (message.content.trim.length < 1 || message.channel.type !== 'text')
+      return;
 
     // Filters
     const filters = [];
