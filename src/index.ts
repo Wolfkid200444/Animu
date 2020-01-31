@@ -188,6 +188,7 @@ mongoose
 
     //-> Adding client-dependent routes
     require('./routes/api')(app, client);
+    require('./routes/webhooks')(app, client);
 
     //-> Adding Lavalink
     client.lVoice = new Lavaqueue({
