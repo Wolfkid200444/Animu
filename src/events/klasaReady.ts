@@ -23,6 +23,7 @@ module.exports = class extends Event {
 
     //-> Delete Any active games that might be cached
     await redisClient.delAsync('active_games');
+    await redisClient.delAsync('mafia_games');
 
     //-> Scheduling Tasks
     if (!this.client.schedule.tasks.find(task => task.taskName === 'petsats'))
