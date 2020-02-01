@@ -11,8 +11,10 @@ import { ISelfRoleModel } from '../models/SelfRole';
 import { Application } from 'express';
 import { KlasaClient } from 'klasa';
 import { TextChannel } from 'discord.js';
+import { IInventoryModel } from '../models/Inventory';
 
 const Profile = <IProfileModel>model('Profile');
+const Inventory = <IInventoryModel>model('Inventory');
 const Log = <ILogModel>model('Log');
 const Guild = <IGuildModel>model('Guild');
 const SelfRole = <ISelfRoleModel>model('SelfRole');
@@ -36,13 +38,12 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/hook', async (req, res) => {
-    console.log(req.params);
-    return res.json({ status: 'active' });
-  });
-
   app.post('/api/hook', async (req, res) => {
-    console.log(req.body);
+    if (req.body.type === 'upvote') {
+      const inv = await Inventory.findOne({ memberID: req.body.user });
+
+      if (inv) inv.addCoins(15);
+    }
     return res.json({ status: 'active' });
   });
 
