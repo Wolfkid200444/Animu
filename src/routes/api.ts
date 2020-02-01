@@ -12,6 +12,7 @@ import { Application } from 'express';
 import { KlasaClient } from 'klasa';
 import { TextChannel } from 'discord.js';
 import { IInventoryModel } from '../models/Inventory';
+import { animuAPIKey } from '../config/keys';
 
 const Profile = <IProfileModel>model('Profile');
 const Inventory = <IInventoryModel>model('Inventory');
@@ -39,12 +40,14 @@ module.exports = (app: Application, client: KlasaClient) => {
   });
 
   app.post('/api/hook', async (req, res) => {
+    if (req.headers.authorization !== animuAPIKey)
+      return res.json({ error: 'Invalid Animu API Key' });
     if (req.body.type === 'upvote') {
       const inv = await Inventory.findOne({ memberID: req.body.user });
 
       if (inv) inv.addCoins(15);
     }
-    return res.json({ status: 'active' });
+    return res.json({ success: 'Upvote Successfully recieved' });
   });
 
   app.get('/api/auth', async (req, res) => {
