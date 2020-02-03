@@ -24,10 +24,11 @@ module.exports = class extends Event {
       firstChannel.send(`
 Thanks for having me here! <:wave:605078389925085206>
 My name's Animu and my purpose is to make your server moar better <a:YAY_1:619057676336496661>
-> To get list of commands, use \`-help\` or visit this link: <https://aldovia.moe/animu-commands/>
+> To get list of commands, visit this link: <https://aldovia.moe/animu-commands/>
 > To get help regarding a specific command, use \`-help command\`
 > To view your profile, use \`-p\`
 > To view your inventory, use \`-inv\`
+> To get daily coins, use \`-checkin\`
 > Visit this link for some useful guides: <https://aldovia.moe/tag/animu/>
 > Download Animu Companion App from here: <https://github.com/LightYagami200/Animu-Companion/releases>\n
 Need help? Join the support server: ${this.client.settings.get(
