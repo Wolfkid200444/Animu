@@ -20,15 +20,15 @@ module.exports = class extends Monitor {
   }
 
   async run(message: KlasaMessage) {
+    if (message.content.trim.length < 1 || message.channel.type !== 'text')
+      return;
+
     if (
       !_.includes(
         ['plus', 'pro'],
         await redisClient.hgetAsync('guild_tiers', message.guild.id)
       )
     )
-      return;
-
-    if (message.content.trim.length < 1 || message.channel.type !== 'text')
       return;
 
     // Filters
