@@ -73,7 +73,7 @@ module.exports = class extends Command {
         new MessageEmbed({
           title: 'Invalid Number',
           description:
-            "The song you are trying to remove does'nt seem to be in the queue",
+            "The song you are trying to remove doesn't seem to be in the queue",
           color: 0x2196f3,
         })
       );
