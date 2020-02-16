@@ -54,7 +54,7 @@ To view list of commands, [Click Here](https://aldovia.moe/animu-commands/)
 You can use a command like this:
 \`${prefix}${_.sample(commandNames)}\`
 
-To view some guides that'll help you understand some of the Animu Concepts, [Click Here](https://aldovia.moe/tag/Animu)
+To view some guides that'll help you understand some of the Animu Concepts, [Click Here](https://help.animu.aldovia.moe)
 
 Hope that helps you :))`,
       color: 0x2196f3,
