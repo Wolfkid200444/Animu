@@ -99,6 +99,8 @@ petSchema.methods.notFedInHour = async function() {
 
   if (this.happinessCap < 30) this.happinessCap = 30;
 
+  if (this.hunger > 100) this.hunger = 100;
+
   await this.save();
   return this.hunger;
 };
@@ -125,6 +127,8 @@ petSchema.methods.notPlayedInHour = async function() {
 
   if (this.happiness >= this.happinessCap) this.happiness = this.happinessCap;
 
+  if (this.happiness < 0) this.happiness = 0;
+
   await this.save();
   return this.happiness;
 };
@@ -145,6 +149,8 @@ petSchema.methods.petFed = async function() {
       : 50;
 
   if (this.hunger >= hungerEndurability) this.happinessCap = 100;
+
+  if (this.huner < 0) this.hunger = 0;
 
   await this.save();
   return this.hunger;
@@ -170,6 +176,8 @@ petSchema.methods.petHappy = async function(rate) {
   this.happiness += happinessToAdd;
 
   if (this.happiness >= this.happinessCap) this.happiness = this.happinessCap;
+
+  if (this.happiness > 100) this.happiness = 100;
 
   await this.save();
   return this.happiness;
