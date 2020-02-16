@@ -12,6 +12,8 @@ module.exports = class extends Task {
   async run() {
     if (botEnv !== 'production') return;
 
+    console.log('PET AGE EVENT', Date());
+
     const pets = await Pet.find({}).exec();
 
     pets.forEach(async pet => {
