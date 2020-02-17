@@ -545,7 +545,7 @@ module.exports = class extends Extendable {
    * @param guildID - ID of the guild
    * @returns An Embed to show to user
    */
-  async useItem(this: User, itemName, guildID) {
+  async useItem(this: User, itemName: string, guildID: string) {
     const inventory = await Inventory.findOne({ memberID: this.id }).exec();
 
     if (!inventory) return this._noProfile(true);
@@ -570,7 +570,7 @@ module.exports = class extends Extendable {
 
     inventory.inventory.splice(index, 1);
 
-    let embed;
+    let embed: MessageEmbed;
 
     // Custom items
     if (item.name === 'Profile Wallpapers Box') {
@@ -654,7 +654,7 @@ module.exports = class extends Extendable {
             );
 
           const index = guild.levelPerks.findIndex(l => l.level === level);
-          console.log('Index of Guild:', index);
+          console.log('Index of Level Perk:', index);
           if (index < 0) return true;
 
           //Assign reward(s)

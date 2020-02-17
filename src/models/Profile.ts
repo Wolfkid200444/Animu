@@ -147,14 +147,14 @@ profileSchema.methods.addExp = async function(
     this.level[index].level++;
     levelUps.push(this.level[index].level);
 
-    const expLeft =
+    this.level[index].exp =
       exp - expToNextLevel(this.level[index].level - 1, this.level[index].exp);
 
     if (
-      expLeft >= expToNextLevel(this.level[index].level, this.level[index].exp)
+      this.level[index].exp >=
+      expToNextLevel(this.level[index].level, this.level[index].exp)
     )
-      levelUp(expLeft);
-    else this.level[index].exp = expLeft;
+      levelUp(this.level[index].exp);
   };
 
   if (
