@@ -136,7 +136,7 @@ profileSchema.methods.addExp = async function(
       this.level.push({
         guildID: guildID,
         level: 1,
-        exp: 0,
+        exp: 10,
       });
 
     index = this.level.findIndex(guildLev => guildLev.guildID === guildID);
