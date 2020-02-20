@@ -62,7 +62,7 @@ module.exports = class extends Monitor {
         const guild: IGuild = await (<Promise<IGuild>>(
           Guild.findOne({ guildID: message.guild.id }).exec()
         ));
-        levelUps.forEach(level => {
+        levelUps.forEach(async level => {
           message.author.send(
             `Congrats, you just levelled up and reached Level ${level} in ${message.guild.name} 🎉`
           );
@@ -73,7 +73,7 @@ module.exports = class extends Monitor {
           //Assign reward(s)
           if (guild.levelPerks[index]) {
             if (guild.levelPerks[index].badge)
-              message.author.giveBadge(
+              await message.author.giveBadge(
                 guild.levelPerks[index].badge,
                 message.guild.id
               );
@@ -87,7 +87,7 @@ module.exports = class extends Monitor {
             }
 
             if (guild.levelPerks[index].rep)
-              message.author.editReputation(
+              await message.author.editReputation(
                 '+',
                 guild.levelPerks[index].rep,
                 message.guild.id

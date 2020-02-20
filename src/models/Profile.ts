@@ -1,6 +1,7 @@
 // Dependencies
 import { Schema, model, Model } from 'mongoose';
 import { IProfileDocument } from '../interfaces/IProfileDocument';
+import _ from 'lodash';
 
 // Interfaces
 export interface IProfile extends IProfileDocument {
@@ -143,34 +144,28 @@ profileSchema.methods.addExp = async function(
 
   if (this.level[index].level === 100) return [];
 
-  const levelUp = async exp => {
-    this.level[index].level++;
-    levelUps.push(this.level[index].level);
+  // Storing current level
+  const currentLevel = this.level[index].level;
 
-    this.level[index].exp =
-      exp - expToNextLevel(this.level[index].level - 1, this.level[index].exp);
+  // Adding exp
+  this.level[index].exp += expToAdd;
 
-    if (
-      this.level[index].exp >=
-      expToNextLevel(this.level[index].level, this.level[index].exp)
-    )
-      levelUp(this.level[index].exp);
-  };
+  // Get new level
+  this.level[index].level = getCurrentLevel(this.level[index].exp);
 
-  if (
-    this.level[index].exp + expToAdd >=
-    expToNextLevel(this.level[index].level, this.level[index].exp)
-  )
-    levelUp(expToAdd + this.level[index].exp);
-  else this.level[index].exp += expToAdd;
+  // Get range of levelled up levels
+  const range = this.level[index].level - currentLevel;
+
+  // Generate Array of levelled up levels
+  if (range) levelUps = _.range(currentLevel, this.level[index].level);
 
   await this.save();
   return levelUps;
 };
 
 // Helper Functions
-function expToNextLevel(currentLevel: number, currentExp: number) {
-  return 10 * (currentLevel + 1) ** 2 - currentExp;
+function getCurrentLevel(currentExp: number) {
+  return Math.floor(Math.pow(currentExp / 10, 1 / 2.5));
 }
 
 // Model & Exporting
