@@ -1,3 +1,4 @@
+import express, { Application } from 'express';
 import redis from 'redis';
 import bluebird from 'bluebird';
 import moment from 'moment';
@@ -8,12 +9,12 @@ import { ILogModel } from '../models/Log';
 import { IGuildModel } from '../models/Guild';
 import { IItemModel } from '../models/Item';
 import { ISelfRoleModel } from '../models/SelfRole';
-import { Application } from 'express';
-import { KlasaClient } from 'klasa';
 import { TextChannel } from 'discord.js';
 import { IInventoryModel } from '../models/Inventory';
 import { animuAPIKey } from '../config/keys';
+import { KlasaClient } from 'klasa';
 
+const api = express.Router();
 const Profile = <IProfileModel>model('Profile');
 const Inventory = <IInventoryModel>model('Inventory');
 const Log = <ILogModel>model('Log');
@@ -28,18 +29,18 @@ const minAndroidVersion = 0.6;
 const currentAndroidVersion = 0.6;
 
 module.exports = (app: Application, client: KlasaClient) => {
-  app.get('/api', (req, res) => {
+  api.get('/', (req, res) => {
     res.json({ ApiStatus: 'online' });
   });
 
-  app.get('/api/version', async (req, res) => {
+  api.get('/version', async (req, res) => {
     return res.json({
       minAndroidVersion,
       currentAndroidVersion,
     });
   });
 
-  app.post('/api/hook', async (req, res) => {
+  api.post('/hook', async (req, res) => {
     if (req.headers.authorization !== animuAPIKey)
       return res.json({ error: 'Invalid Animu API Key' });
     if (req.body.type === 'upvote') {
@@ -50,7 +51,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     return res.json({ success: 'Upvote Successfully recieved' });
   });
 
-  app.get('/api/auth', async (req, res) => {
+  api.get('/auth', async (req, res) => {
     if (!req.query.token) return res.json({ err: 'Token not provided' });
 
     if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
@@ -65,7 +66,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/guild', async (req, res) => {
+  api.get('/guild', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -95,7 +96,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/members/:id', async (req, res) => {
+  api.get('/members/:id', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -153,7 +154,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.post('/api/members/:id/kick', async (req, res) => {
+  api.post('/members/:id/kick', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -172,7 +173,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.post('/api/members/:id/ban', async (req, res) => {
+  api.post('/members/:id/ban', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -191,7 +192,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.post('/api/members/:id/badges', async (req, res) => {
+  api.post('/members/:id/badges', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -210,7 +211,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/channels', async (req, res) => {
+  api.get('/channels', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -230,7 +231,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/roles', async (req, res) => {
+  api.get('/roles', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -248,7 +249,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/growth', async (req, res) => {
+  api.get('/growth', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -275,7 +276,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/joined', async (req, res) => {
+  api.get('/joined', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -300,7 +301,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/logs', async (req, res) => {
+  api.get('/logs', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -331,7 +332,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/leaderboards/levels', async (req, res) => {
+  api.get('/leaderboards/levels', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -371,7 +372,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/leaderboards/rep', async (req, res) => {
+  api.get('/leaderboards/rep', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -405,7 +406,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/selfroles', async (req, res) => {
+  api.get('/selfroles', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -421,7 +422,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.post('/api/selfroles', async (req, res) => {
+  api.post('/selfroles', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -475,7 +476,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.delete('/api/selfroles/:roleName', async (req, res) => {
+  api.delete('/selfroles/:roleName', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -501,7 +502,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/levelperks', async (req, res) => {
+  api.get('/levelperks', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -523,7 +524,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.post('/api/levelperks', async (req, res) => {
+  api.post('/levelperks', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -555,7 +556,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.delete('/api/levelperks/:level', async (req, res) => {
+  api.delete('/levelperks/:level', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -579,7 +580,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.get('/api/settings', async (req, res) => {
+  api.get('/settings', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
 
@@ -595,7 +596,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.post('/api/settings', async (req, res) => {
+  api.post('/settings', async (req, res) => {
     if (!req.query.token)
       return res.status(401).json({ err: 'Token not provided' });
     if (!req.body.key)
@@ -619,4 +620,6 @@ module.exports = (app: Application, client: KlasaClient) => {
       settings: guild.settings,
     });
   });
+
+  app.use('/api', api);
 };

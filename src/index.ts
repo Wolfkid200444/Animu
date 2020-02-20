@@ -9,17 +9,9 @@ import {
   lavalinkPassword,
 } from './config/keys';
 import mongoose from 'mongoose';
-import express from 'express';
-import bodyParser from 'body-parser';
 import redis from 'redis';
 import bluebird from 'bluebird';
 import LavaqueueNode from 'lavaqueue/typings/Node';
-//=====================
-
-//=====================
-//Routes
-//=====================
-import rootRoute from './routes/root';
 //=====================
 
 //=====================
@@ -129,12 +121,6 @@ AnimuClient.defaultUserSchema.add('TODOs', 'any', { array: true });
 //=====================
 //INIT
 //=====================
-//-> Express App
-const app = express();
-app.use(bodyParser.json());
-
-//-> Initializing Routes
-rootRoute(app);
 
 //-> Klasa AnimuClient
 AnimuClient.defaultPermissionLevels
@@ -186,8 +172,8 @@ mongoose
 
     await client.login(discordBotToken);
 
-    //-> Adding client-dependent routes
-    require('./routes/api')(app, client);
+    //-> Routing
+    require('./routes/routes')(client);
 
     //-> Adding Lavalink
     client.lVoice = new Lavaqueue({
@@ -243,10 +229,4 @@ mongoose
       }
     );
   });
-//=====================
-
-//=====================
-//Listening
-//=====================
-app.listen(process.env.PORT || 8080);
 //=====================
