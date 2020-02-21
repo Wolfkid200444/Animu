@@ -168,7 +168,7 @@ module.exports = class extends Extendable {
           profileEmbed.addField(
             '❯ Level',
             `${levelRaw.level} (${levelRaw.exp}/${10 *
-              (levelRaw.level + 1) ** 2} Exp)`,
+              (levelRaw.level + 1) ** 2.5} Exp)`,
             true
           );
         else
