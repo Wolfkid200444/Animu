@@ -63,6 +63,20 @@ module.exports = (app: Application, client: KlasaClient) => {
     }
   );
 
+  api.use(
+    ['/guilds/:id/members/:memberID*'],
+    async (req: Request, res: Response, next: NextFunction) => {
+      // Fetching Guild
+      const member = req.guild.members.get(req.params.memberID);
+
+      if (!member)
+        return res.status(404).json({ code: 404, error: 'No member found' });
+
+      req['member'] = member;
+      next();
+    }
+  );
+
   // Root Route
   api.get('/', (req, res) => {
     return res.json({ active: true });
@@ -158,11 +172,55 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
+  // Fetch ID's of all the members in a guild
+  api.get('/guilds/:id/members', (req, res) => {
+    return res.json({
+      members: req.guild.members.array().map(m => m.id),
+    });
+  });
+
+  // Fetch a member in a guild
+  api.get('/guilds/:id/members/:memberID', (req, res) => {
+    return res.json({
+      member: req.member,
+    });
+  });
+
+  // Kick a guild Member (untested)
+  api.post('/guilds/:id/members/:memberID/kick', (req, res) => {
+    const reason = req.query.reason || 'Kicked using API';
+
+    if (!req.member.kickable)
+      return res.status(403).json({
+        status: 403,
+        error: 'Not enough perms to kick the specified member',
+      });
+
+    req.member.kick(reason);
+
+    return res.json({
+      msg: 'success',
+    });
+  });
+
+  // Ban a guild Member (untested)
+  api.post('/guilds/:id/members/:memberID/ban', (req, res) => {
+    const reason = req.query.reason || 'Banned using API';
+
+    if (!req.member.bannable)
+      return res.status(403).json({
+        status: 403,
+        error: 'Not enough perms to ban the specified member',
+      });
+
+    req.member.ban({ reason });
+
+    return res.json({
+      msg: 'success',
+    });
+  });
+
   // ? Routes to Add:
-  // - GET /guilds/:id/members => Return member ids of all the members in a guild
-  // - GET /guilds/:id/members/:id => Return info about a member in a guild
-  // - POST /guilds/:id/members/:id/kick => Kick the member
-  // - POST /guilds/:id/members/:id/ban => Ban the member
   // - GET /guilds/:id/notifications => Return notifications such as reports, Updates, etc
   // - GET /users/:id => Return info about the user (must be the logged in user)
   // - GET /users/:id/token => Returns token for the logged in user alongside QR Code
