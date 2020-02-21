@@ -1,9 +1,11 @@
 // Imports
 import express from 'express';
 import { KlasaClient } from 'klasa';
+import bodyParser from 'body-parser';
 
 // Init
 const app = express();
+app.use(bodyParser.json());
 
 module.exports = (client: KlasaClient) => {
   // Root
