@@ -333,8 +333,39 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
+  // Delete a Self Role for a guild
+  // --------
+  // Body Params:
+  // role - ID of role
+  //! Untested
+  api.delete('/guilds/:id/selfroles', async (req, res) => {
+    if (!req.body.role)
+      return res.status(400).json({ code: 400, error: "Role wan't provided" });
+
+    const selfRole = await SelfRole.findOne({
+      guildID: req.guild.id,
+      roleName: req.params.roleName,
+    }).exec();
+
+    if (!selfRole)
+      return res.status(400).json({
+        code: 400,
+        error: "Self role with provided role wasn't found",
+      });
+
+    await SelfRole.remove({
+      guildID: req.guild.id,
+      roleName: req.params.roleName,
+    }).exec();
+
+    const selfRoles = await SelfRole.find({ guildID: req.guild.id }).exec();
+
+    return res.json({
+      selfRoles,
+    });
+  });
+
   // ? Routes to Add:
-  // - DELETE /guilds/:id/selfroles => Delete a self role
   // - GET /guilds/:id/levelperks => Return all the level up perks
   // - POST /guilds/:id/levelperks => Create a new level up perk
   // - DELETE /guilds/:id/levelperks => Delete level up perk
