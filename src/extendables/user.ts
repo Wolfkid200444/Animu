@@ -167,8 +167,9 @@ module.exports = class extends Extendable {
         if (levelRaw)
           profileEmbed.addField(
             '❯ Level',
-            `${levelRaw.level} (${levelRaw.exp}/${10 *
-              (levelRaw.level + 1) ** 2.5} Exp)`,
+            `${levelRaw.level} (${levelRaw.exp}/${Math.floor(
+              10 * (levelRaw.level + 1) ** 2.5
+            )} Exp)`,
             true
           );
         else
@@ -1090,7 +1091,7 @@ module.exports = class extends Extendable {
       profile.level.push({
         guildID: guildID,
         level: 1,
-        exp: 0,
+        exp: 10,
       });
 
     await profile.save();
