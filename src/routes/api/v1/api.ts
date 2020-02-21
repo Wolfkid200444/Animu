@@ -4,6 +4,7 @@ import { KlasaClient } from 'klasa';
 import redis from 'redis';
 import bluebird from 'bluebird';
 import moment from 'moment';
+import { botEnv } from '../../../config/keys';
 
 // Init
 const api = express.Router();
@@ -15,6 +16,14 @@ const version = 1.0;
 
 module.exports = (app: Application, client: KlasaClient) => {
   // Middlewares
+  api.use(async (req: Request, res: Response, next: NextFunction) => {
+    if (botEnv === 'production')
+      return res
+        .status(400)
+        .json({ code: 400, error: 'API not ready for production' });
+    next();
+  });
+
   api.use(
     ['/guilds*'],
     async (req: Request, res: Response, next: NextFunction) => {
