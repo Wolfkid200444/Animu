@@ -5,9 +5,13 @@ import redis from 'redis';
 import bluebird from 'bluebird';
 import moment from 'moment';
 import { botEnv } from '../../../config/keys';
+import { model } from 'mongoose';
+import { ISelfRoleModel } from '../../../models/SelfRole';
+import { TextChannel } from 'discord.js';
 
 // Init
 const api = express.Router();
+const SelfRole = <ISelfRoleModel>model('SelfRole');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
 
@@ -186,8 +190,9 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  // Kick a guild Member (untested)
-  api.post('/guilds/:id/members/:memberID/kick', (req, res) => {
+  // Kick a guild Member
+  //! Untested
+  api.post('/guilds/:id/members/:memberID/kick', async (req, res) => {
     const reason = req.query.reason || 'Kicked using API';
 
     if (!req.member.kickable)
@@ -196,15 +201,16 @@ module.exports = (app: Application, client: KlasaClient) => {
         error: 'Not enough perms to kick the specified member',
       });
 
-    req.member.kick(reason);
+    const member = await req.member.kick(reason);
 
     return res.json({
-      msg: 'success',
+      member,
     });
   });
 
-  // Ban a guild Member (untested)
-  api.post('/guilds/:id/members/:memberID/ban', (req, res) => {
+  // Ban a guild Member
+  //! Untested
+  api.post('/guilds/:id/members/:memberID/ban', async (req, res) => {
     const reason = req.query.reason || 'Banned using API';
 
     if (!req.member.bannable)
@@ -213,14 +219,127 @@ module.exports = (app: Application, client: KlasaClient) => {
         error: 'Not enough perms to ban the specified member',
       });
 
-    req.member.ban({ reason });
+    const member = await req.member.ban({ reason });
 
     return res.json({
-      msg: 'success',
+      member,
+    });
+  });
+
+  // Fetch settings of a guild
+  api.get('/guilds/:id/settings', (req, res) => {
+    return res.json({
+      settings: req.guild.settings,
+    });
+  });
+
+  // Update a setting of a guild
+  // -------
+  // Body Params:
+  // key - key of Setting to update
+  // value - new value for the setting to update
+  //! Untested
+  api.post('/guilds/:id/settings', (req, res) => {
+    if (!req.body.key || !req.body.value)
+      return res
+        .status(400)
+        .json({ code: 400, error: "Key or Value wasn't provided" });
+
+    req.guild.settings.update(req.body.key, req.body.value);
+
+    return res.json({
+      settings: req.guild.settings,
+    });
+  });
+
+  // Fetch Self Roles of a guild
+  api.get('/guilds/:id/selfroles', async (req, res) => {
+    const selfRoles = await SelfRole.find({ guildID: req.guild.id }).exec();
+
+    return res.json({
+      selfRoles,
+    });
+  });
+
+  // Create a new Self Role for a guild
+  // --------
+  // Body Params:
+  // role - ID of role
+  // emoji - name of emoji
+  //! Untested
+  api.post('/guilds/:id/selfroles', async (req, res) => {
+    if (!req.body.role || !req.body.emoji)
+      return res
+        .status(400)
+        .json({ code: 400, error: "Role or Emoji wasn't provided" });
+
+    const role = req.guild.roles.get(req.body.role);
+    let emoji = req.body.emojiName;
+
+    if (client.emojis.find(e => e.name === req.body.emojiName.split(':')[1]))
+      emoji = client.emojis.find(
+        e => e.name === req.body.emojiName.split(':')[1]
+      );
+
+    if (
+      !req.guild.settings.get('selfRolesChannel') ||
+      !req.guild.settings.get('selfRolesMessage')
+    )
+      return res.status(400).json({
+        code: 400,
+        error:
+          "'selfRolesChannel' and/or 'selfRolesMessage' are not set in guild settings",
+      });
+
+    if (!role)
+      return res.status(400).json({
+        code: 400,
+        error: 'No role with given ID was found',
+      });
+
+    const channel = req.guild.channels.get(
+      req.guild.settings.get('selfRolesChannel')
+    );
+
+    if (!(channel instanceof TextChannel))
+      return res.status(400).json({
+        code: 400,
+        error: "'selfRolesChannel' is not a valid text channel",
+      });
+
+    const msg = await channel.messages.fetch(
+      req.guild.settings.get('selfRolesMessage')
+    );
+
+    if (!msg || !channel)
+      return res.status(400).json({
+        code: 400,
+        error: "'selfRolesChannel' or 'selfRolesMessage' is invalid",
+      });
+
+    msg.react(emoji);
+
+    await new SelfRole({
+      guildID: req.guild,
+      messageID: req.guild.settings.get('selfRolesMessage'),
+      emojiName: emoji,
+      roleName: role.name,
+    }).save();
+
+    const selfRoles = await SelfRole.find({ guildID: req.guild.id }).exec();
+
+    return res.json({
+      selfRoles,
     });
   });
 
   // ? Routes to Add:
+  // - DELETE /guilds/:id/selfroles => Delete a self role
+  // - GET /guilds/:id/levelperks => Return all the level up perks
+  // - POST /guilds/:id/levelperks => Create a new level up perk
+  // - DELETE /guilds/:id/levelperks => Delete level up perk
+  // - GET /guilds/:id/logs => Return logs
+  // - GET /guilds/:id/leaderboards => Returns Level & Reputation Leaderboards
   // - GET /guilds/:id/notifications => Return notifications such as reports, Updates, etc
   // - GET /users/:id => Return info about the user (must be the logged in user)
   // - GET /users/:id/token => Returns token for the logged in user alongside QR Code
