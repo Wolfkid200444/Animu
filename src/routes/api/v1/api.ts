@@ -10,11 +10,13 @@ import { ISelfRoleModel } from '../../../models/SelfRole';
 import { TextChannel } from 'discord.js';
 import { IGuildModel } from '../../../models/Guild';
 import _ from 'lodash';
+import { ILogModel } from '../../../models/Log';
 
 // Init
 const api = express.Router();
 const SelfRole = <ISelfRoleModel>model('SelfRole');
 const Guild = <IGuildModel>model('Guild');
+const Log = <ILogModel>model('Log');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
 
@@ -457,8 +459,31 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
+  // Fetch Logs
+  // -------
+  // Query Params:
+  // offset
+  // limit
+  api.get('/guilds/:id/logs', async (req, res) => {
+    const offset = req.query.offset || 0;
+    const limit = req.query.limit || 20;
+
+    if (typeof offset !== 'number' || typeof limit !== 'number')
+      return res.status(400).json({
+        code: 400,
+        error: "'offset' and/or 'limit' were provided in an incorrect format",
+      });
+
+    const logs = await Log.find({ guildID: req.guild.id })
+      .sort({ dateTime: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+
+    return res.json({ logs });
+  });
+
   // ? Routes to Add:
-  // - GET /guilds/:id/logs => Return logs
   // - GET /guilds/:id/leaderboards => Returns Level & Reputation Leaderboards
   // - GET /guilds/:id/notifications => Return notifications such as reports, Updates, etc
   // - GET /users/:id => Return info about the user (must be the logged in user)
