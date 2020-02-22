@@ -206,7 +206,7 @@ module.exports = (app: Application, client: KlasaClient) => {
 
     // Filtering Private Profile Data
     profile.mutedIn = undefined;
-    req.member.user.settings = undefined;
+    req.member.user = undefined;
 
     _.remove(profile.badges, b => b.guildID !== req.guild.id);
     _.remove(profile.reputation, r => r.guildID !== req.guild.id);
@@ -218,6 +218,9 @@ module.exports = (app: Application, client: KlasaClient) => {
   });
 
   // Kick a guild Member
+  // -----
+  // Body Params:
+  // reason
   //! Untested
   api.post('/guilds/:id/members/:memberID/kick', async (req, res) => {
     const reason = req.query.reason || 'Kicked using API';
@@ -236,6 +239,9 @@ module.exports = (app: Application, client: KlasaClient) => {
   });
 
   // Ban a guild Member
+  // -----
+  // Body Params:
+  // reason
   //! Untested
   api.post('/guilds/:id/members/:memberID/ban', async (req, res) => {
     const reason = req.query.reason || 'Banned using API';
@@ -250,6 +256,45 @@ module.exports = (app: Application, client: KlasaClient) => {
 
     return res.json({
       member,
+    });
+  });
+
+  // Fetch badges of a member
+  api.get('/guilds/:id/members/:memberID/badges', async (req, res) => {
+    const profile = await Profile.findOne({
+      memberID: req.params.memberID,
+    }).exec();
+
+    const badges = profile.badges.filter(b => b.guildID === req.guild.id)[0];
+
+    return res.json({
+      activeBadge: badges.activeBadge,
+      badges: badges.badges,
+    });
+  });
+
+  // Give a badge to a guild member
+  // ------
+  // Body Params:
+  // badge - badge to give
+  //! Untested
+  api.post('/guilds/:id/members/:memberID/badges', async (req, res) => {
+    if (!req.body.badge || typeof req.body.badge !== 'string')
+      return res.status(400).json({
+        code: 400,
+        error: "'badge' not provided or the format is incorrect",
+      });
+
+    const profile = await Profile.findOne({
+      memberID: req.params.memberID,
+    }).exec();
+
+    req.member.user.giveBadge(req.body.badge, req.guild.id);
+    const badges = profile.badges.filter(b => b.guildID === req.guild.id)[0];
+
+    return res.json({
+      activeBadge: badges.activeBadge,
+      badges: badges.badges,
     });
   });
 
@@ -549,8 +594,6 @@ module.exports = (app: Application, client: KlasaClient) => {
   // - GET /guilds/:id/notifications => Return notifications such as reports, Updates, etc
   // - GET /users/:id => Return info about the user (must be the logged in user)
   // - GET /users/:id/token => Returns token for the logged in user alongside QR Code
-  // - GET /guilds/:id/members/:id/badges => Returnns badges of this member
-  // - POST /guilds/:id/members/:id/badges => Give a new badge to this member
   // - DELETE /guilds/:id/members/:id/badges => Remove a badge from this member
 
   app.use('/api/v1', api);
