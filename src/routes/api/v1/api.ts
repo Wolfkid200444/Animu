@@ -643,6 +643,7 @@ module.exports = (app: Application, client: KlasaClient) => {
   // - GET /users/:id => Return info about the user (must be the logged in user)
   // - GET /users/:id/token => Returns token for the logged in user alongside QR Code
   // - DELETE /guilds/:id/members/:id/badges => Remove a badge from this member
+  // - GET /guilds/:id/reports => Return all the reports from a guild
 
   app.use('/api/v1', api);
 };
