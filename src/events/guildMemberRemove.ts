@@ -16,16 +16,17 @@ module.exports = class extends Event {
   async run(member: GuildMember) {
     // Staff Member left notification
     if (
-      member.hasPermission('ADMINISTRATOR') ||
-      member.hasPermission('MANAGE_GUILD') ||
-      member.hasPermission('BAN_MEMBERS') ||
-      member.hasPermission('KICK_MEMBERS')
+      (member.hasPermission('ADMINISTRATOR') ||
+        member.hasPermission('MANAGE_GUILD') ||
+        member.hasPermission('BAN_MEMBERS') ||
+        member.hasPermission('KICK_MEMBERS')) &&
+      member.guild.settings.get('notifications.staffMemberLeft')
     ) {
       const notification = await new Notification({
         guildID: member.guild.id,
         title: `${member.displayName} just left ${member.guild.name}`,
         description: `A staff member by the tag of ${member.user.tag} just left ${member.guild.name}. Their highest role was ${member.roles.highest}.`,
-        type: 'staff_member_left',
+        type: 'staffMemberLeft',
       }).save();
 
       member.guild.owner.send(
