@@ -199,9 +199,13 @@ module.exports = (app: Application, client: KlasaClient) => {
   });
 
   // Fetch a member in a guild
-  api.get('/guilds/:id/members/:memberID', (req, res) => {
+  api.get('/guilds/:id/members/:memberID', async (req, res) => {
+    const profile = await Profile.findOne({
+      memberID: req.params.memberID,
+    }).exec();
+
     return res.json({
-      member: req.member,
+      member: { ...req.member, profile },
     });
   });
 
