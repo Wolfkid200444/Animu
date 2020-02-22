@@ -11,11 +11,13 @@ import { TextChannel } from 'discord.js';
 import { IGuildModel } from '../../../models/Guild';
 import _ from 'lodash';
 import { ILogModel } from '../../../models/Log';
+import { IProfileModel } from '../../../models/Profile';
 
 // Init
 const api = express.Router();
 const SelfRole = <ISelfRoleModel>model('SelfRole');
 const Guild = <IGuildModel>model('Guild');
+const Profile = <IProfileModel>model('Profile');
 const Log = <ILogModel>model('Log');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
@@ -86,21 +88,13 @@ module.exports = (app: Application, client: KlasaClient) => {
     }
   );
 
-  api.use(
-    ['/guilds/:id/levelperks'],
-    async (req: Request, res: Response, next: NextFunction) => {
-      // Fetching Tier
-      const tier = await redisClient.hgetAsync('guild_tiers', req.guild.id);
+  api.use(async (req: Request, res: Response, next: NextFunction) => {
+    // Fetching Tier
+    const tier = await redisClient.hgetAsync('guild_tiers', req.guild.id);
 
-      if (tier === 'free')
-        return res
-          .status(400)
-          .json({ code: 400, error: 'Not available for free tier' });
-
-      req['tier'] = tier;
-      next();
-    }
-  );
+    req['tier'] = tier;
+    next();
+  });
 
   // Root Route
   api.get('/', (req, res) => {
@@ -388,6 +382,11 @@ module.exports = (app: Application, client: KlasaClient) => {
 
   // Fetch level perks of a guild
   api.get('/guilds/:id/levelperks', async (req, res) => {
+    if (req.tier === 'free')
+      return res
+        .status(400)
+        .json({ code: 400, error: 'Not available for free tier' });
+
     const guild = await Guild.findOne({ guildID: req.guild.id }).exec();
 
     return res.json({
@@ -403,6 +402,11 @@ module.exports = (app: Application, client: KlasaClient) => {
   // value - Value for this perk
   //! Untested
   api.post('/guilds/:id/levelperks', async (req, res) => {
+    if (req.tier === 'free')
+      return res
+        .status(400)
+        .json({ code: 400, error: 'Not available for free tier' });
+
     const guild = await Guild.findOne({ guildID: req.guild.id }).exec();
 
     if (!req.body.level || !req.body.key || !req.body.value)
@@ -439,6 +443,11 @@ module.exports = (app: Application, client: KlasaClient) => {
   // level - level # to create perk for (int)
   //! Untested
   api.delete('/guilds/:id/levelperks', async (req, res) => {
+    if (req.tier === 'free')
+      return res
+        .status(400)
+        .json({ code: 400, error: 'Not available for free tier' });
+
     const guild = await Guild.findOne({ guildID: req.guild.id }).exec();
 
     if (
@@ -483,8 +492,54 @@ module.exports = (app: Application, client: KlasaClient) => {
     return res.json({ logs });
   });
 
+  // Fetch Level & Reputation Leaderboards
+  api.get('/guilds/:id/leaderboards', async (req, res) => {
+    const levelLeaderboards = [];
+    const repLeaderboards = [];
+
+    const members = await Profile.find({
+      level: { $elemMatch: { guildID: req.guild.id } },
+    });
+
+    if (req.tier !== 'free') {
+      members.sort((a, b) => {
+        const indexA = a.level.findIndex(r => r.guildID === req.guild.id);
+        const indexB = b.level.findIndex(r => r.guildID === req.guild.id);
+        return a.level[indexA].level > b.level[indexB].level ? -1 : 1;
+      });
+
+      const levelMembers = members.slice(0, 30);
+
+      levelMembers.forEach(m => {
+        if (client.users.get(m.memberID)) levelLeaderboards.push(m.memberID);
+      });
+    }
+
+    members.sort((a, b) => {
+      const indexA = a.reputation.findIndex(r => r.guildID === req.guild.id);
+      const indexB = b.reputation.findIndex(r => r.guildID === req.guild.id);
+      return a.reputation[indexA].rep > b.reputation[indexB].rep ? -1 : 1;
+    });
+
+    const repMembers = members.slice(0, 30);
+
+    repMembers.forEach(m => {
+      if (client.users.get(m.memberID)) repLeaderboards.push(m.memberID);
+    });
+
+    return res.json({
+      levelLeaderboards:
+        levelLeaderboards.length > 0
+          ? levelLeaderboards
+          : {
+              code: 400,
+              error: 'Not available for free tier',
+            },
+      repLeaderboards,
+    });
+  });
+
   // ? Routes to Add:
-  // - GET /guilds/:id/leaderboards => Returns Level & Reputation Leaderboards
   // - GET /guilds/:id/notifications => Return notifications such as reports, Updates, etc
   // - GET /users/:id => Return info about the user (must be the logged in user)
   // - GET /users/:id/token => Returns token for the logged in user alongside QR Code
