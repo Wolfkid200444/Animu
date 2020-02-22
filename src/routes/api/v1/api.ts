@@ -204,6 +204,14 @@ module.exports = (app: Application, client: KlasaClient) => {
       memberID: req.params.memberID,
     }).exec();
 
+    // Filtering Private Profile Data
+    profile.mutedIn = undefined;
+    req.member.user.settings = undefined;
+
+    _.remove(profile.badges, b => b.guildID !== req.guild.id);
+    _.remove(profile.reputation, r => r.guildID !== req.guild.id);
+    _.remove(profile.level, l => l.guildID !== req.guild.id);
+
     return res.json({
       member: { ...req.member, profile },
     });
