@@ -77,13 +77,41 @@ module.exports = (app: Application, client: KlasaClient) => {
   api.use(
     ['/guilds/:id/members/:memberID*'],
     async (req: Request, res: Response, next: NextFunction) => {
-      // Fetching Guild
+      // Fetching Member
       const member = req.guild.members.get(req.params.memberID);
 
       if (!member)
         return res.status(404).json({ code: 404, error: 'No member found' });
 
       req['member'] = member;
+      next();
+    }
+  );
+
+  api.use(
+    ['/guilds/:id/channels/:channelID*'],
+    async (req: Request, res: Response, next: NextFunction) => {
+      // Fetching Channel
+      const channel = req.guild.channels.get(req.params.channelID);
+
+      if (!channel)
+        return res.status(404).json({ code: 404, error: 'No channel found' });
+
+      req['channel'] = channel;
+      next();
+    }
+  );
+
+  api.use(
+    ['/guilds/:id/roles/:roleID*'],
+    async (req: Request, res: Response, next: NextFunction) => {
+      // Fetching Role
+      const role = req.guild.roles.get(req.params.roleID);
+
+      if (!role)
+        return res.status(404).json({ code: 404, error: 'No role found' });
+
+      req['role'] = role;
       next();
     }
   );
@@ -588,6 +616,26 @@ module.exports = (app: Application, client: KlasaClient) => {
             },
       repLeaderboards,
     });
+  });
+
+  // Fetch IDs of all the channels in a guild
+  api.get('/guilds/:id/channels', (req, res) => {
+    return res.json({ channels: req.guild.channels.array().map(c => c.id) });
+  });
+
+  // Fetch a channel in a guild
+  api.get('/guilds/:id/channels/:channelID', (req, res) => {
+    return res.json({ channel: req.guild.channels.get(req.params.channelID) });
+  });
+
+  // Fetch IDs of all the roles in a guild
+  api.get('/guilds/:id/roles', (req, res) => {
+    return res.json({ roles: req.guild.roles.array().map(r => r.id) });
+  });
+
+  // Fetch a role in a guild
+  api.get('/guilds/:id/roles/:roleID', (req, res) => {
+    return res.json({ role: req.guild.roles.get(req.params.roleID) });
   });
 
   // ? Routes to Add:
