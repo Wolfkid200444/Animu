@@ -6,5 +6,6 @@ declare module 'express-serve-static-core' {
     user?: KlasaUser;
     guild?: KlasaGuild;
     member?: GuildMember;
+    tier?: string;
   }
 }

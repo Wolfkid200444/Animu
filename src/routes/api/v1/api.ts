@@ -8,10 +8,13 @@ import { botEnv } from '../../../config/keys';
 import { model } from 'mongoose';
 import { ISelfRoleModel } from '../../../models/SelfRole';
 import { TextChannel } from 'discord.js';
+import { IGuildModel } from '../../../models/Guild';
+import _ from 'lodash';
 
 // Init
 const api = express.Router();
 const SelfRole = <ISelfRoleModel>model('SelfRole');
+const Guild = <IGuildModel>model('Guild');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
 
@@ -77,6 +80,22 @@ module.exports = (app: Application, client: KlasaClient) => {
         return res.status(404).json({ code: 404, error: 'No member found' });
 
       req['member'] = member;
+      next();
+    }
+  );
+
+  api.use(
+    ['/guilds/:id/levelperks'],
+    async (req: Request, res: Response, next: NextFunction) => {
+      // Fetching Tier
+      const tier = await redisClient.hgetAsync('guild_tiers', req.guild.id);
+
+      if (tier === 'free')
+        return res
+          .status(400)
+          .json({ code: 400, error: 'Not available for free tier' });
+
+      req['tier'] = tier;
       next();
     }
   );
@@ -365,15 +384,88 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
+  // Fetch level perks of a guild
+  api.get('/guilds/:id/levelperks', async (req, res) => {
+    const guild = await Guild.findOne({ guildID: req.guild.id }).exec();
+
+    return res.json({
+      levelPerks: guild.levelPerks,
+    });
+  });
+
+  // Create a new level up perk
+  // --------
+  // Body Params:
+  // level - level # to create perk for (int)
+  // key - Type of perk to create (badge|rep|role)
+  // value - Value for this perk
+  //! Untested
+  api.post('/guilds/:id/levelperks', async (req, res) => {
+    const guild = await Guild.findOne({ guildID: req.guild.id }).exec();
+
+    if (!req.body.level || !req.body.key || !req.body.value)
+      return res.status(400).json({
+        code: 400,
+        error: "'level', 'key' or 'value' weren't provided",
+      });
+
+    if (
+      typeof req.body.level !== 'number' ||
+      req.body.level < 0 ||
+      req.body.level > 100 ||
+      !_.includes(['badge', 'rep', 'role'], req.body.key)
+    )
+      return res.status(400).json({
+        code: 400,
+        error: "'level', 'key' or 'value' were provided in incorrect format",
+      });
+
+    await guild.addLevelPerk(
+      req.body.level,
+      req.body.perkName,
+      req.body.perkValue
+    );
+
+    return res.json({
+      levelPerks: guild.levelPerks,
+    });
+  });
+
+  // Delete a level up perk
+  // --------
+  // Body Params:
+  // level - level # to create perk for (int)
+  //! Untested
+  api.delete('/guilds/:id/levelperks', async (req, res) => {
+    const guild = await Guild.findOne({ guildID: req.guild.id }).exec();
+
+    if (
+      !req.body.level ||
+      typeof req.body.level !== 'number' ||
+      req.body.level < 0 ||
+      req.body.level > 100
+    )
+      return res.status(400).json({
+        code: 400,
+        error: "'level' wasn't provided or the format was incorrect",
+      });
+
+    await guild.removeLevelPerk(parseInt(req.params.level));
+
+    return res.json({
+      levelPerks: guild.levelPerks,
+    });
+  });
+
   // ? Routes to Add:
-  // - GET /guilds/:id/levelperks => Return all the level up perks
-  // - POST /guilds/:id/levelperks => Create a new level up perk
-  // - DELETE /guilds/:id/levelperks => Delete level up perk
   // - GET /guilds/:id/logs => Return logs
   // - GET /guilds/:id/leaderboards => Returns Level & Reputation Leaderboards
   // - GET /guilds/:id/notifications => Return notifications such as reports, Updates, etc
   // - GET /users/:id => Return info about the user (must be the logged in user)
   // - GET /users/:id/token => Returns token for the logged in user alongside QR Code
+  // - GET /guilds/:id/members/:id/badges => Returnns badges of this member
+  // - POST /guilds/:id/members/:id/badges => Give a new badge to this member
+  // - DELETE /guilds/:id/members/:id/badges => Remove a badge from this member
 
   app.use('/api/v1', api);
 };
