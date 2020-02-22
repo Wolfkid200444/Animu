@@ -153,6 +153,7 @@ mongoose
     require('./models/Log');
     require('./models/Guild');
     require('./models/BankAccount');
+    require('./models/Notification');
 
     //-> Klasa AnimuClient
     const client = new AnimuClient({
