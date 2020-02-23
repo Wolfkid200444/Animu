@@ -45,5 +45,9 @@ module.exports = class extends Command {
         }).setTimestamp()
       );
     }
+
+    return msg.send(
+      `Your report was successfully sent to server owner of ${guild.name}`
+    );
   }
 };
