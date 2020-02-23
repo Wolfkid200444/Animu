@@ -20,10 +20,10 @@ module.exports = class extends Event {
         if (member.roles.find(r => r.name === '🛡 Senior Moderator'))
           this.client.settings.update('animuStaff', member.id);
       });
-    }
 
-    //-> Set Server count on Top.gg
-    new DBL(topGGAPIKey, this.client);
+      //-> Set Server count on Top.gg
+      new DBL(topGGAPIKey, this.client);
+    }
 
     //-> Delete Any active games that might be cached
     await redisClient.delAsync('active_games');
