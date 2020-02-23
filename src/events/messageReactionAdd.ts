@@ -8,6 +8,8 @@ const SelfRole = <ISelfRoleModel>mongoose.model('SelfRole');
 
 module.exports = class extends Event {
   async run(messageReaction: MessageReaction, user: KlasaUser) {
+    if (user.bot) return;
+
     if (messageReaction.message.partial) await messageReaction.message.fetch();
 
     const selfRole = await SelfRole.findOne({
