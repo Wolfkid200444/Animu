@@ -30,8 +30,8 @@ module.exports = (app: Application, client: KlasaClient) => {
   api.use(async (req: Request, res: Response, next: NextFunction) => {
     if (botEnv === 'production')
       return res
-        .status(400)
-        .json({ code: 400, error: 'API not ready for production' });
+        .status(501)
+        .json({ code: 501, error: 'API not ready for production' });
     next();
   });
 
@@ -70,7 +70,7 @@ module.exports = (app: Application, client: KlasaClient) => {
         return res.status(401).json({ code: 401, error: 'Access Denied' });
 
       // Fetching Tier
-      const tier = await redisClient.hgetAsync('guild_tiers', req.guild.id);
+      const tier = await redisClient.hgetAsync('guild_tiers', guild.id);
 
       req['guild'] = guild;
       req['tier'] = tier;
