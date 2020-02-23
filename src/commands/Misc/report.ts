@@ -13,7 +13,7 @@ module.exports = class extends Command {
       cooldown: 60,
       description: 'Report a member',
       usageDelim: ' ',
-      usage: '<guildID:string> <memberID:string> <description:string{1, 500}>',
+      usage: '<guildID:string> <memberID:string> <description:string{1,500}>',
     });
   }
 

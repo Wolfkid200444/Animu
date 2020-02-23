@@ -646,8 +646,6 @@ module.exports = (app: Application, client: KlasaClient) => {
   });
 
   // ? Routes to Add:
-  // - DELETE /guilds/:id/members/:id/badges => Remove a badge from this member
-  // - GET /guilds/:id/reports => Return all the reports from a guild
 
   app.use('/api/v1', api);
 };
