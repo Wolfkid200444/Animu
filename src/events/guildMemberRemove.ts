@@ -16,11 +16,10 @@ module.exports = class extends Event {
   async run(member: GuildMember) {
     // Staff Member left notification
     if (
-      (member.hasPermission('ADMINISTRATOR') ||
-        member.hasPermission('MANAGE_GUILD') ||
-        member.hasPermission('BAN_MEMBERS') ||
-        member.hasPermission('KICK_MEMBERS')) &&
-      member.guild.settings.get('notifications.staffMemberLeft')
+      member.hasPermission('ADMINISTRATOR') ||
+      member.hasPermission('MANAGE_GUILD') ||
+      member.hasPermission('BAN_MEMBERS') ||
+      member.hasPermission('KICK_MEMBERS')
     ) {
       const notification = await new Notification({
         guildID: member.guild.id,
@@ -29,13 +28,14 @@ module.exports = class extends Event {
         type: 'staffMemberLeft',
       }).save();
 
-      member.guild.owner.send(
-        new MessageEmbed({
-          title: notification.title,
-          description: notification.description,
-          color: 0x2196f3,
-        }).setTimestamp()
-      );
+      if (member.guild.settings.get('notifications.staffMemberLeft'))
+        member.guild.owner.send(
+          new MessageEmbed({
+            title: notification.title,
+            description: notification.description,
+            color: 0x2196f3,
+          }).setTimestamp()
+        );
     }
 
     if (

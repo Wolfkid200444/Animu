@@ -106,6 +106,7 @@ AnimuClient.defaultGuildSchema.add('toxicityFilters', folder => {
 /* Notifications */
 AnimuClient.defaultGuildSchema.add('notifications', folder => {
   folder.add('staffMemberLeft', 'bool', { default: true });
+  folder.add('report', 'bool', { default: true });
 });
 
 /* Logs */
