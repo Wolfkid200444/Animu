@@ -36,7 +36,7 @@ module.exports = (app: Application, client: KlasaClient) => {
   });
 
   api.use(
-    ['/guilds*'],
+    ['/guilds*', '/me*'],
     async (req: Request, res: Response, next: NextFunction) => {
       const token = req.headers.authorization;
 
@@ -69,7 +69,12 @@ module.exports = (app: Application, client: KlasaClient) => {
       if (guild.ownerID !== req.user.id)
         return res.status(401).json({ code: 401, error: 'Access Denied' });
 
+      // Fetching Tier
+      const tier = await redisClient.hgetAsync('guild_tiers', req.guild.id);
+
       req['guild'] = guild;
+      req['tier'] = tier;
+
       next();
     }
   );
@@ -115,14 +120,6 @@ module.exports = (app: Application, client: KlasaClient) => {
       next();
     }
   );
-
-  api.use(async (req: Request, res: Response, next: NextFunction) => {
-    // Fetching Tier
-    const tier = await redisClient.hgetAsync('guild_tiers', req.guild.id);
-
-    req['tier'] = tier;
-    next();
-  });
 
   // Root Route
   api.get('/', (req, res) => {
@@ -638,10 +635,17 @@ module.exports = (app: Application, client: KlasaClient) => {
     return res.json({ role: req.guild.roles.get(req.params.roleID) });
   });
 
+  // Fetch info about the logged in user
+  api.get('/me', (req, res) => {
+    return res.json({ me: req.user });
+  });
+
+  // Fetch token of the logged in user
+  api.get('/me/token', (req, res) => {
+    return res.json({ token: req.headers.authorization });
+  });
+
   // ? Routes to Add:
-  // - GET /guilds/:id/notifications => Return notifications such as reports, Updates, etc
-  // - GET /users/:id => Return info about the user (must be the logged in user)
-  // - GET /users/:id/token => Returns token for the logged in user alongside QR Code
   // - DELETE /guilds/:id/members/:id/badges => Remove a badge from this member
   // - GET /guilds/:id/reports => Return all the reports from a guild
 
