@@ -157,7 +157,7 @@ module.exports = (app: Application, client: KlasaClient) => {
   // ---------------
   // Query Params:
   // growthCycle - number of days to show growthRate for (int)
-  // joinRate - number of days to show joinRate for (int)
+  // joinCycle - number of days to show joinRate for (int)
   api.get('/guilds/:id/stats', (req, res) => {
     const growthRate = [];
     const joinRate = [];
@@ -246,9 +246,8 @@ module.exports = (app: Application, client: KlasaClient) => {
   // -----
   // Body Params:
   // reason
-  //! Untested
   api.post('/guilds/:id/members/:memberID/kick', async (req, res) => {
-    const reason = req.query.reason || 'Kicked using API';
+    const reason = req.body.reason || 'Kicked using API';
 
     if (!req.member.kickable)
       return res.status(403).json({
@@ -267,9 +266,8 @@ module.exports = (app: Application, client: KlasaClient) => {
   // -----
   // Body Params:
   // reason
-  //! Untested
   api.post('/guilds/:id/members/:memberID/ban', async (req, res) => {
-    const reason = req.query.reason || 'Banned using API';
+    const reason = req.body.reason || 'Banned using API';
 
     if (!req.member.bannable)
       return res.status(403).json({
@@ -302,7 +300,6 @@ module.exports = (app: Application, client: KlasaClient) => {
   // ------
   // Body Params:
   // badge - badge to give
-  //! Untested
   api.post('/guilds/:id/members/:memberID/badges', async (req, res) => {
     if (!req.body.badge || typeof req.body.badge !== 'string')
       return res.status(400).json({
@@ -335,14 +332,15 @@ module.exports = (app: Application, client: KlasaClient) => {
   // Body Params:
   // key - key of Setting to update
   // value - new value for the setting to update
-  //! Untested
-  api.post('/guilds/:id/settings', (req, res) => {
-    if (!req.body.key || !req.body.value)
-      return res
-        .status(400)
-        .json({ code: 400, error: "Key or Value wasn't provided" });
+  api.post('/guilds/:id/settings', async (req, res) => {
+    if (!req.body.key || typeof req.body.key !== 'string')
+      return res.status(400).json({
+        code: 400,
+        error:
+          "'Key' or 'Value' were either not provided or the format is incorrect",
+      });
 
-    req.guild.settings.update(req.body.key, req.body.value);
+    await req.guild.settings.update(req.body.key, req.body.value);
 
     return res.json({
       settings: req.guild.settings,
@@ -363,20 +361,24 @@ module.exports = (app: Application, client: KlasaClient) => {
   // Body Params:
   // role - ID of role
   // emoji - name of emoji
-  //! Untested
   api.post('/guilds/:id/selfroles', async (req, res) => {
-    if (!req.body.role || !req.body.emoji)
-      return res
-        .status(400)
-        .json({ code: 400, error: "Role or Emoji wasn't provided" });
+    if (
+      !req.body.role ||
+      !req.body.emoji ||
+      typeof req.body.role !== 'string' ||
+      typeof req.body.emoji !== 'string'
+    )
+      return res.status(400).json({
+        code: 400,
+        error:
+          "'role' or 'emoji' were either not provided or the format is incorrect",
+      });
 
     const role = req.guild.roles.get(req.body.role);
-    let emoji = req.body.emojiName;
+    let emoji = req.body.emoji;
 
-    if (client.emojis.find(e => e.name === req.body.emojiName.split(':')[1]))
-      emoji = client.emojis.find(
-        e => e.name === req.body.emojiName.split(':')[1]
-      );
+    if (client.emojis.find(e => e.name === req.body.emoji.split(':')[1]))
+      emoji = client.emojis.find(e => e.name === req.body.emoji.split(':')[1]);
 
     if (
       !req.guild.settings.get('selfRolesChannel') ||
@@ -417,7 +419,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     msg.react(emoji);
 
     await new SelfRole({
-      guildID: req.guild,
+      guildID: req.guild.id,
       messageID: req.guild.settings.get('selfRolesMessage'),
       emojiName: emoji,
       roleName: role.name,
@@ -434,14 +436,24 @@ module.exports = (app: Application, client: KlasaClient) => {
   // --------
   // Body Params:
   // role - ID of role
-  //! Untested
   api.delete('/guilds/:id/selfroles', async (req, res) => {
-    if (!req.body.role)
-      return res.status(400).json({ code: 400, error: "Role wan't provided" });
+    if (!req.body.role || typeof req.body.role !== 'string')
+      return res.status(400).json({
+        code: 400,
+        error: "'role' was either not provided or the format is incorrect",
+      });
+
+    const role = req.guild.roles.get(req.body.role);
+
+    if (!role)
+      return res.status(400).json({
+        code: 400,
+        error: "Role wasn't found",
+      });
 
     const selfRole = await SelfRole.findOne({
       guildID: req.guild.id,
-      roleName: req.params.roleName,
+      roleName: role.name,
     }).exec();
 
     if (!selfRole)
@@ -452,7 +464,7 @@ module.exports = (app: Application, client: KlasaClient) => {
 
     await SelfRole.remove({
       guildID: req.guild.id,
-      roleName: req.params.roleName,
+      roleName: role.name,
     }).exec();
 
     const selfRoles = await SelfRole.find({ guildID: req.guild.id }).exec();
@@ -482,7 +494,6 @@ module.exports = (app: Application, client: KlasaClient) => {
   // level - level # to create perk for (int)
   // key - Type of perk to create (badge|rep|role)
   // value - Value for this perk
-  //! Untested
   api.post('/guilds/:id/levelperks', async (req, res) => {
     if (req.tier === 'free')
       return res
@@ -499,7 +510,7 @@ module.exports = (app: Application, client: KlasaClient) => {
 
     if (
       typeof req.body.level !== 'number' ||
-      req.body.level < 0 ||
+      req.body.level < 1 ||
       req.body.level > 100 ||
       !_.includes(['badge', 'rep', 'role'], req.body.key)
     )
@@ -508,11 +519,7 @@ module.exports = (app: Application, client: KlasaClient) => {
         error: "'level', 'key' or 'value' were provided in incorrect format",
       });
 
-    await guild.addLevelPerk(
-      req.body.level,
-      req.body.perkName,
-      req.body.perkValue
-    );
+    await guild.addLevelPerk(req.body.level, req.body.key, req.body.value);
 
     return res.json({
       levelPerks: guild.levelPerks,
@@ -523,7 +530,6 @@ module.exports = (app: Application, client: KlasaClient) => {
   // --------
   // Body Params:
   // level - level # to create perk for (int)
-  //! Untested
   api.delete('/guilds/:id/levelperks', async (req, res) => {
     if (req.tier === 'free')
       return res
@@ -535,7 +541,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     if (
       !req.body.level ||
       typeof req.body.level !== 'number' ||
-      req.body.level < 0 ||
+      req.body.level < 1 ||
       req.body.level > 100
     )
       return res.status(400).json({
@@ -543,7 +549,7 @@ module.exports = (app: Application, client: KlasaClient) => {
         error: "'level' wasn't provided or the format was incorrect",
       });
 
-    await guild.removeLevelPerk(parseInt(req.params.level));
+    await guild.removeLevelPerk(parseInt(req.body.level));
 
     return res.json({
       levelPerks: guild.levelPerks,
