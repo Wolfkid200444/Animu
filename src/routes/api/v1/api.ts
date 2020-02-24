@@ -145,6 +145,7 @@ module.exports = (app: Application, client: KlasaClient) => {
 
   // Get Info of a guild (must be owner)
   api.get('/guilds/:id', (req, res) => {
+    req.guild['tier'] = req.tier;
     return res.json({
       guild: req.guild,
     });
@@ -231,14 +232,15 @@ module.exports = (app: Application, client: KlasaClient) => {
 
     // Filtering Private Profile Data
     profile.mutedIn = undefined;
-    req.member.user = undefined;
+    const member = Object.assign({}, req.member);
+    member.user = undefined;
 
     _.remove(profile.badges, b => b.guildID !== req.guild.id);
     _.remove(profile.reputation, r => r.guildID !== req.guild.id);
     _.remove(profile.level, l => l.guildID !== req.guild.id);
 
     return res.json({
-      member: { ...req.member, profile },
+      member: { ...member, profile },
     });
   });
 
