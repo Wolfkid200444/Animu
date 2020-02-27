@@ -133,8 +133,13 @@ module.exports = class extends Command {
       if (mafia) await game.playAudio('mafia-wins');
       else await game.playAudio('mafia-loses');
       game.end();
-      await redisClient.hdelAsync('active_games', msg.channel.id);
-      await redisClient.sremAsync('mafia_games', msg.channel.guild.id);
+      try {
+        console.log('ENDING MAFIA');
+        await redisClient.hdelAsync('active_games', msg.channel.id);
+        await redisClient.sremAsync('mafia_games', msg.channel.guild.id);
+      } catch (e) {
+        console.log(e);
+      }
       return null;
     } catch (err) {
       game.end();
