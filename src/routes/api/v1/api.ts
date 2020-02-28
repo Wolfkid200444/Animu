@@ -231,13 +231,18 @@ module.exports = (app: Application, client: KlasaClient) => {
     }).exec();
 
     // Filtering Private Profile Data
-    profile.mutedIn = undefined;
-    const member = Object.assign({}, req.member);
+    const member = Object.assign(
+      { displayName: req.member.displayName, id: req.member.id },
+      req.member
+    );
     member.user = undefined;
 
-    _.remove(profile.badges, b => b.guildID !== req.guild.id);
-    _.remove(profile.reputation, r => r.guildID !== req.guild.id);
-    _.remove(profile.level, l => l.guildID !== req.guild.id);
+    if (profile) {
+      profile.mutedIn = undefined;
+      _.remove(profile.badges, b => b.guildID !== req.guild.id);
+      _.remove(profile.reputation, r => r.guildID !== req.guild.id);
+      _.remove(profile.level, l => l.guildID !== req.guild.id);
+    }
 
     return res.json({
       member: { ...member, profile },
@@ -483,10 +488,12 @@ module.exports = (app: Application, client: KlasaClient) => {
         .status(400)
         .json({ code: 400, error: 'Not available for free tier' });
 
-    const guild = await Guild.findOne({ guildID: req.guild.id }).exec();
+    const guild = await Guild.findOne({ guildID: req.guild.id })
+      .lean()
+      .exec();
 
     return res.json({
-      levelPerks: guild.levelPerks,
+      levelPerks: guild.levelPerks.map(l => ({ ...l, guild: req.guild.id })),
     });
   });
 
