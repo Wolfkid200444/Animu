@@ -57,24 +57,22 @@ module.exports = class extends Task {
       }
 
       // Pet isn't dead yet
-
-      // Below Code was commented out as a result of unexpected behaviour where it sent message to users 100s of times
-      // if (hunger > 90 || happiness < 10)
-      //   this.client.users
-      //     .get(pet.memberID)
-      //     .send(
-      //       pet.petType === 'cat'
-      //         ? 'Meow Meoooow Meooooowwwww!!'
-      //         : 'Bork Bork Bork Bork!!'
-      //     );
-      // else if (hunger > 60 || happiness < 40)
-      //   this.client.users
-      //     .get(pet.memberID)
-      //     .send(pet.petType === 'cat' ? 'Meeeeowwww!' : 'Bork Bork!');
-      // else if (hunger > 40 || happiness < 60)
-      //   this.client.users
-      //     .get(pet.memberID)
-      //     .send(pet.petType === 'cat' ? 'Meow!' : 'Bork!');
+      if (hunger > 90 || happiness < 10)
+        this.client.users
+          .get(pet.memberID)
+          .send(
+            pet.petType === 'cat'
+              ? 'Meow Meoooow Meooooowwwww!!'
+              : 'Bork Bork Bork Bork!!'
+          );
+      else if (hunger > 60 || happiness < 40)
+        this.client.users
+          .get(pet.memberID)
+          .send(pet.petType === 'cat' ? 'Meeeeowwww!' : 'Bork Bork!');
+      else if (hunger > 40 || happiness < 60)
+        this.client.users
+          .get(pet.memberID)
+          .send(pet.petType === 'cat' ? 'Meow!' : 'Bork!');
     });
   }
 };
