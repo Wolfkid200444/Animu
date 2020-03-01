@@ -132,7 +132,6 @@ module.exports = class extends Command {
       const mafia = game.players.find(p => p.role === 'mafia');
       if (mafia) await game.playAudio('mafia-wins');
       else await game.playAudio('mafia-loses');
-      game.end();
       try {
         console.log('ENDING MAFIA');
         await redisClient.hdelAsync('active_games', msg.channel.id);
@@ -140,6 +139,7 @@ module.exports = class extends Command {
       } catch (e) {
         console.log(e);
       }
+      game.end();
       return null;
     } catch (err) {
       game.end();

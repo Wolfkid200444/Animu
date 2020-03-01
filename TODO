@@ -2,8 +2,8 @@
 TODO: Test and fix Mafia
 
 # Moderation
-TODO: Add report system
 TODO: Add Warnings system
+TODO: Add a "reason" argument to reputation
 
 # Webhooks
 TODO: Add Youtube Channel upload Webhooks
@@ -12,11 +12,11 @@ TODO: Add Anime episode release Webhooks
 
 # Logs
 TODO: Add edited messages logs
+TODO: Add reputation logs
 
 # Notifications
 TODO: Add Notifications when:
 > New Companion Update is out
-> A member reports another member
 
 # Music
 TODO: Add Lyrics
