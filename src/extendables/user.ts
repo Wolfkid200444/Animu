@@ -425,7 +425,7 @@ module.exports = class extends Extendable {
             change === '+' ? 'added' : 'deducted'
           } __${amount}__ ${change === '+' ? 'to' : 'from'} **${
             this.tag
-          }**'s Reputation`
+          }**'s Reputation with reason of:\n\`\`\`${reason}\`\`\``
         );
     }
 
