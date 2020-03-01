@@ -12,7 +12,9 @@ declare module 'discord.js' {
     editReputation(
       change: '+' | '-',
       amoung: number,
-      guildID: string
+      guildID: string,
+      editedBy: User,
+      reason: string
     ): Promise<boolean>;
     _noProfile(isAuthor?: boolean): MessageEmbed;
   }

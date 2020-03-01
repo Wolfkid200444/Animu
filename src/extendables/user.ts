@@ -1,6 +1,6 @@
 //Dependencies
 import { Extendable, ExtendableStore } from 'klasa';
-import { User, MessageEmbed } from 'discord.js';
+import { User, MessageEmbed, TextChannel } from 'discord.js';
 import { model } from 'mongoose';
 import _ from 'lodash';
 import redis from 'redis';
@@ -12,6 +12,7 @@ import { IInventoryModel } from '../models/Inventory';
 import { IItemModel } from '../models/Item';
 import { IGuildModel } from '../models/Guild';
 import { IBankAccountModel } from '../models/BankAccount';
+import { ILogModel } from '../models/Log';
 
 //Init
 const Profile: IProfileModel = <IProfileModel>model('Profile');
@@ -20,6 +21,7 @@ const Item: IItemModel = <IItemModel>model('Item');
 const Pet: IPetModel = <IPetModel>model('Pet');
 const Guild: IGuildModel = <IGuildModel>model('Guild');
 const BankAccount: IBankAccountModel = <IBankAccountModel>model('BankAccount');
+const Log = <ILogModel>model('Log');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
 
@@ -360,7 +362,14 @@ module.exports = class extends Extendable {
    * @param guildID - ID of guild to add/deduct rep for
    * @returns True if reputation was added/deducted, False if user was banned due to low rep
    */
-  async editReputation(this: User, change, amount, guildID) {
+  async editReputation(
+    this: User,
+    change: '+' | '-',
+    amount: number,
+    guildID: string,
+    editedBy: User,
+    reason: string
+  ) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
     //Checking Aldovia Title
@@ -393,6 +402,30 @@ module.exports = class extends Extendable {
     }
 
     if (!proceed) return true;
+
+    await new Log({
+      guildID: thisGuild.id,
+      event: 'reputationEdit',
+      data: {
+        editedBy: editedBy.id,
+        editedOf: this.id,
+        amountEdited: amount,
+        change: change,
+      },
+    }).save();
+
+    if (thisGuild.settings.get('logChannels.reputationEdits')) {
+      const reputationEditLogChannel = thisGuild.channels.get(
+        thisGuild.settings.get('logChannels.reputationEdits')
+      );
+
+      if (reputationEditLogChannel instanceof TextChannel)
+        reputationEditLogChannel.send(
+          `**${editedBy.tag}** ${
+            change === '+' ? 'gave' : 'deducted'
+          } __${amount}__ from **${this.tag}**'s Reputation`
+        );
+    }
 
     if (!profile) profile = (await Profile.register(this.id)).profile;
 
@@ -677,7 +710,13 @@ module.exports = class extends Extendable {
               }
 
               if (guild.levelPerks[index].rep)
-                this.editReputation('+', guild.levelPerks[index].rep, guildID);
+                this.editReputation(
+                  '+',
+                  guild.levelPerks[index].rep,
+                  guildID,
+                  this.client.user,
+                  `Added reputation for reaching level ${guild.levelPerks[index].level}`
+                );
             } catch (e) {
               console.log('An error occured while handling Level up perks:', e);
             }
