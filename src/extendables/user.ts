@@ -422,8 +422,10 @@ module.exports = class extends Extendable {
       if (reputationEditLogChannel instanceof TextChannel)
         reputationEditLogChannel.send(
           `**${editedBy.tag}** ${
-            change === '+' ? 'gave' : 'deducted'
-          } __${amount}__ from **${this.tag}**'s Reputation`
+            change === '+' ? 'added' : 'deducted'
+          } __${amount}__ ${change === '+' ? 'to' : 'from'} **${
+            this.tag
+          }**'s Reputation`
         );
     }
 
