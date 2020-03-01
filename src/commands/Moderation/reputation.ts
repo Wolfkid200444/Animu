@@ -21,7 +21,12 @@ module.exports = class extends Command {
 
   async run(
     msg: KlasaMessage,
-    [member, change, amount, reason]: [GuildMember, '+' | '-', number, string]
+    [member, change, amount, reason = 'No reason provided']: [
+      GuildMember,
+      '+' | '-',
+      number,
+      string
+    ]
   ) {
     return msg.sendEmbed(
       (await member.user.editReputation(

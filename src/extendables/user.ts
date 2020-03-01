@@ -368,7 +368,7 @@ module.exports = class extends Extendable {
     amount: number,
     guildID: string,
     editedBy: User,
-    reason: string
+    reason: string = 'No reason provided'
   ) {
     let profile = await Profile.findOne({ memberID: this.id }).exec();
 
