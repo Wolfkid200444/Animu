@@ -27,13 +27,13 @@ const version = 1.0;
 
 module.exports = (app: Application, client: KlasaClient) => {
   // Middlewares
-  api.use(async (req: Request, res: Response, next: NextFunction) => {
-    if (botEnv === 'production')
-      return res
-        .status(501)
-        .json({ code: 501, error: 'API not ready for production' });
-    next();
-  });
+  //api.use(async (req: Request, res: Response, next: NextFunction) => {
+  //  if (botEnv === 'production')
+  //      return res
+  //     .status(501)
+  //      .json({ code: 501, error: 'API not ready for production' });
+  //  next();
+  //});
 
   api.use(
     ['/guilds*', '/me*'],

@@ -3,7 +3,6 @@ TODO: Test and fix Mafia
 
 # Moderation
 TODO: Add Warnings system
-TODO: Add a "reason" argument to reputation
 
 # Webhooks
 TODO: Add Youtube Channel upload Webhooks
@@ -12,7 +11,6 @@ TODO: Add Anime episode release Webhooks
 
 # Logs
 TODO: Add edited messages logs
-TODO: Add reputation logs
 
 # Notifications
 TODO: Add Notifications when:
