@@ -34,15 +34,12 @@ module.exports = (app: Application, client: KlasaClient) => {
   //  next();
   //});
 
-  api.use(
-    '/*',
-    async (req: Request, res: Response, next: NextFunction) => {
-      res.header('Access-Control-Allow-Origin', "*");
-      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-      res.header('Access-Control-Allow-Headers', 'Content-Type');
-      next();
-    }
-  );
+  api.use(async (req: Request, res: Response, next: NextFunction) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+  });
 
   api.use(
     ['/guilds*', '/me*'],
