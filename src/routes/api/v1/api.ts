@@ -4,7 +4,6 @@ import { KlasaClient } from 'klasa';
 import redis from 'redis';
 import bluebird from 'bluebird';
 import moment from 'moment';
-import { botEnv } from '../../../config/keys';
 import { model } from 'mongoose';
 import { ISelfRoleModel } from '../../../models/SelfRole';
 import { TextChannel } from 'discord.js';
@@ -34,6 +33,16 @@ module.exports = (app: Application, client: KlasaClient) => {
   //      .json({ code: 501, error: 'API not ready for production' });
   //  next();
   //});
+
+  api.use(
+    '/*',
+    async (req: Request, res: Response, next: NextFunction) => {
+      res.header('Access-Control-Allow-Origin', "*");
+      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+      res.header('Access-Control-Allow-Headers', 'Content-Type');
+      next();
+    }
+  );
 
   api.use(
     ['/guilds*', '/me*'],
