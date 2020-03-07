@@ -42,13 +42,7 @@ export default class extends Command {
 
 // Gifs
 const gifs = [
-  'https://media.tenor.com/images/37c35cf5c3c72f34881d1ed546f70439/tenor.gif',
-  'https://media.tenor.com/images/e11e607335c7e9e265d4dbbdbb2bfdf5/tenor.gif',
-  'https://media.tenor.com/images/ae05156dabb6110e8262c2a36f9a54e9/tenor.gif',
   'https://media.tenor.com/images/7516f3c8e67eab088cfe38e95d91b687/tenor.gif',
-  'https://media.tenor.com/images/b9b30a58c8f4e8e029c0de8da1ea007e/tenor.gif',
-  'https://media.tenor.com/images/fa47bbfd4cd00807a347d678d617f8d8/tenor.gif',
-  'https://media.tenor.com/images/2202827ba0db35274ead071c5a9d2553/tenor.gif',
   'https://media.giphy.com/media/Z2sivLSfN8FH2/giphy.gif',
   'https://data.whicdn.com/images/328811537/original.gif',
   'https://media.giphy.com/media/BZstFqDpmEZu8/giphy.gif',
@@ -61,4 +55,5 @@ const gifs = [
   'https://media.giphy.com/media/d9skh5UdAxyqk/giphy.gif',
   'https://media.giphy.com/media/DuwGqdgiulKfK/giphy.gif',
   'https://media.giphy.com/media/514rRMooEn8ti/giphy.gif',
+  'https://media.giphy.com/media/EVODaJHSXZGta/giphy.gif',
 ];
