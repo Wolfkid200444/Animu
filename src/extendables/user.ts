@@ -256,7 +256,7 @@ module.exports = class extends Extendable {
         `${this.client.users.get(inventory.memberID).username ||
           'Unknown'}'s Inventory`
       )
-      .addField('Coins', numberWithCommas(inventory.coins))
+      .addField('Coins', numberWithCommas(Math.floor(inventory.coins)))
       .addField('Inventory', inventoryStr || '[Inventory is empty]')
       .setColor('#2196f3');
   }
