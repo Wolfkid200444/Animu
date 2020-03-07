@@ -43,4 +43,7 @@ export default class extends Command {
 // Gifs
 const gifs = [
   'https://media1.tenor.com/images/d16a9affe8915e6413b0c1f1d380b2ee/tenor.gif',
+  'https://thumbs.gfycat.com/ShowyObedientCrane-max-1mb.gif',
+  'https://media1.tenor.com/images/d0c2e7382742f1faf8fcb44db268615f/tenor.gif?itemid=5853736',
+  'https://media.tenor.com/images/719fd823d2cf82e36b7bd0903d6423d5/tenor.gif',
 ];
