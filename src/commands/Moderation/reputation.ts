@@ -14,7 +14,7 @@ module.exports = class extends Command {
       permissionLevel: 6,
       description: 'Modify reputation',
       extendedHelp: 'Modify reputation of a member',
-      usage: '<member:member> <+|-> <amount:integer{1,100}> [reason:string]',
+      usage: '<member:member> <+|-> <amount:integer{1,100}> [reason:...string]',
       usageDelim: ' ',
     });
   }
