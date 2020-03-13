@@ -1134,6 +1134,14 @@ module.exports = class extends Extendable {
         level: 1,
         exp: 10,
       });
+    else {
+      const index = profile.level.findIndex(l => l.guildID === guildID);
+
+      if (profile.level[index].exp === 0) {
+        profile.level[index].level = 1;
+        profile.level[index].exp = 10;
+      }
+    }
 
     await profile.save();
 
