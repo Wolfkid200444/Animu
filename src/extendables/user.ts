@@ -930,6 +930,18 @@ module.exports = class extends Extendable {
           description: 'It seems your pet likes the new toy you gave it',
           color: 0x2196f3,
         });
+    } else if (_.includes(item.properties, 'nitro')) {
+      this.client.users
+        .get('338334949331697664')
+        .send(
+          `Meow :), A user with tag of \`${this.tag}\` and ID of \`${this.id}\` has used $10 Nitro - 1 Month Item, gimme the code to deliver to that user :)`
+        );
+
+      embed = new MessageEmbed({
+        title: 'Nitro Upgrade!',
+        description: `You'll get nitro gift code in your DMS within 24 hours from me :) (Be sure to keep your DMs open)`,
+        color: 0x2196f3,
+      });
     }
 
     await inventory.save();
