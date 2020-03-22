@@ -21,6 +21,7 @@ export interface IItemModel extends Model<IItem> {
     usable: boolean,
     instantUse: boolean,
     inShop: boolean,
+    stockLeft: number,
     purchaseMsg: string,
     properties: Array<string | number>
   ): Promise<IItem>;
@@ -43,6 +44,7 @@ const itemSchema: Schema<IItem> = new Schema({
   usable: Boolean,
   instantUse: Boolean,
   inShop: Boolean,
+  stockLeft: Number,
   purchaseMsg: String,
   properties: [Schema.Types.Mixed],
 });
@@ -56,6 +58,7 @@ itemSchema.statics.createItem = async function(
   usable,
   instantUse,
   inShop,
+  stockLeft,
   purchaseMsg,
   properties
 ) {
@@ -71,6 +74,7 @@ itemSchema.statics.createItem = async function(
     usable,
     instantUse,
     inShop,
+    stockLeft,
     purchaseMsg,
     properties: properties.split(',').map(role => role.trim()),
   }).save();
@@ -86,6 +90,13 @@ itemSchema.methods.purchase = async function(msg, memberID, isStaff) {
 
   if (isStaff) price = 0;
 
+  if (this.stockLeft && this.stockLeft < 1)
+    return {
+      res: 'err',
+      title: 'Not in Stock',
+      desc: "The item you're trying to purchase isn't available in stock",
+    };
+
   if (inventory.coins < price)
     return {
       res: 'err',
@@ -95,6 +106,11 @@ itemSchema.methods.purchase = async function(msg, memberID, isStaff) {
 
   //Purchasing item
   inventory.coins -= price;
+
+  if (this.stockLeft && this.stockLeft > 0) {
+    this.stockLeft--;
+    await this.save();
+  }
 
   //Use item instantly
   if (this.instantUse) {

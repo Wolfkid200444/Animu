@@ -11,6 +11,7 @@ export interface IITemDocument extends Document {
   usable: boolean;
   instantUse: boolean;
   inShop: boolean;
+  stockLeft: number;
   purchaseMsg: string;
   properties: Array<string | number>;
 }

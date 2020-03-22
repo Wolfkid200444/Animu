@@ -1,15 +1,16 @@
-const { Command } = require('klasa');
-const { MessageEmbed } = require('discord.js');
-const mongoose = require('mongoose');
-const { numberWithCommas } = require('../../util/util');
+import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { MessageEmbed } from 'discord.js';
+import mongoose from 'mongoose';
+import { numberWithCommas } from '../../util/util';
+import { IItemModel } from '../../models/Item';
 
 //Init
-const Item = mongoose.model('Item');
+const Item = <IItemModel>mongoose.model('Item');
 
 module.exports = class extends Command {
-  constructor(...args) {
-    super(...args, {
-      runIn: ['text', 'dm', 'group'],
+  constructor(store: CommandStore, file: string[], dir: string) {
+    super(store, file, dir, {
+      runIn: ['text', 'dm'],
       requiredPermissions: ['EMBED_LINKS'],
       cooldown: 30,
       description: 'View Shop',
@@ -19,7 +20,7 @@ module.exports = class extends Command {
     });
   }
 
-  async run(msg) {
+  async run(msg: KlasaMessage) {
     const items = await Item.find({}).exec();
 
     let itemStr = '';
@@ -38,12 +39,12 @@ module.exports = class extends Command {
           item.price - item.price * (item.discount / 100)
         )} Coins ~~${numberWithCommas(item.price)} Coins~~ (${
           item.discount
-        }% off)`;
+        }% off) ${item.stockLeft ?? `[**${item.stockLeft}** in Stock]`}`;
 
       itemStr += `• ${item.name} | ${priceStr}\n`;
     });
 
-    msg.sendEmbed(
+    return msg.sendEmbed(
       new MessageEmbed()
         .setTitle('Shop')
         .setDescription(itemStr)
