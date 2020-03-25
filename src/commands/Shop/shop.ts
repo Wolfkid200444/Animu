@@ -39,7 +39,9 @@ module.exports = class extends Command {
           item.price - item.price * (item.discount / 100)
         )} Coins ~~${numberWithCommas(item.price)} Coins~~ (${
           item.discount
-        }% off) ${item.stockLeft ?? `[**${item.stockLeft}** in Stock]`}`;
+        }% off) ${
+          item.stockLeft != null ? `[**${item.stockLeft}** in Stock]` : ''
+        }`;
 
       itemStr += `• ${item.name} | ${priceStr}\n`;
     });
