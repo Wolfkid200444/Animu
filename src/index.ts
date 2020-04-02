@@ -113,6 +113,7 @@ AnimuClient.defaultGuildSchema.add('notifications', folder => {
 AnimuClient.defaultGuildSchema.add('logChannels', folder => {
   folder.add('reputationEdits', 'textchannel');
   folder.add('deletedMessages', 'textchannel');
+  folder.add('editedMessages', 'textchannel');
   folder.add('reports', 'textchannel');
 });
 
