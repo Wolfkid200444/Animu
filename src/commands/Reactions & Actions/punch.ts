@@ -32,4 +32,6 @@ const gifs = [
   'https://media.tenor.com/images/fd39799497e493022dd01b2cc55149ee/tenor.gif',
   'https://media.tenor.com/images/eadd2f071795558b6555edc5adf6d62d/tenor.gif',
   'https://media.tenor.com/images/e9f33925a9d24e22f5e5d6612ccf37f1/tenor.gif',
+  'https://cdn.discordapp.com/attachments/642360052086210570/694375434405806150/20200229_165720.gif',
+  'https://cdn.discordapp.com/attachments/642360052086210570/694376064679673936/bbd0130.gif',
 ];
