@@ -46,4 +46,5 @@ const gifs = [
   'https://thumbs.gfycat.com/ShowyObedientCrane-max-1mb.gif',
   'https://media1.tenor.com/images/d0c2e7382742f1faf8fcb44db268615f/tenor.gif?itemid=5853736',
   'https://media.tenor.com/images/719fd823d2cf82e36b7bd0903d6423d5/tenor.gif',
+  'https://media.discordapp.net/attachments/587691022826602516/698208669564928080/Yuri.gif',
 ];
