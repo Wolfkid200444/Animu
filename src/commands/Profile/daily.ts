@@ -39,6 +39,11 @@ module.exports = class extends Command {
           .setColor('#f44336')
       );
 
+    await msg.client.settings.update(
+      'checkInViews',
+      msg.client.settings.get('checkInViews') + 1
+    );
+
     if (inventory.checkedIn)
       return msg.send(
         new MessageEmbed({

@@ -37,6 +37,7 @@ AnimuClient.defaultClientSchema.add('animuStaff', 'User', {
   array: true,
 });
 AnimuClient.defaultClientSchema.add('supportServerInviteLink', 'String');
+AnimuClient.defaultClientSchema.add('checkInViews', 'number', { default: 0 });
 
 //-> Guild Schema
 AnimuClient.defaultGuildSchema.add('defaultVolume', 'number', {
@@ -92,7 +93,7 @@ AnimuClient.defaultGuildSchema.add('joinRoles', 'role', { array: true });
 
 /* Toxicity Filters */
 AnimuClient.defaultGuildSchema.add('deleteToxicMessages', 'bool');
-AnimuClient.defaultGuildSchema.add('toxicityFilters', folder => {
+AnimuClient.defaultGuildSchema.add('toxicityFilters', (folder) => {
   folder.add('toxicity', 'bool');
   folder.add('severeToxicity', 'bool');
   folder.add('insult', 'bool');
@@ -104,13 +105,13 @@ AnimuClient.defaultGuildSchema.add('toxicityFilters', folder => {
 });
 
 /* Notifications */
-AnimuClient.defaultGuildSchema.add('notifications', folder => {
+AnimuClient.defaultGuildSchema.add('notifications', (folder) => {
   folder.add('staffMemberLeft', 'bool', { default: true });
   folder.add('report', 'bool', { default: true });
 });
 
 /* Logs */
-AnimuClient.defaultGuildSchema.add('logChannels', folder => {
+AnimuClient.defaultGuildSchema.add('logChannels', (folder) => {
   folder.add('reputationEdits', 'textchannel');
   folder.add('deletedMessages', 'textchannel');
   folder.add('editedMessages', 'textchannel');

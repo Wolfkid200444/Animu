@@ -153,7 +153,7 @@ profileSchema.methods.addExp = async function (
   // Get new level
   this.level[index].level = getCurrentLevel(this.level[index].exp);
 
-  // Get range of levelled up levels
+  // Get range   of levelled up levels
   const range = this.level[index].level - currentLevel;
 
   // Generate Array of levelled up levels
