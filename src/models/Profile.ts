@@ -57,7 +57,7 @@ export const profileSchema: Schema<IProfile> = new Schema({
 });
 
 // Static Methods
-profileSchema.statics.register = async function(memberID: string) {
+profileSchema.statics.register = async function (memberID: string) {
   const profile = await this.findOne({ memberID }).exec();
 
   if (profile) return { res: 'already_exists', profile };
@@ -85,16 +85,16 @@ profileSchema.statics.register = async function(memberID: string) {
 };
 
 // Methods
-profileSchema.methods.addReputation = async function(amount, guildID) {
-  const index = this.reputation.findIndex(rep => rep.guildID === guildID);
+profileSchema.methods.addReputation = async function (amount, guildID) {
+  const index = this.reputation.findIndex((rep) => rep.guildID === guildID);
   this.reputation[index].rep += amount;
 
   this.save();
   return true;
 };
 
-profileSchema.methods.deductReputation = async function(amount, guildID) {
-  const index = this.reputation.findIndex(rep => rep.guildID === guildID);
+profileSchema.methods.deductReputation = async function (amount, guildID) {
+  const index = this.reputation.findIndex((rep) => rep.guildID === guildID);
   this.reputation[index].rep -= amount;
 
   if (this.reputation <= 0) {
@@ -109,7 +109,7 @@ profileSchema.methods.deductReputation = async function(amount, guildID) {
   return true;
 };
 
-profileSchema.methods.edit = async function(field, value) {
+profileSchema.methods.edit = async function (field, value) {
   this[field] = value;
 
   await this.save();
@@ -117,29 +117,29 @@ profileSchema.methods.edit = async function(field, value) {
   return this;
 };
 
-profileSchema.methods.addExp = async function(
+profileSchema.methods.addExp = async function (
   expToAdd,
   guildID,
   defaultRep = 50
 ): Promise<number[]> {
-  let index = this.level.findIndex(guildLev => guildLev.guildID === guildID);
+  let index = this.level.findIndex((guildLev) => guildLev.guildID === guildID);
   let levelUps = [];
 
   if (index < 0) {
-    if (!this.reputation.find(rep => rep.guildID === guildID))
+    if (!this.reputation.find((rep) => rep.guildID === guildID))
       this.reputation.push({
         guildID: guildID,
         rep: defaultRep,
       });
 
-    if (!this.level.find(level => level.guildID === guildID))
+    if (!this.level.find((level) => level.guildID === guildID))
       this.level.push({
         guildID: guildID,
         level: 1,
         exp: 10,
       });
 
-    index = this.level.findIndex(guildLev => guildLev.guildID === guildID);
+    index = this.level.findIndex((guildLev) => guildLev.guildID === guildID);
   }
 
   if (this.level[index].level === 100) return [];
@@ -157,7 +157,7 @@ profileSchema.methods.addExp = async function(
   const range = this.level[index].level - currentLevel;
 
   // Generate Array of levelled up levels
-  if (range) levelUps = _.range(currentLevel, this.level[index].level);
+  if (range) levelUps = _.range(currentLevel + 1, this.level[index].level + 1);
 
   await this.save();
   return levelUps;
