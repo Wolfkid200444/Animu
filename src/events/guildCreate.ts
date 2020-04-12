@@ -14,7 +14,7 @@ module.exports = class extends Event {
   async run(guild: DGuild) {
     const firstChannel = guild.channels
       .filter(
-        ch =>
+        (ch) =>
           ch.permissionsFor(guild.me).has('SEND_MESSAGES') && ch.type === 'text'
       )
       .sort((a, b) => a.rawPosition - b.rawPosition)
@@ -28,9 +28,10 @@ My name's Animu and my purpose is to make your server moar better <a:YAY_1:61905
 > To get help regarding a specific command, use \`-help command\`
 > To view your profile, use \`-p\`
 > To view your inventory, use \`-inv\`
-> To get daily coins, use \`-checkin\`
+> To get check-in coins, use \`-checkin\`; You can Check-in every 2 minutes
 > Visit this link for some useful guides: <https://aldovia.moe/tag/animu/>
-> Download Animu Companion App from here: <https://github.com/LightYagami200/Animu-Companion/releases>\n
+> Download Animu Companion App from here: <https://github.com/LightYagami200/Animu-Companion/releases>
+Did you know? Animu is the only discord bot where you can purchase Ntro from shop \`-shop\`\n
 Need help? Join the support server: ${this.client.settings.get(
         'supportServerInviteLink'
       )}
