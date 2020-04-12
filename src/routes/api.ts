@@ -46,7 +46,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     if (req.body.type === 'upvote') {
       const inv = await Inventory.findOne({ memberID: req.body.user });
 
-      if (inv) inv.addCoins(15);
+      if (inv) inv.addCoins(50);
     }
     return res.json({ success: 'Upvote Successfully recieved' });
   });
@@ -84,7 +84,7 @@ module.exports = (app: Application, client: KlasaClient) => {
         name: guild.name,
         memberCount: guild.memberCount,
         onlineMemberCount: guild.members.filter(
-          m =>
+          (m) =>
             m.presence.status === 'online' ||
             m.presence.status === 'idle' ||
             m.presence.status === 'dnd'
@@ -117,11 +117,11 @@ module.exports = (app: Application, client: KlasaClient) => {
       if (owner.id === member.id) isOwner = true;
 
     const badges = profile.badges.find(
-      guildBadges => guildBadges.guildID === guildID
+      (guildBadges) => guildBadges.guildID === guildID
     );
 
-    const level = profile.level.find(g => g.guildID === guildID);
-    const rep = profile.reputation.find(g => g.guildID === guildID);
+    const level = profile.level.find((g) => g.guildID === guildID);
+    const rep = profile.reputation.find((g) => g.guildID === guildID);
 
     return res.json({
       member: {
@@ -224,8 +224,8 @@ module.exports = (app: Application, client: KlasaClient) => {
 
     return res.json({
       channels: guild.channels
-        .filter(c => c.type === 'text')
-        .map(c => {
+        .filter((c) => c.type === 'text')
+        .map((c) => {
           return { id: c.id, name: c.name };
         }),
     });
@@ -243,7 +243,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     const guild = client.guilds.get(guildID);
 
     return res.json({
-      roles: guild.roles.map(r => {
+      roles: guild.roles.map((r) => {
         return { id: r.id, name: r.name };
       }),
     });
@@ -265,7 +265,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     for (let i = 0; i < growthCycle; i++) {
       const date = moment().subtract(i, 'days');
       growth.push(
-        guild.members.filter(m =>
+        guild.members.filter((m) =>
           moment(m.joinedAt).isSameOrBefore(date, 'day')
         ).size
       );
@@ -292,7 +292,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     for (let i = 0; i < joinedCycle; i++) {
       const date = moment().subtract(i, 'days');
       joined.push(
-        guild.members.filter(m => moment(m.joinedAt).isSame(date, 'day')).size
+        guild.members.filter((m) => moment(m.joinedAt).isSame(date, 'day')).size
       );
     }
 
@@ -320,7 +320,7 @@ module.exports = (app: Application, client: KlasaClient) => {
       .limit(parseInt(limit))
       .exec();
 
-    logs.forEach(log => {
+    logs.forEach((log) => {
       log.data.authorTag = client.users.get(log.data.authorID).tag;
       log.data.authorAvatarUrl = client.users
         .get(log.data.authorID)
@@ -354,8 +354,8 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
 
     membersRaw.sort((a, b) => {
-      const indexA = a.level.findIndex(r => r.guildID === guild.id);
-      const indexB = b.level.findIndex(r => r.guildID === guild.id);
+      const indexA = a.level.findIndex((r) => r.guildID === guild.id);
+      const indexB = b.level.findIndex((r) => r.guildID === guild.id);
       return a.level[indexA].level > b.level[indexB].level ? -1 : 1;
     });
 
@@ -363,7 +363,7 @@ module.exports = (app: Application, client: KlasaClient) => {
 
     const members = [];
 
-    membersRaw2.forEach(m => {
+    membersRaw2.forEach((m) => {
       if (client.users.get(m.memberID)) members.push(m.memberID);
     });
 
@@ -388,8 +388,8 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
 
     membersRaw.sort((a, b) => {
-      const indexA = a.reputation.findIndex(r => r.guildID === guild.id);
-      const indexB = b.reputation.findIndex(r => r.guildID === guild.id);
+      const indexA = a.reputation.findIndex((r) => r.guildID === guild.id);
+      const indexB = b.reputation.findIndex((r) => r.guildID === guild.id);
       return a.reputation[indexA].rep > b.reputation[indexB].rep ? -1 : 1;
     });
 
@@ -397,7 +397,7 @@ module.exports = (app: Application, client: KlasaClient) => {
 
     const members = [];
 
-    membersRaw2.forEach(m => {
+    membersRaw2.forEach((m) => {
       if (client.users.get(m.memberID)) members.push(m.memberID);
     });
 
@@ -436,11 +436,11 @@ module.exports = (app: Application, client: KlasaClient) => {
     if (!req.body.roleName) return res.json({ err: 'No role provided' });
     if (!req.body.emojiName) return res.json({ err: 'No emji provided' });
 
-    const role = guildC.roles.find(r => r.name === req.body.roleName);
+    const role = guildC.roles.find((r) => r.name === req.body.roleName);
     let emoji = req.body.emojiName;
-    if (client.emojis.find(e => e.name === req.body.emojiName.split(':')[1]))
+    if (client.emojis.find((e) => e.name === req.body.emojiName.split(':')[1]))
       emoji = client.emojis.find(
-        e => e.name === req.body.emojiName.split(':')[1]
+        (e) => e.name === req.body.emojiName.split(':')[1]
       );
 
     if (
