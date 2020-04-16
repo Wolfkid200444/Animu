@@ -28,7 +28,7 @@ My name's Animu and my purpose is to make your server moar better <a:YAY_1:61905
 > To get help regarding a specific command, use \`-help command\`
 > To view your profile, use \`-p\`
 > To view your inventory, use \`-inv\`
-> To get check-in coins, use \`-checkin\`; You can Check-in every 2 minutes
+> To get check-in coins, use \`-checkin\`; You can Check-in every 60 minutes
 > Visit this link for some useful guides: <https://aldovia.moe/tag/animu/>
 > Download Animu Companion App from here: <https://github.com/LightYagami200/Animu-Companion/releases>
 Did you know? Animu is the only discord bot where you can purchase Ntro from shop \`-shop\`\n

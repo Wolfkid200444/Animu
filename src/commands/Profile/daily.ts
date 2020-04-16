@@ -11,7 +11,7 @@ module.exports = class extends Command {
       runIn: ['text', 'dm'],
       aliases: ['d', 'checkin', 'work'],
       requiredPermissions: ['EMBED_LINKS'],
-      cooldown: 120,
+      cooldown: 60 * 60,
       description: 'Get daily coins',
     });
   }
