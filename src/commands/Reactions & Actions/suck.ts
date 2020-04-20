@@ -1,5 +1,5 @@
 import { Command, CommandStore, KlasaMessage } from 'klasa';
-import { MessageEmbed, GuildMember, TextChannel } from 'discord.js';
+import { MessageEmbed, GuildMember } from 'discord.js';
 import prompt from 'discordjs-prompter';
 import _ from 'lodash';
 
