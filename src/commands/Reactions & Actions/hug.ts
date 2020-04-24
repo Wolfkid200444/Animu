@@ -50,4 +50,6 @@ const gifs = [
   'https://cdn.discordapp.com/attachments/642360052086210570/694375435215044658/e9a3f49.gif',
   'https://cdn.discordapp.com/attachments/587691022826602516/698208676476878848/Yuri_hug.gif',
   'https://cdn.discordapp.com/attachments/587691022826602516/698208682063953990/Yuri_hug.gif',
+  'https://cdn.discordapp.com/attachments/587691022826602516/702307776654868590/hug.gif',
+  'https://cdn.discordapp.com/attachments/587691022826602516/702307783722270772/hug2.gif',
 ];
