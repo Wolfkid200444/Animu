@@ -4,9 +4,12 @@ import redis from 'redis';
 import bluebird from 'bluebird';
 import { IGuildModel } from '../models/Guild';
 import { Guild as DGuild, TextChannel } from 'discord.js';
+import { IInventoryModel } from '../models/Inventory';
 
 //Init
 const Guild = <IGuildModel>mongoose.model('Guild');
+const Inventory = <IInventoryModel>mongoose.model('Inventory');
+
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
 
@@ -46,6 +49,13 @@ Need help? Join the support server: ${this.client.settings.get(
       tier: 'free',
       levelPerks: [],
     }).save();
+
+    Inventory.updateOne(
+      {
+        memberID: guild.owner.id,
+      },
+      { $inc: { coins: 100 } }
+    ).exec();
 
     await redisClient.hsetAsync('guild_tiers', guild.id, 'free');
   }
