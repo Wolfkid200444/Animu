@@ -27,7 +27,8 @@
     "strictBindCallApply": true,
     "target": "esnext",
     "types": ["node", "discord.js", "klasa"],
-    "allowJs": true
+    "allowJs": true,
+    "skipLibCheck": true
   },
   "include": ["./src/"],
   "exclude": ["node_modules"]

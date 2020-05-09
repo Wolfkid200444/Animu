@@ -46,6 +46,5 @@ export default class extends Command {
 const gifs = [
   'https://img2.gelbooru.com/images/f3/3b/f33b8bbd620d9951aca5cbccd33b67e8.gif',
   'https://img.xbooru.com//images/195/9ce812a94b35d82250e11743a1bb777d.gif?209855',
-  'https://img.yuriplease.com/full/webp/0/nipple-sucking.962.webp',
   'https://rei.animecharactersdatabase.com/uploads/guild/gallery/19996-592815562.gif',
 ];

@@ -146,6 +146,7 @@ mongoose
   .connect(mongoConnectionString, {
     useNewUrlParser: true,
     useCreateIndex: true,
+    useUnifiedTopology: true,
   })
   .then(async () => {
     //->Creating models

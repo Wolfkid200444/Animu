@@ -21,6 +21,7 @@ const stackoverflowKey: string = keys.stackoverflowKey;
 const alphaVantageAPIKey: string = keys.alphaVantageAPIKey;
 const openWeatherAPIKey: string = keys.openWeatherAPIKey;
 const perspectiveAPIKey: string = keys.perspectiveAPIKey;
+const idAnalyzerAPIKey: string = keys.idAnalyzerAPIKey;
 const lavalinkPassword: string = keys.lavalinkPassword;
 const botEnv: string = keys.botEnv;
 
@@ -45,6 +46,7 @@ export {
   alphaVantageAPIKey,
   openWeatherAPIKey,
   perspectiveAPIKey,
+  idAnalyzerAPIKey,
   lavalinkPassword,
   botEnv,
 };
