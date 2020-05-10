@@ -85,12 +85,12 @@ module.exports = class extends Extendable {
     //Else
     else {
       if (
-        profile.badges.find(guildBadges => guildBadges.guildID === guildID) &&
-        profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID) &&
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
           .activeBadge
       )
         profileEmbed.setFooter(
-          profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+          profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
             .activeBadge
         );
 
@@ -117,7 +117,7 @@ module.exports = class extends Extendable {
 
       if (proceedRep) {
         const repRaw = profile.reputation.find(
-          reputation => reputation.guildID === guildID
+          (reputation) => reputation.guildID === guildID
         );
 
         if (repRaw)
@@ -164,7 +164,9 @@ module.exports = class extends Extendable {
       }
 
       if (proceedLevel) {
-        const levelRaw = profile.level.find(level => level.guildID === guildID);
+        const levelRaw = profile.level.find(
+          (level) => level.guildID === guildID
+        );
 
         if (levelRaw)
           profileEmbed.addField(
@@ -241,7 +243,7 @@ module.exports = class extends Extendable {
     let inventoryStr = '';
     const inventoryItems = {};
 
-    inventory.inventory.forEach(item => {
+    inventory.inventory.forEach((item) => {
       inventoryItems[item] = inventoryItems[item] + 1 || 1;
     });
 
@@ -253,8 +255,9 @@ module.exports = class extends Extendable {
 
     return new MessageEmbed()
       .setTitle(
-        `${this.client.users.get(inventory.memberID).username ||
-          'Unknown'}'s Inventory`
+        `${
+          this.client.users.get(inventory.memberID).username || 'Unknown'
+        }'s Inventory`
       )
       .addField('Coins', numberWithCommas(Math.floor(inventory.coins)))
       .addField('Inventory', inventoryStr || '[Inventory is empty]')
@@ -291,23 +294,24 @@ module.exports = class extends Extendable {
 
     let badgesString = '';
 
-    if (profile.badges.find(guildBadges => guildBadges.guildID === guildID)) {
+    if (profile.badges.find((guildBadges) => guildBadges.guildID === guildID)) {
       if (
-        profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
           .badges.length >= 1
       )
         profile.badges
-          .find(guildBadges => guildBadges.guildID === guildID)
-          .badges.forEach(badge => (badgesString += `${badge}\n`));
+          .find((guildBadges) => guildBadges.guildID === guildID)
+          .badges.forEach((badge) => (badgesString += `${badge}\n`));
 
       return new MessageEmbed()
         .setTitle(
-          `${this.client.users.get(profile.memberID).username ||
-            'Unknown'}'s Badges`
+          `${
+            this.client.users.get(profile.memberID).username || 'Unknown'
+          }'s Badges`
         )
         .addField(
           'Active Badge',
-          profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+          profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
             .activeBadge || '[No active badge]'
         )
         .addField('All Badges', badgesString || '[No badges]')
@@ -475,10 +479,10 @@ module.exports = class extends Extendable {
 
     if (!profile) profile = (await Profile.register(this.id)).profile;
 
-    if (profile.badges.find(guildBadges => guildBadges.guildID === guildID)) {
+    if (profile.badges.find((guildBadges) => guildBadges.guildID === guildID)) {
       if (
         _.includes(
-          profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+          profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
             .badges,
           badgeName
         )
@@ -486,7 +490,7 @@ module.exports = class extends Extendable {
         return false;
       else
         profile.badges
-          .find(guildBadges => guildBadges.guildID === guildID)
+          .find((guildBadges) => guildBadges.guildID === guildID)
           .badges.push(badgeName);
 
       await profile.save();
@@ -509,8 +513,8 @@ module.exports = class extends Extendable {
    * @returns An Array of levels if a role is to be added, otherwise an empty array
    */
   async addExp(this: User, expToAdd, guildID) {
-    return new Promise(resolve => {
-      Profile.findOne({ memberID: this.id }).then(async profile => {
+    return new Promise((resolve) => {
+      Profile.findOne({ memberID: this.id }).then(async (profile) => {
         if (!profile) profile = (await Profile.register(this.id)).profile;
 
         const res = await profile.addExp(
@@ -535,36 +539,37 @@ module.exports = class extends Extendable {
 
     if (!profile) return this._noProfile(true);
 
-    if (!profile.badges.find(guildBadges => guildBadges.guildID === guildID))
+    if (!profile.badges.find((guildBadges) => guildBadges.guildID === guildID))
       return false;
 
     if (
       _.includes(
-        profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
           .badges,
         badgeName
       )
     ) {
       if (
-        profile.badges.find(guildBadges => guildBadges.guildID === guildID)
+        profile.badges.find((guildBadges) => guildBadges.guildID === guildID)
           .activeBadge
       )
         profile.badges
-          .find(guildBadges => guildBadges.guildID === guildID)
+          .find((guildBadges) => guildBadges.guildID === guildID)
           .badges.push(
-            profile.badges.find(guildBadges => guildBadges.guildID === guildID)
-              .activeBadge
+            profile.badges.find(
+              (guildBadges) => guildBadges.guildID === guildID
+            ).activeBadge
           );
 
       profile.badges.find(
-        guildBadges => guildBadges.guildID === guildID
+        (guildBadges) => guildBadges.guildID === guildID
       ).activeBadge = badgeName;
 
       profile.badges.find(
-        guildBadges => guildBadges.guildID === guildID
+        (guildBadges) => guildBadges.guildID === guildID
       ).badges = profile.badges
-        .find(guildBadges => guildBadges.guildID === guildID)
-        .badges.filter(badge => badge !== badgeName);
+        .find((guildBadges) => guildBadges.guildID === guildID)
+        .badges.filter((badge) => badge !== badgeName);
 
       await profile.save();
     } else {
@@ -638,6 +643,173 @@ module.exports = class extends Extendable {
         description: `You got.... **${wallpaper.name}**`,
         color: 0x2196f3,
       }).setImage(wallpaper.imageURL);
+    } else if (item.name === 'Vote Box') {
+      /**
+       * Rewards Chart
+       * ----- COMMON (80%) -----
+       * 50 Coins
+       * 100 Coins
+       * 1x Small Exp Bottle
+       * 1x Medium Exp Bottle
+       * 1x Large Exp Bottle
+       * Marriage Ring
+       * ----- Uncommon (15%) -----
+       * 300 Coins
+       * 500 Coins
+       * 1x Wallpaper Box
+       * 3x Small Exp Bottles
+       * 3x Medium Exp Bottles
+       * 3x Large Exp Bottles
+       * ----- Rare (4%) -----
+       * 1,000 Coins
+       * 5x Small Exp Bottles
+       * 5x Medium Exp Bottles
+       * 5x Large Exp Bottles
+       * 2x Wallpaper Boxes
+       * ----- Legendary (0.9%) -----
+       * 2x Animu Lite - 7 Days
+       * 2,000 Coins
+       * 3,000 Coins
+       * ----- Mythical (0.1%) -----
+       * 1 Golden Wallpaper Box
+       * 5,000 Coins
+       */
+
+      //  Higher is better :)
+      const luck = Math.floor(Math.random() * 1000 + 1);
+
+      if (luck <= 800) {
+        const randomNum = Math.floor(Math.random() * 6 + 1);
+
+        embed = new MessageEmbed({
+          title: `You got a **Common** Item`,
+          color: 0x9e9e9e,
+        });
+
+        if (randomNum === 1) {
+          await inventory.addCoins(50);
+          embed.setDescription(`You got 50 Coins!`);
+        } else if (randomNum === 2) {
+          await inventory.addCoins(100);
+          embed.setDescription(`You got 100 Coins!`);
+        } else if (randomNum === 3) {
+          await inventory.giveItem('Small Exp Bottle');
+          embed.setDescription(`You got Small Exp Bottle!`);
+        } else if (randomNum === 4) {
+          await inventory.giveItem('Medium Exp Bottle');
+          embed.setDescription(`You got Medium Exp Bottle!`);
+        } else if (randomNum === 5) {
+          await inventory.giveItem('Large Exp Bottle');
+          embed.setDescription(`You got Large Exp Bottle!`);
+        } else {
+          await inventory.giveItem('Marriage Ring');
+          embed.setDescription(`You got Marriage Ring!`);
+        }
+      } else if (luck <= 950) {
+        const randomNum = Math.floor(Math.random() * 6 + 1);
+
+        embed = new MessageEmbed({
+          title: `You got an **Uncommon** Item`,
+          color: 0x4caf50,
+        });
+
+        if (randomNum === 1) {
+          await inventory.addCoins(300);
+          embed.setDescription(`You got 300 Coins!`);
+        } else if (randomNum === 2) {
+          await inventory.addCoins(500);
+          embed.setDescription(`You got 500 Coins!`);
+        } else if (randomNum === 3) {
+          await inventory.giveItem('Small Exp Bottle');
+          await inventory.giveItem('Small Exp Bottle');
+          await inventory.giveItem('Small Exp Bottle');
+          embed.setDescription(`You got 3x Small Exp Bottles!`);
+        } else if (randomNum === 4) {
+          await inventory.giveItem('Medium Exp Bottle');
+          await inventory.giveItem('Medium Exp Bottle');
+          await inventory.giveItem('Medium Exp Bottle');
+          embed.setDescription(`You got 3x Medium Exp Bottles!`);
+        } else if (randomNum === 5) {
+          await inventory.giveItem('Large Exp Bottle');
+          await inventory.giveItem('Large Exp Bottle');
+          await inventory.giveItem('Large Exp Bottle');
+          embed.setDescription(`You got 3x Large Exp Bottles!`);
+        } else {
+          await inventory.giveItem('Profile Wallpapers Box');
+          embed.setDescription(`You got Profile Wallpapers Box!`);
+        }
+      } else if (luck <= 990) {
+        const randomNum = Math.floor(Math.random() * 5 + 1);
+
+        embed = new MessageEmbed({
+          title: `You got a **Rare** Item`,
+          color: 0xf44336,
+        });
+
+        if (randomNum === 1) {
+          await inventory.addCoins(1000);
+          embed.setDescription(`You got 1,000 Coins!`);
+        } else if (randomNum === 2) {
+          await inventory.giveItem('Small Exp Bottle');
+          await inventory.giveItem('Small Exp Bottle');
+          await inventory.giveItem('Small Exp Bottle');
+          await inventory.giveItem('Small Exp Bottle');
+          await inventory.giveItem('Small Exp Bottle');
+          embed.setDescription(`You got 5x Small Exp Bottles!`);
+        } else if (randomNum === 3) {
+          await inventory.giveItem('Medium Exp Bottle');
+          await inventory.giveItem('Medium Exp Bottle');
+          await inventory.giveItem('Medium Exp Bottle');
+          await inventory.giveItem('Medium Exp Bottle');
+          await inventory.giveItem('Medium Exp Bottle');
+          embed.setDescription(`You got 5x Medium Exp Bottles!`);
+        } else if (randomNum === 4) {
+          await inventory.giveItem('Large Exp Bottle');
+          await inventory.giveItem('Large Exp Bottle');
+          await inventory.giveItem('Large Exp Bottle');
+          await inventory.giveItem('Large Exp Bottle');
+          await inventory.giveItem('Large Exp Bottle');
+          embed.setDescription(`You got 5x Large Exp Bottles!`);
+        } else {
+          await inventory.giveItem('Profile Wallpapers Box');
+          await inventory.giveItem('Profile Wallpapers Box');
+          embed.setDescription(`You got 2x Profile Wallpapers Boxes!`);
+        }
+      } else if (luck <= 999) {
+        const randomNum = Math.floor(Math.random() * 3 + 1);
+
+        embed = new MessageEmbed({
+          title: `You got a **Legendary** Item`,
+          color: 0xcddc39,
+        });
+
+        if (randomNum === 1) {
+          await inventory.addCoins(2000);
+          embed.setDescription(`You got 2,000 Coins!`);
+        } else if (randomNum === 2) {
+          await inventory.addCoins(3000);
+          embed.setDescription(`You got 3,000 Coins!`);
+        } else {
+          await inventory.giveItem('Animu Lite - 7 Days');
+          await inventory.giveItem('Animu Lite - 7 Days');
+          embed.setDescription(`You got 2x Animu Lite - 7 Days!`);
+        }
+      } else {
+        const randomNum = Math.floor(Math.random() * 2 + 1);
+
+        embed = new MessageEmbed({
+          title: `You got a **Mythic Item** Item`,
+          color: 0x9c27b0,
+        });
+
+        if (randomNum === 1) {
+          await inventory.addCoins(5000);
+          embed.setDescription(`You got 5,000 Coins!`);
+        } else {
+          await inventory.giveItem('Golden Profile Wallpapers Box');
+          embed.setDescription(`You got Golden Profile Wallpapers Box!`);
+        }
+      }
     } else if (
       item.name === 'Small Exp Bottle' ||
       item.name === 'Medium Exp Bottle' ||
@@ -680,7 +852,7 @@ module.exports = class extends Extendable {
 
       //If member actually levelled up
       if (levelUps.length) {
-        levelUps.forEach(level => {
+        levelUps.forEach((level) => {
           this.client.users
             .get(this.id)
             .send(
@@ -689,7 +861,7 @@ module.exports = class extends Extendable {
               } 🎉`
             );
 
-          const index = guild.levelPerks.findIndex(l => l.level === level);
+          const index = guild.levelPerks.findIndex((l) => l.level === level);
           console.log('Index of Level Perk:', index);
           if (index < 0) return true;
 
@@ -703,7 +875,7 @@ module.exports = class extends Extendable {
               if (guild.levelPerks[index].role) {
                 const role = this.client.guilds
                   .get(guildID)
-                  .roles.find(r => r.name === guild.levelPerks[index].role);
+                  .roles.find((r) => r.name === guild.levelPerks[index].role);
 
                 this.client.guilds
                   .get(guildID)
@@ -1111,7 +1283,7 @@ module.exports = class extends Extendable {
         bankAccount.deposits.length > 0
           ? bankAccount.deposits
               .map(
-                d =>
+                (d) =>
                   `• ${numberWithCommas(Math.round(d.coins))} Coins - ${
                     d.daysLeft
                   } Days Left`
@@ -1134,20 +1306,20 @@ module.exports = class extends Extendable {
 
     if (!profile) return this._noProfile(true);
 
-    if (!profile.reputation.find(rep => rep.guildID === guildID))
+    if (!profile.reputation.find((rep) => rep.guildID === guildID))
       profile.reputation.push({
         guildID: guildID,
         rep: this.client.guilds.get(guildID).settings.get('startingRep'),
       });
 
-    if (!profile.level.find(level => level.guildID === guildID))
+    if (!profile.level.find((level) => level.guildID === guildID))
       profile.level.push({
         guildID: guildID,
         level: 1,
         exp: 10,
       });
     else {
-      const index = profile.level.findIndex(l => l.guildID === guildID);
+      const index = profile.level.findIndex((l) => l.guildID === guildID);
 
       console.log(index);
 
