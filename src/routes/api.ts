@@ -46,7 +46,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     if (req.body.type === 'upvote') {
       const inv = await Inventory.findOne({ memberID: req.body.user });
 
-      if (inv) inv.addCoins(50);
+      if (inv) inv.giveItem('Vote Box');
     }
     return res.json({ success: 'Upvote Successfully recieved' });
   });
