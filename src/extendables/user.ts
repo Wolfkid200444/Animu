@@ -655,6 +655,7 @@ module.exports = class extends Extendable {
        * 1x Medium Exp Bottle
        * 1x Large Exp Bottle
        * Marriage Ring
+       * Divorce Contract
        * ----- Uncommon (15%) -----
        * 300 Coins
        * 500 Coins
@@ -703,9 +704,12 @@ module.exports = class extends Extendable {
         } else if (randomNum === 5) {
           await inventory.giveItem("Large Exp Bottle");
           embed.setDescription(`You got Large Exp Bottle!`);
-        } else {
+        } else if (randomNum === 6) {
           await inventory.giveItem("Marriage Ring");
           embed.setDescription(`You got Marriage Ring!`);
+        } else {
+          await inventory.giveItem("Divorce Contract");
+          embed.setDescription(`You got Divorce Contract!`);
         }
       } else if (luck <= 950) {
         const randomNum = Math.floor(Math.random() * 6 + 1);
