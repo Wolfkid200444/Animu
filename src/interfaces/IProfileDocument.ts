@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
 // Interfaces
 export interface IBadge {
@@ -18,6 +18,11 @@ export interface ILevel {
   level: number;
 }
 
+export interface IMAL {
+  username: string;
+  password: string;
+}
+
 export interface IProfileDocument extends Document {
   memberID: string;
   bruh: string;
@@ -30,4 +35,5 @@ export interface IProfileDocument extends Document {
   mutedIn: string[];
   reputation: Array<IReputation>;
   level: Array<ILevel>;
+  MAL: IMAL;
 }

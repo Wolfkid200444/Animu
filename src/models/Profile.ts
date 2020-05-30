@@ -1,7 +1,7 @@
 // Dependencies
-import { Schema, model, Model } from 'mongoose';
-import { IProfileDocument } from '../interfaces/IProfileDocument';
-import _ from 'lodash';
+import { Schema, model, Model } from "mongoose";
+import { IProfileDocument } from "../interfaces/IProfileDocument";
+import _ from "lodash";
 
 // Interfaces
 export interface IProfile extends IProfileDocument {
@@ -54,14 +54,21 @@ export const profileSchema: Schema<IProfile> = new Schema({
       level: Number,
     },
   ],
+  MAL: {
+    username: {
+      unique: true,
+      type: String,
+    },
+    password: String,
+  },
 });
 
 // Static Methods
 profileSchema.statics.register = async function (memberID: string) {
   const profile = await this.findOne({ memberID }).exec();
 
-  if (profile) return { res: 'already_exists', profile };
-  const Inventory = this.model('Inventory');
+  if (profile) return { res: "already_exists", profile };
+  const Inventory = this.model("Inventory");
 
   await new Inventory({
     memberID,
@@ -70,15 +77,15 @@ profileSchema.statics.register = async function (memberID: string) {
   }).save();
 
   return {
-    res: 'created',
+    res: "created",
     profile: await new this({
       memberID,
-      description: '[No description provided]',
-      favoriteAnime: '[No favorite anime provided]',
-      profileColor: '#2196f3',
+      description: "[No description provided]",
+      favoriteAnime: "[No favorite anime provided]",
+      profileColor: "#2196f3",
       mutedIn: [],
       badges: [],
-      marriedTo: '',
+      marriedTo: "",
       reputation: [],
     }).save(),
   };
@@ -170,6 +177,6 @@ function getCurrentLevel(currentExp: number) {
 
 // Model & Exporting
 export const Profile: IProfileModel = model<IProfile, IProfileModel>(
-  'Profile',
+  "Profile",
   profileSchema
 );

@@ -1,6 +1,6 @@
-import { IProfile } from '../models/Profile';
+import { IProfile } from "../models/Profile";
 
-declare module 'discord.js' {
+declare module "discord.js" {
   interface User {
     register(): Promise<false | IProfile>;
     getProfileEmbed(guildID: string): Promise<MessageEmbed>;
@@ -10,12 +10,13 @@ declare module 'discord.js' {
     addExp(expToAdd: number, guildID: string): Promise<Array<number>>;
     giveBadge(badgeName: string, guildID: string): Promise<boolean>;
     editReputation(
-      change: '+' | '-',
+      change: "+" | "-",
       amoung: number,
       guildID: string,
       editedBy: User,
       reason: string
     ): Promise<boolean>;
+    loginMAL(username: string, password: string): Promise<false | string>;
     _noProfile(isAuthor?: boolean): MessageEmbed;
   }
 }
