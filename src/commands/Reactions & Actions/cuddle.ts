@@ -49,4 +49,5 @@ const gifs = [
   'https://media.discordapp.net/attachments/587691022826602516/698208669564928080/Yuri.gif',
   'https://cdn.discordapp.com/attachments/587691022826602516/702307811199287446/Cuddle.gif',
   'https://cdn.discordapp.com/attachments/587691022826602516/702307816257486959/Cuddle2.gif',
+  'https://cdn.discordapp.com/attachments/587691022826602516/709580731847802950/Cuddle.gif',
 ];
