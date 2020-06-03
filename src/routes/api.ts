@@ -1,26 +1,26 @@
-import express, { Application } from 'express';
-import redis from 'redis';
-import bluebird from 'bluebird';
-import moment from 'moment';
-import { model } from 'mongoose';
-import _ from 'lodash';
-import { IProfileModel } from '../models/Profile';
-import { ILogModel } from '../models/Log';
-import { IGuildModel } from '../models/Guild';
-import { IItemModel } from '../models/Item';
-import { ISelfRoleModel } from '../models/SelfRole';
-import { TextChannel } from 'discord.js';
-import { IInventoryModel } from '../models/Inventory';
-import { animuAPIKey } from '../config/keys';
-import { KlasaClient } from 'klasa';
+import express, { Application } from "express";
+import redis from "redis";
+import bluebird from "bluebird";
+import moment from "moment";
+import { model } from "mongoose";
+import _ from "lodash";
+import { IProfileModel } from "../models/Profile";
+import { ILogModel } from "../models/Log";
+import { IGuildModel } from "../models/Guild";
+import { IItemModel } from "../models/Item";
+import { ISelfRoleModel } from "../models/SelfRole";
+import { TextChannel } from "discord.js";
+import { IInventoryModel } from "../models/Inventory";
+import { animuAPIKey } from "../config/keys";
+import { KlasaClient } from "klasa";
 
 const api = express.Router();
-const Profile = <IProfileModel>model('Profile');
-const Inventory = <IInventoryModel>model('Inventory');
-const Log = <ILogModel>model('Log');
-const Guild = <IGuildModel>model('Guild');
-const SelfRole = <ISelfRoleModel>model('SelfRole');
-const Item = <IItemModel>model('Item');
+const Profile = <IProfileModel>model("Profile");
+const Inventory = <IInventoryModel>model("Inventory");
+const Log = <ILogModel>model("Log");
+const Guild = <IGuildModel>model("Guild");
+const SelfRole = <ISelfRoleModel>model("SelfRole");
+const Item = <IItemModel>model("Item");
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient: any = redis.createClient();
 
@@ -29,35 +29,37 @@ const minAndroidVersion = 0.6;
 const currentAndroidVersion = 0.6;
 
 module.exports = (app: Application, client: KlasaClient) => {
-  api.get('/', (req, res) => {
-    res.json({ ApiStatus: 'online' });
+  api.get("/", (req, res) => {
+    res.json({ ApiStatus: "online" });
   });
 
-  api.get('/version', async (req, res) => {
+  api.get("/version", async (req, res) => {
     return res.json({
       minAndroidVersion,
       currentAndroidVersion,
     });
   });
 
-  api.post('/hook', async (req, res) => {
+  api.post("/hook", async (req, res) => {
     if (req.headers.authorization !== animuAPIKey)
-      return res.json({ error: 'Invalid Animu API Key' });
-    if (req.body.type === 'upvote') {
+      return res.json({ error: "Invalid Animu API Key" });
+    if (req.body.type === "upvote") {
       const inv = await Inventory.findOne({ memberID: req.body.user });
 
-      if (inv) inv.giveItem('Vote Box');
+      if (inv) await inv.giveItem("Vote Box");
+
+      if (req.body.isWeekend) await inv.giveItem("Vote Box");
     }
-    return res.json({ success: 'Upvote Successfully recieved' });
+    return res.json({ success: "Upvote Successfully recieved" });
   });
 
-  api.get('/auth', async (req, res) => {
-    if (!req.query.token) return res.json({ err: 'Token not provided' });
+  api.get("/auth", async (req, res) => {
+    if (!req.query.token) return res.json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
 
@@ -66,14 +68,14 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.get('/guild', async (req, res) => {
+  api.get("/guild", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
 
@@ -85,25 +87,25 @@ module.exports = (app: Application, client: KlasaClient) => {
         memberCount: guild.memberCount,
         onlineMemberCount: guild.members.filter(
           (m) =>
-            m.presence.status === 'online' ||
-            m.presence.status === 'idle' ||
-            m.presence.status === 'dnd'
+            m.presence.status === "online" ||
+            m.presence.status === "idle" ||
+            m.presence.status === "dnd"
         ).size,
         nitroBoostersCount: guild.premiumSubscriptionCount,
         nitroLevel: guild.premiumTier,
-        tier: await redisClient.hgetAsync('guild_tiers', guild.id),
+        tier: await redisClient.hgetAsync("guild_tiers", guild.id),
       },
     });
   });
 
-  api.get('/members/:id', async (req, res) => {
+  api.get("/members/:id", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
     const member = guild.members.get(req.params.id);
@@ -133,17 +135,17 @@ module.exports = (app: Application, client: KlasaClient) => {
         description: profile.description,
         favoriteAnime: profile.favoriteAnime,
         profileColor: profile.profileColor,
-        profileWallpaperURL: wallpaper !== null ? wallpaper.imageURL : '',
+        profileWallpaperURL: wallpaper !== null ? wallpaper.imageURL : "",
         marriedTo: profile.marriedTo,
         badges: {
           activeBadge: isOwner
-            ? '👑 Bot Owner 👑'
-            : _.includes(client.settings.get('animuStaff'), member.id)
-            ? '🛡 Bot Staff'
+            ? "👑 Bot Owner 👑"
+            : _.includes(client.settings.get("animuStaff"), member.id)
+            ? "🛡 Bot Staff"
             : badges !== null && badges !== undefined
             ? badges.activeBadge
-            : '',
-          badges: badges !== null && badges !== undefined ? badges.badges : '',
+            : "",
+          badges: badges !== null && badges !== undefined ? badges.badges : "",
         },
         level: {
           level: level !== null && level !== undefined ? level.level : 0,
@@ -154,14 +156,14 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.post('/members/:id/kick', async (req, res) => {
+  api.post("/members/:id/kick", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
     const member = guild.members.get(req.params.id);
@@ -173,14 +175,14 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.post('/members/:id/ban', async (req, res) => {
+  api.post("/members/:id/ban", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
     const member = guild.members.get(req.params.id);
@@ -192,14 +194,14 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.post('/members/:id/badges', async (req, res) => {
+  api.post("/members/:id/badges", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
     const member = guild.members.get(req.params.id);
@@ -207,38 +209,38 @@ module.exports = (app: Application, client: KlasaClient) => {
     member.user.giveBadge(req.body.badgeName, guildID);
 
     return res.json({
-      result: 'success',
+      result: "success",
     });
   });
 
-  api.get('/channels', async (req, res) => {
+  api.get("/channels", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
 
     return res.json({
       channels: guild.channels
-        .filter((c) => c.type === 'text')
+        .filter((c) => c.type === "text")
         .map((c) => {
           return { id: c.id, name: c.name };
         }),
     });
   });
 
-  api.get('/roles', async (req, res) => {
+  api.get("/roles", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
 
@@ -249,24 +251,24 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.get('/growth', async (req, res) => {
+  api.get("/growth", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
     const growthCycle = req.query.cycle || 7;
     const growth = [];
 
     for (let i = 0; i < growthCycle; i++) {
-      const date = moment().subtract(i, 'days');
+      const date = moment().subtract(i, "days");
       growth.push(
         guild.members.filter((m) =>
-          moment(m.joinedAt).isSameOrBefore(date, 'day')
+          moment(m.joinedAt).isSameOrBefore(date, "day")
         ).size
       );
     }
@@ -276,23 +278,23 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.get('/joined', async (req, res) => {
+  api.get("/joined", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
     const joinedCycle = req.query.cycle || 7;
     const joined = [];
 
     for (let i = 0; i < joinedCycle; i++) {
-      const date = moment().subtract(i, 'days');
+      const date = moment().subtract(i, "days");
       joined.push(
-        guild.members.filter((m) => moment(m.joinedAt).isSame(date, 'day')).size
+        guild.members.filter((m) => moment(m.joinedAt).isSame(date, "day")).size
       );
     }
 
@@ -301,14 +303,14 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.get('/logs', async (req, res) => {
+  api.get("/logs", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
     const limit = req.query.limit || 20;
@@ -332,20 +334,20 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.get('/leaderboards/levels', async (req, res) => {
+  api.get("/leaderboards/levels", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
-    const guildTier = await redisClient.hgetAsync('guild_tiers', guildID);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
+    const guildTier = await redisClient.hgetAsync("guild_tiers", guildID);
 
-    if (guildTier === 'free')
+    if (guildTier === "free")
       return res
         .status(403)
-        .json({ err: 'This API route is not available for free users' });
+        .json({ err: "This API route is not available for free users" });
 
     const guild = client.guilds.get(guildID);
 
@@ -372,14 +374,14 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.get('/leaderboards/rep', async (req, res) => {
+  api.get("/leaderboards/rep", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
 
@@ -406,14 +408,14 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.get('/selfroles', async (req, res) => {
+  api.get("/selfroles", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const selfRoles = await SelfRole.find({ guildID: guildID }).exec();
 
@@ -422,51 +424,51 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.post('/selfroles', async (req, res) => {
+  api.post("/selfroles", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guildC = client.guilds.get(guildID);
 
-    if (!req.body.roleName) return res.json({ err: 'No role provided' });
-    if (!req.body.emojiName) return res.json({ err: 'No emji provided' });
+    if (!req.body.roleName) return res.json({ err: "No role provided" });
+    if (!req.body.emojiName) return res.json({ err: "No emji provided" });
 
     const role = guildC.roles.find((r) => r.name === req.body.roleName);
     let emoji = req.body.emojiName;
-    if (client.emojis.find((e) => e.name === req.body.emojiName.split(':')[1]))
+    if (client.emojis.find((e) => e.name === req.body.emojiName.split(":")[1]))
       emoji = client.emojis.find(
-        (e) => e.name === req.body.emojiName.split(':')[1]
+        (e) => e.name === req.body.emojiName.split(":")[1]
       );
 
     if (
-      !guildC.settings.get('selfRolesChannel') ||
-      !guildC.settings.get('selfRolesMessage')
+      !guildC.settings.get("selfRolesChannel") ||
+      !guildC.settings.get("selfRolesMessage")
     )
-      return res.json({ err: 'No self roles channel/msg set' });
+      return res.json({ err: "No self roles channel/msg set" });
 
-    if (!role) return res.json({ err: 'No emoji/role found' });
+    if (!role) return res.json({ err: "No emoji/role found" });
 
-    const rCh = guildC.channels.get(guildC.settings.get('selfRolesChannel'));
+    const rCh = guildC.channels.get(guildC.settings.get("selfRolesChannel"));
 
     if (!(rCh instanceof TextChannel))
-      return res.json({ err: 'Channel provided is not a valid text channel' });
+      return res.json({ err: "Channel provided is not a valid text channel" });
 
     const rMsg = await rCh.messages.fetch(
-      guildC.settings.get('selfRolesMessage')
+      guildC.settings.get("selfRolesMessage")
     );
 
-    if (!rMsg || !rCh) return res.json({ err: 'Invalid message ID/Channel' });
+    if (!rMsg || !rCh) return res.json({ err: "Invalid message ID/Channel" });
 
     rMsg.react(emoji);
 
     await new SelfRole({
       guildID: guildID,
-      messageID: guildC.settings.get('selfRolesMessage'),
+      messageID: guildC.settings.get("selfRolesMessage"),
       emojiName: emoji,
       roleName: req.body.roleName,
     }).save();
@@ -476,14 +478,14 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.delete('/selfroles/:roleName', async (req, res) => {
+  api.delete("/selfroles/:roleName", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const selfRole = await SelfRole.findOne({
       guildID: guildID,
@@ -493,7 +495,7 @@ module.exports = (app: Application, client: KlasaClient) => {
     if (!selfRole)
       return res
         .status(404)
-        .json({ err: 'Self role with provided roleName not found' });
+        .json({ err: "Self role with provided roleName not found" });
 
     await SelfRole.remove({ guildID, roleName: req.params.roleName }).exec();
 
@@ -502,20 +504,20 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.get('/levelperks', async (req, res) => {
+  api.get("/levelperks", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
-    const guildTier = await redisClient.hgetAsync('guild_tiers', guildID);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
+    const guildTier = await redisClient.hgetAsync("guild_tiers", guildID);
 
-    if (guildTier === 'free')
+    if (guildTier === "free")
       return res
         .status(403)
-        .json({ err: 'This API route is not available for free users' });
+        .json({ err: "This API route is not available for free users" });
 
     const guild = await Guild.findOne({ guildID: guildID }).exec();
 
@@ -524,26 +526,26 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.post('/levelperks', async (req, res) => {
+  api.post("/levelperks", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
-    const guildTier = await redisClient.hgetAsync('guild_tiers', guildID);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
+    const guildTier = await redisClient.hgetAsync("guild_tiers", guildID);
 
-    if (guildTier === 'free')
+    if (guildTier === "free")
       return res
         .status(403)
-        .json({ err: 'This API route is not available for free users' });
+        .json({ err: "This API route is not available for free users" });
 
     const guild = await Guild.findOne({ guildID: guildID }).exec();
 
-    if (!req.body.level) return res.json({ err: 'No level provided' });
-    if (!req.body.perkName) return res.json({ err: 'No perkName provided' });
-    if (!req.body.perkValue) return res.json({ err: 'No perkValue provided' });
+    if (!req.body.level) return res.json({ err: "No level provided" });
+    if (!req.body.perkName) return res.json({ err: "No perkName provided" });
+    if (!req.body.perkValue) return res.json({ err: "No perkValue provided" });
 
     await guild.addLevelPerk(
       req.body.level,
@@ -556,20 +558,20 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.delete('/levelperks/:level', async (req, res) => {
+  api.delete("/levelperks/:level", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
-    const guildTier = await redisClient.hgetAsync('guild_tiers', guildID);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
+    const guildTier = await redisClient.hgetAsync("guild_tiers", guildID);
 
-    if (guildTier === 'free')
+    if (guildTier === "free")
       return res
         .status(403)
-        .json({ err: 'This API route is not available for free users' });
+        .json({ err: "This API route is not available for free users" });
 
     const guild = await Guild.findOne({ guildID: guildID }).exec();
 
@@ -580,14 +582,14 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.get('/settings', async (req, res) => {
+  api.get("/settings", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
 
@@ -596,23 +598,23 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  api.post('/settings', async (req, res) => {
+  api.post("/settings", async (req, res) => {
     if (!req.query.token)
-      return res.status(401).json({ err: 'Token not provided' });
+      return res.status(401).json({ err: "Token not provided" });
     if (!req.body.key)
       return res
         .status(400)
-        .json({ err: 'Key (Setting to update) not provided' });
+        .json({ err: "Key (Setting to update) not provided" });
 
-    if (!(await redisClient.hexistsAsync('auth_tokens', req.query.token)))
-      return res.status(401).json({ err: 'Invalid token' });
+    if (!(await redisClient.hexistsAsync("auth_tokens", req.query.token)))
+      return res.status(401).json({ err: "Invalid token" });
 
-    const guildID = await redisClient.hgetAsync('auth_tokens', req.query.token);
+    const guildID = await redisClient.hgetAsync("auth_tokens", req.query.token);
 
     const guild = client.guilds.get(guildID);
 
-    if (req.body.key.includes('.')) {
-      const keys = req.body.key.split('.');
+    if (req.body.key.includes(".")) {
+      const keys = req.body.key.split(".");
       guild.settings[keys[0]][keys[1]] = req.body.value;
     } else guild.settings[req.body.key] = req.body.value;
 
@@ -621,5 +623,5 @@ module.exports = (app: Application, client: KlasaClient) => {
     });
   });
 
-  app.use('/api', api);
+  app.use("/api", api);
 };
