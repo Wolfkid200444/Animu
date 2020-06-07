@@ -712,7 +712,7 @@ module.exports = class extends Extendable {
           embed.setDescription(`You got Divorce Contract!`);
         }
       } else if (luck <= 950) {
-        const randomNum = Math.floor(Math.random() * 6 + 1);
+        const randomNum = Math.floor(Math.random() * 7 + 1);
 
         embed = new MessageEmbed({
           title: `You got an **Uncommon** Item`,
@@ -740,6 +740,9 @@ module.exports = class extends Extendable {
           await inventory.giveItem("Large Exp Bottle");
           await inventory.giveItem("Large Exp Bottle");
           embed.setDescription(`You got 3x Large Exp Bottles!`);
+        } else if (randomNum === 6) {
+          await inventory.giveItem("Strange Exp Bottle");
+          embed.setDescription(`You got a Strange Exp Bottle!`);
         } else {
           await inventory.giveItem("Profile Wallpapers Box");
           embed.setDescription(`You got Profile Wallpapers Box!`);
@@ -804,7 +807,7 @@ module.exports = class extends Extendable {
         const randomNum = Math.floor(Math.random() * 2 + 1);
 
         embed = new MessageEmbed({
-          title: `You got a **Mythic Item** Item`,
+          title: `You got a **Mythic** Item`,
           color: 0x9c27b0,
         });
 
@@ -845,10 +848,15 @@ module.exports = class extends Extendable {
       } else if (item.name === "Medium Exp Bottle") {
         expToAdd =
           300 * this.client.guilds.get(guildID).settings.get("expRate");
+        returnCoins = 50;
+      } else if (item.name === "Large Exp Bottle") {
+        expToAdd =
+          500 * this.client.guilds.get(guildID).settings.get("expRate");
         returnCoins = 75;
       } else {
         expToAdd =
-          500 * this.client.guilds.get(guildID).settings.get("expRate");
+          Math.floor(Math.random() * 1000 + 1) *
+          this.client.guilds.get(guildID).settings.get("expRate");
         returnCoins = 125;
       }
 
