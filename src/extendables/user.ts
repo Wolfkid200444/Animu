@@ -682,7 +682,7 @@ module.exports = class extends Extendable {
       const luck = Math.floor(Math.random() * 1000 + 1);
 
       if (luck <= 800) {
-        const randomNum = Math.floor(Math.random() * 6 + 1);
+        const randomNum = Math.floor(Math.random() * 7 + 1);
 
         embed = new MessageEmbed({
           title: `You got a **Common** Item`,
