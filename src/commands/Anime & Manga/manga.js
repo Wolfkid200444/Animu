@@ -1,20 +1,21 @@
-const { Command } = require('klasa');
-const { MessageEmbed } = require('discord.js');
-const axios = require('axios');
+const { Command } = require("klasa");
+const { MessageEmbed } = require("discord.js");
+const axios = require("axios");
+const { shorten } = require("../../util/util");
 
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Discover new manga (or doujins)',
+      description: "Discover new manga (or doujins)",
       cooldown: 10,
-      requiredPermissions: ['EMBED_LINKS'],
-      usage: '<mangaName:...string>',
+      requiredPermissions: ["EMBED_LINKS"],
+      usage: "<mangaName:...string>",
       quotedStringSupport: true,
     });
   }
 
   async run(msg, [mangaName]) {
-    const res = await axios.get('https://api.jikan.moe/v3/search/manga/', {
+    const res = await axios.get("https://api.jikan.moe/v3/search/manga/", {
       params: {
         q: mangaName,
         page: 1,
@@ -27,12 +28,12 @@ module.exports = class extends Command {
     msg.sendEmbed(
       new MessageEmbed()
         .setThumbnail(manga.image_url)
-        .setColor('#2196f3')
-        .addField('❯ Name', manga.title, true)
-        .addField('❯ Type', manga.type, true)
-        .addField('❯ Description', manga.synopsis)
-        .addField('❯ chapters', manga.chapters, true)
-        .addField('❯ Score', manga.score, true)
+        .setColor("#2196f3")
+        .addField("❯ Name", manga.title, true)
+        .addField("❯ Type", manga.type, true)
+        .addField("❯ Description", shorten(manga.synopsis, 240))
+        .addField("❯ chapters", manga.chapters, true)
+        .addField("❯ Score", manga.score, true)
     );
   }
 };

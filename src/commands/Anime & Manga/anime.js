@@ -1,20 +1,21 @@
-const { Command } = require('klasa');
-const { MessageEmbed } = require('discord.js');
-const axios = require('axios');
+const { Command } = require("klasa");
+const { MessageEmbed } = require("discord.js");
+const axios = require("axios");
+const { shorten } = require("../../util/util");
 
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      description: 'Discover new anime (or hentai)',
+      description: "Discover new anime (or hentai)",
       cooldown: 10,
-      requiredPermissions: ['EMBED_LINKS'],
-      usage: '<animeName:...string>',
+      requiredPermissions: ["EMBED_LINKS"],
+      usage: "<animeName:...string>",
       quotedStringSupport: true,
     });
   }
 
   async run(msg, [animeName]) {
-    const res = await axios.get('https://api.jikan.moe/v3/search/anime/', {
+    const res = await axios.get("https://api.jikan.moe/v3/search/anime/", {
       params: {
         q: animeName,
         page: 1,
@@ -27,12 +28,12 @@ module.exports = class extends Command {
     msg.sendEmbed(
       new MessageEmbed()
         .setThumbnail(anime.image_url)
-        .setColor('#2196f3')
-        .addField('❯ Name', anime.title, true)
-        .addField('❯ Type', anime.type, true)
-        .addField('❯ Description', anime.synopsis)
-        .addField('❯ Episodes', anime.episodes, true)
-        .addField('❯ Score', anime.score, true)
+        .setColor("#2196f3")
+        .addField("❯ Name", anime.title, true)
+        .addField("❯ Type", anime.type, true)
+        .addField("❯ Description", shorten(anime.synopsis, 240))
+        .addField("❯ Episodes", anime.episodes, true)
+        .addField("❯ Score", anime.score, true)
     );
   }
 };

@@ -52,7 +52,7 @@
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
     "mongodb": "^3.2.7",
-    "mongoose": "^5.7.5",
+    "mongoose": "^5.9.18",
     "node-opus": "^0.3.2",
     "pako": "^1.0.10",
     "perspective-api-client": "^3.1.0",

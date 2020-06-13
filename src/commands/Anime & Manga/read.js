@@ -1,10 +1,10 @@
-const { Command } = require('klasa');
-const { MessageEmbed } = require('discord.js');
-const _ = require('lodash');
-const cheerio = require('cheerio');
-const request = require('request');
-const redis = require('redis');
-const bluebird = require('bluebird');
+const { Command } = require("klasa");
+const { MessageEmbed } = require("discord.js");
+const _ = require("lodash");
+const cheerio = require("cheerio");
+const request = require("request");
+const redis = require("redis");
+const bluebird = require("bluebird");
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 const redisClient = redis.createClient();
@@ -12,37 +12,37 @@ const redisClient = redis.createClient();
 module.exports = class extends Command {
   constructor(...args) {
     super(...args, {
-      runIn: ['text'],
-      description: 'Read a manga (or doujin)',
+      runIn: ["text"],
+      description: "Read a manga (or doujin)",
       cooldown: 60,
-      requiredPermissions: ['EMBED_LINKS'],
-      usage: '<mangaName:string> <chapter:number>',
-      usageDelim: ' ',
+      requiredPermissions: ["EMBED_LINKS"],
+      usage: "<mangaName:string> <chapter:number>",
+      usageDelim: " ",
       quotedStringSupport: true,
     });
   }
 
   async run(msg, [mangaName, chapter]) {
+    return msg.send(
+      "The website used for scraping manga has recenty made significant changes to how it operates and thus can't be used"
+    );
+
     let pageNumber = 1;
     let searchResults = [];
     let imagesArr = [];
 
     request(
       {
-        method: 'GET',
-        url: `https://manganelo.com/search/${_.snakeCase(mangaName)}`,
+        method: "GET",
+        url: `https://manganelo.com/search/story/${_.snakeCase(mangaName)}`,
       },
       async (err, res, body) => {
         let $s = cheerio.load(body);
 
-        $s('.panel-search-story .search-story-item').each((i, elem) => {
+        $s(".panel-search-story .search-story-item").each((i, elem) => {
           searchResults.push({
-            title: $s(elem)
-              .find('.item-title')
-              .text(),
-            url: $s(elem)
-              .find('.item-title')
-              .attr('href'),
+            title: $s(elem).find(".item-title").text(),
+            url: $s(elem).find(".item-title").attr("href"),
           });
         });
 
@@ -50,14 +50,14 @@ module.exports = class extends Command {
 
         const sentMsg1 = await msg.send(
           new MessageEmbed({
-            title: 'Result(s) Found',
+            title: "Result(s) Found",
             description:
               searchResults.length > 0
                 ? searchResults
                     .map((result, i) => `**${i + 1})** ${result.title}`)
-                    .join('\n')
-                : 'No Manga Found',
-            color: searchResults.length > 0 ? '#2196f3' : '#f44336',
+                    .join("\n")
+                : "No Manga Found",
+            color: searchResults.length > 0 ? "#2196f3" : "#f44336",
           })
         );
 
@@ -67,24 +67,24 @@ module.exports = class extends Command {
 
         if (searchResults.length === 0) return;
         if (searchResults.length > 0) {
-          sentMsg1.react('1⃣');
-          validReactions.push('1⃣');
+          sentMsg1.react("1⃣");
+          validReactions.push("1⃣");
         }
         if (searchResults.length > 1) {
-          sentMsg1.react('2⃣');
-          validReactions.push('2⃣');
+          sentMsg1.react("2⃣");
+          validReactions.push("2⃣");
         }
         if (searchResults.length > 2) {
-          sentMsg1.react('3⃣');
-          validReactions.push('3⃣');
+          sentMsg1.react("3⃣");
+          validReactions.push("3⃣");
         }
         if (searchResults.length > 3) {
-          sentMsg1.react('4⃣');
-          validReactions.push('4⃣');
+          sentMsg1.react("4⃣");
+          validReactions.push("4⃣");
         }
         if (searchResults.length > 4) {
-          sentMsg1.react('5⃣');
-          validReactions.push('5⃣');
+          sentMsg1.react("5⃣");
+          validReactions.push("5⃣");
         }
 
         const filter1 = (reaction, user) =>
@@ -97,45 +97,47 @@ module.exports = class extends Command {
 
         let mangaUrl;
 
-        reactionsSearch.on('collect', r => {
+        reactionsSearch.on("collect", (r) => {
           const emojiName = r._emoji.name;
-          if (emojiName === '1⃣') mangaUrl = searchResults[0].url;
-          if (emojiName === '2⃣') mangaUrl = searchResults[1].url;
-          if (emojiName === '3⃣') mangaUrl = searchResults[2].url;
-          if (emojiName === '4⃣') mangaUrl = searchResults[3].url;
-          if (emojiName === '5⃣') mangaUrl = searchResults[4].url;
+          if (emojiName === "1⃣") mangaUrl = searchResults[0].url;
+          if (emojiName === "2⃣") mangaUrl = searchResults[1].url;
+          if (emojiName === "3⃣") mangaUrl = searchResults[2].url;
+          if (emojiName === "4⃣") mangaUrl = searchResults[3].url;
+          if (emojiName === "5⃣") mangaUrl = searchResults[4].url;
           sentMsg1.reactions.removeAll();
 
           const url = `${mangaUrl.replace(
-            '/manga/',
-            '/chapter/'
+            "/manga/",
+            "/chapter/"
           )}/chapter_${chapter}`;
 
           request(
             {
-              method: 'GET',
+              method: "GET",
               url,
             },
             async (err, res, body2) => {
               let $ = cheerio.load(body2);
 
-              let title = $('.panel-chapter-info-top h1');
+              let title = $(".panel-chapter-info-top h1");
 
               if (!title.text())
                 return msg.send(
                   new MessageEmbed({
-                    title: 'Invalid Chapter',
+                    title: "Invalid Chapter",
                     description: "The chapter you wish to read doesn't exist",
-                    color: '#f44336',
+                    color: "#f44336",
                   })
                 );
 
-              $('.container-chapter-reader img').each((i, elem) => {
+              $(".container-chapter-reader img").each((i, elem) => {
                 imagesArr.push(elem.attribs.src);
               });
 
+              console.log(imagesArr);
+
               const readStatus = await redisClient.hgetAsync(
-                'manga_status',
+                "manga_status",
                 `${msg.author.id}:${title}:${chapter}`
               );
 
@@ -144,39 +146,39 @@ module.exports = class extends Command {
               const embed = new MessageEmbed()
                 .setTitle(title.text())
                 .setImage(imagesArr[pageNumber - 1])
-                .setColor('#2196f3');
+                .setColor("#2196f3");
 
-              msg.send(embed).then(sentMsg => {
-                sentMsg.react('⬅');
-                sentMsg.react('➡');
+              msg.send(embed).then((sentMsg) => {
+                sentMsg.react("⬅");
+                sentMsg.react("➡");
 
                 const filter = (reaction, user) =>
-                  _.includes(['⬅', '➡'], reaction.emoji.name) &&
+                  _.includes(["⬅", "➡"], reaction.emoji.name) &&
                   user.id === msg.author.id;
 
                 const reactions = sentMsg.createReactionCollector(filter, {
                   time: 600000,
                 });
 
-                reactions.on('collect', async r => {
+                reactions.on("collect", async (r) => {
                   const emojiName = r._emoji.name;
-                  if (emojiName === '➡' && pageNumber < imagesArr.length + 1)
+                  if (emojiName === "➡" && pageNumber < imagesArr.length + 1)
                     pageNumber++;
-                  if (emojiName === '⬅' && pageNumber > 1) pageNumber--;
+                  if (emojiName === "⬅" && pageNumber > 1) pageNumber--;
 
                   msg.send(
                     new MessageEmbed()
                       .setTitle(title.text())
                       .setImage(imagesArr[pageNumber - 1])
-                      .setColor('#2196f3')
+                      .setColor("#2196f3")
                   );
 
                   sentMsg.reactions
-                    .find(r => r.emoji.name === emojiName)
+                    .find((r) => r.emoji.name === emojiName)
                     .users.remove(msg.author.id);
 
                   await redisClient.hsetAsync(
-                    'manga_status',
+                    "manga_status",
                     `${msg.author.id}:${title}:${chapter}`,
                     pageNumber
                   );
